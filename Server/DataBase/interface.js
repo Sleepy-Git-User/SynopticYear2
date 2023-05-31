@@ -23,19 +23,21 @@ function loginChecker(UserID){
   //console.log(loginChecker(""));
   
   
-  function makeUser(Email,PhoneNumber,Fname,Lname,DoB,Password){
+  function makeUser(Email,PhoneNumber,Fname,Lname,DoB,Password,Line1,Line2,City,Postcode){
     const user_id = Database.generateUUID("User", "UserID"); //Creates users UUID.
     if (Database.inTable("User", "Email", Email) === true) {
       //Checks if the Email is already in the table and returns fales if its taken.
       return "Email Already in use";
     } else {
+      if (PhoneNumber != null){
       if (Database.inTable("User", "PhoneNumber", PhoneNumber) === true) {
         return "Phone number already taken.";
-      } else {  
+      }
+    } else {  
         //SQL to insert data in to the User table.
         const insert_user_sql = Database.database.prepare(`
             INSERT INTO User
-            (UserID, Email, PhoneNumber, Fname, Lname, DoB)
+            (UserID, Email, PhoneNumber, Fname, Lname, Bname, DoB)
             VALUES (?,?,?,?,?,?)`);
   
         //Creates the salt for the new user, and hashes it with the users inputted password.
