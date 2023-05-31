@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS User
     Lname TEXT NOT NULL,
     Bname TEXT,
     DoB TEXT NOT NULL,
-    accountType TEXT NOT NULL DEFAULT 'user',
+    AccountType TEXT NOT NULL DEFAULT 'user',
     img TEXT,
     Email_Confirmed BIT DEFAULT 0 NOT NULL,
     Account_Status BIT DEFAULT 0 NOT NULL, 
@@ -26,13 +26,13 @@ CREATE TABLE IF NOT EXISTS Password
 
 CREATE TABLE IF NOT EXISTS Address
 (
-    id VARCHAR(128) NOT NULL UNIQUE,
-    address VARCHAR(128) NOT NULL,
+    AddressID VARCHAR(128) NOT NULL UNIQUE,
+    Address VARCHAR(128) NOT NULL,
     UserID VARCHAR(128) NOT NULL,
-    line1 VARCHAR(128) NOT NULL,
-    line2 VARCHAR(128) NOT NULL,
-    city VARCHAR(128) NOT NULL,
-    postcode VARCHAR(128) NOT NULL,
+    Line1 VARCHAR(128) NOT NULL,
+    Line2 VARCHAR(128) NOT NULL,
+    City VARCHAR(128) NOT NULL,
+    Postcode VARCHAR(128) NOT NULL,
     PRIMARY KEY (id)
     FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE
 );
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Item
     ItemID VARCHAR(128) NOT NULL UNIQUE,
     UserID VARCHAR(128) NOT NULL,
     Title VARCHAR(128) NOT NULL,
-    Description TEXT NOT NULL,
+    Desc TEXT NOT NULL,
     Price DECIMAL(10,2) NOT NULL,
     Category VARCHAR(128) NOT NULL,
     img TEXT,
@@ -71,11 +71,11 @@ CREATE TABLE IF NOT EXISTS Item
 CREATE TABLE IF NOT EXISTS Food
 (
     FoodID VARCHAR(128) NOT NULL UNIQUE,
-    name VARCHAR(128) NOT NULL,
-    description TEXT NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    Title VARCHAR(128) NOT NULL,
+    Desc TEXT NOT NULL,
+    Price DECIMAL(10,2) NOT NULL,
     img TEXT,
-    quantity INT NOT NULL,
+    Quantity INT NOT NULL,
     BusinessID VARCHAR(128) NOT NULL,
     SDate TEXT NOT NULL,
     EDate TEXT NOT NULL,
@@ -84,6 +84,4 @@ CREATE TABLE IF NOT EXISTS Food
     PRIMARY KEY (FoodID)
     FOREIGN KEY (BusinessID) REFERENCES User(UserID) ON DELETE CASCADE
 )
-
--- We may need a table for purchased items  
 
