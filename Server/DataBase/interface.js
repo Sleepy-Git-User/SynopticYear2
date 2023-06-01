@@ -111,6 +111,20 @@ module.exports = (dbName = "Database") => {
 
     //******************** Listings ***********************/
 
+    //Updating more than just the quantity??
+
+    /**
+     *  Creates a new listing
+     * @param {*} Name The name of the item
+     * @param {*} Desc The description of the item
+     * @param {*} Price The price of the item
+     * @param {*} img The title of the image of the item
+     * @param {*} Quantity The quantity being sold
+     * @param {*} SellerID The businessID
+     * @param {*} ListingDate The start date of the listing
+     * @param {*} EndDate The end date of the listing
+     * @returns True if successful
+     */
     function createListing(
         Name,
         Desc,
@@ -121,7 +135,7 @@ module.exports = (dbName = "Database") => {
         ListingDate,
         EndDate
     ) {
-        const listing_id = Database.generateUUID("Food", "FoodID"); //Creates users UUID.
+        const listing_id = Database.generateUUID("Listing", "ListingID"); //Creates users UUID.
         if (Quantity < 0) {
             return "Invalid Quantity";
         }
@@ -135,7 +149,7 @@ module.exports = (dbName = "Database") => {
     INSERT INTO Listing
     (ListingID, Name, Description, Price, img, Quantity, SellerID, SDate, EDate)
     VALUES (?,?,?,?,?,?,?,?,?)`);
-        insert_listing_sql.run(
+        return insert_listing_sql.run(
             listing_id,
             Name,
             Desc,
@@ -143,15 +157,105 @@ module.exports = (dbName = "Database") => {
             img,
             Quantity,
             SellerID,
-            SDate,
-            EDate
+            ListingDate,
+            EndDate
         );
+    }
+
+    /**
+     * Updates one column in the listing table
+     * @param {*} ListingID Which listing is it
+     * @param {*} Column What column are you changing
+     * @param {*} NewValue What is the new value
+     * @param {*} CheckedColumn What column are you checking against
+     * @param {*} CheckedValue What is the value you are checking against
+     *
+     * @returns true if successful
+     */
+    function updateListing(
+        ListingID,
+        Column,
+        NewValue,
+        CheckedColumn,
+        CheckedValue
+    ) {
+        return Database.updateRecord(
+            "Listing",
+            Column,
+            NewValue,
+            "ListingID",
+            ListingID,
+            CheckedColumn,
+            CheckedValue
+        );
+    }
+
+    /**
+     * Gets all listings that are active
+     * @returns All listings that are active
+     */
+    function getListings() {
+        return Database.getRecord("Listing", "Status", 0);
+    }
+
+    /**
+     * Gets a specific listing
+     * @param {*} ListingID Which specified listing are you looking for
+     * @returns True if found
+     */
+    function getListing(ListingID) {
+        return Database.getRecord("Listing", "ListingID", ListingID);
+    }
+
+    /**
+     * Gets all active listings from a specific business
+     * @param {*} BusinessID Which business are you looking for
+     * @returns All active listings from a specific business
+     */
+    function getBusinessListings(BusinessID) {
+        listing_sql = Database.database.prepare(
+            `SELECT * FROM Listing WHERE SellerID = ? AND Status = 0`
+        );
+        return listing_sql.all(BusinessID);
+    }
+
+    /**
+     * Gets all listings from a specific business including expired listings
+     * @param {*} BusinessID Which business are you looking for
+     * @returns All listings from a specific business
+     */
+    function getAllBusinessListings(BusinessID) {
+        return Database.getRecord("Listing", "SellerID", BusinessID);
+    }
+
+    /**
+     *  Gets all listings from the database
+     * @returns All listings from the database
+     */
+    function getAllRecords() {
+        return Database.getAllRecords("Listing");
+    }
+
+    /**
+     *  Gets all expired listings
+     * @returns All expired listings
+     */
+    function getExpiredListings() {
+        return Database.getRecord("Listing", "Status", 1);
     }
 
     //********************************************************/
 
     //******************** PURCHASE ***********************/
 
+    /**
+     *  Creates a new purchase of an item
+     *  Changes the quantity of the item and status if needed
+     * @param {*} ListingID The item being purcahsed
+     * @param {*} BuyerID WHo is purchasing the item
+     * @param {*} Quantity How many they are purchasing
+     * @returns "Purchase Successful" if successful
+     */
     function reserveItem(ListingID, BuyerID, Quantity) {
         //Get listing
         if (Database.inTable("Listing", "ListingID", ListingID) === true) {
@@ -169,11 +273,17 @@ module.exports = (dbName = "Database") => {
             }
 
             //Insert into purchases section
-
+            purchase_id = Database.generateUUID("Purchase", "PurchaseID");
             const insert_purchase_sql = Database.database.prepare(`
-        INSERT INTO Purchase(ListingID, BuyerID, Date, Quantity) VALUES (?,?,?)`);
+        INSERT INTO Purchase(PurchaseID, ListingID, BuyerID, Date, Quantity) VALUES (?,?,?,?,?)`);
 
-            insert_purchase_sql.run(ListingID, BuyerID, new Date(), Quantity);
+            insert_purchase_sql.run(
+                purchase_id,
+                ListingID,
+                BuyerID,
+                new Date(),
+                Quantity
+            );
 
             //Update Quantity in listing
             NewQuantity = Listing.Quantity - Quantity;
@@ -201,16 +311,47 @@ module.exports = (dbName = "Database") => {
         return "Listing does not exist";
     }
 
+    /**
+     *  Gets all purchases from a specific buyer
+     * @param {*} BuyerID Which buyer are you looking for
+     * @returns All purchases from a specific buyer
+     */
     function getBoughtItems(BuyerID) {
         return Database.getRecord("Purchase", "BuyerID", BuyerID);
     }
 
+    /**
+     *  Gets all the items sold by a business
+     * @param {*} SellerID Which business are you looking for
+     * @returns All items sold by a business
+     */
     function getSoldItems(SellerID) {
         //Joing purchase and listing tables using ListingID
         const sql = Database.database.prepare(
             `SELECT * FROM Purchase INNER JOIN Listing ON Purchase.ListingID = Listing.ListingID WHERE Listing.SellerID = ?`
         );
         return sql.all(SellerID);
+    }
+
+    /**
+     *  Gets all the purchases of a specific item
+     * @param {*} ListingID
+     * @returns All purchases of a specific item
+     */
+    function getItemHistory(ListingID) {
+        const sql = Database.database.prepare(
+            `SELECT * FROM Purchase INNER JOIN Listing ON Purchase.ListingID = Listing.ListingID WHERE Listing.ListingID = ?`
+        );
+        return sql.all(ListingID);
+    }
+
+    /**
+     *  Gets a specific purchase
+     * @param {*} PurchaseID Which purchase are you looking for
+     * @returns A specific purchase
+     */
+    function getPurchase(PurchaseID) {
+        return Database.getRecord("Purchase", "PurchaseID", PurchaseID);
     }
 
     //********************************************************/
@@ -226,5 +367,18 @@ module.exports = (dbName = "Database") => {
         editLname,
         getUserDetails,
         getAllUserDetails,
+        createListing,
+        updateListing,
+        getListings,
+        getListing,
+        getBusinessListings,
+        getAllBusinessListings,
+        getAllRecords,
+        getExpiredListings,
+        reserveItem,
+        getBoughtItems,
+        getSoldItems,
+        getItemHistory,
+        getPurchase,
     };
 };
