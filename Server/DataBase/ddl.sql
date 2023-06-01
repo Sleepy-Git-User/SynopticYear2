@@ -6,9 +6,7 @@ CREATE TABLE IF NOT EXISTS User
     Fname TEXT NOT NULL,
     Lname TEXT NOT NULL,
     DoB TEXT NOT NULL,
-    AccountType BIT DEFAULT 0 NOT NULL,
     img TEXT,
-    AddressID VARCHAR(128) NOT NULL,
     Email_Confirmed BIT DEFAULT 0 NOT NULL,
     Account_Status BIT DEFAULT 0 NOT NULL, 
     FOREIGN KEY (AddressID) REFERENCES Address(AddressID)
@@ -18,13 +16,24 @@ CREATE TABLE IF NOT EXISTS Business
 (
     BusinessID VARCHAR(128) NOT NULL UNIQUE PRIMARY KEY,
     Bname TEXT NOT NULL,
-    Email VARCHAR(320) NOT NULL UNIQUE,
+    Email VARCHAR(320) NOT NULL UNIQUE, --Contact details for business
     PhoneNumber TEXT NOT NULL UNIQUE,
     img TEXT,
     AddressID VARCHAR(128) NOT NULL,
+    InvCode VARCHAR(8) NOT NULL,
     Email_Confirmed BIT DEFAULT 0 NOT NULL,
     Account_Status BIT DEFAULT 0 NOT NULL,
     FOREIGN KEY (AddressID) REFERENCES Address(AddressID)
+);
+
+CREATE TABLE IF NOT EXISTS user_business
+(
+    UserID VARCHAR(128) NOT NULL,
+    BusinessID VARCHAR(128) NOT NULL,
+    privilege BIT DEFAULT 0 NOT NULL, -- 0 = staff, 1 = admin
+    PRIMARY KEY (UserID, BusinessID),
+    FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE
+    FOREIGN KEY (BusinessID) REFERENCES Business(BusinessID) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Password
@@ -33,7 +42,6 @@ CREATE TABLE IF NOT EXISTS Password
     BusinessID VARCHAR(128),
     Password VARCHAR(64) NOT NULL,
     Salt VARCHAR(64) NOT NULL,
-
     PRIMARY KEY (UserID, BusinessID),
     FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE
     FOREIGN KEY (BusinessID) REFERENCES Business(BusinessID) ON DELETE CASCADE
@@ -86,8 +94,15 @@ CREATE TABLE IF NOT EXISTS Purchase
     BuyerID VARCHAR(128) NOT NULL,
     Date INT NOT NULL,
     Quantity INT NOT NULL,
+    Code VARCHAR(4) NOT NULL,
     PRIMARY KEY (PurchaseID)
     FOREIGN KEY (ListingID) REFERENCES Listing(ListingID) ON DELETE CASCADE
     FOREIGN KEY (BuyerID) REFERENCES User(UserID) ON DELETE CASCADE
 )
 
+CREATE TABLE IF NOT EXISTS Catergories
+(
+    CatergoryID VARCHAR(128) NOT NULL UNIQUE,
+    Name VARCHAR(128) NOT NULL UNIQUE,
+    PRIMARY KEY (CatergoryID)
+)
