@@ -356,7 +356,103 @@ module.exports = (dbName = "Database") => {
 
     //********************************************************/
 
-    //******************** REVIEWS ***********************/
+    //********************** REVIEWS *************************/
+
+    /**
+     *  Creates a new review using User, Item and Business
+     * @param {*} ReviewerID Who is writing the review
+     * @param {*} PurchaseID Which purchase is being reviewed
+     * @param {*} Rating What rating is being given
+     * @param {*} Review What is being said
+     */
+    function createReview(ReviewerID, PurchaseID, Rating, Review) {
+        const BusinessID = Database.getRecord(
+            "Purchase",
+            "PurchaseID",
+            PurchaseID
+        ).SellerID;
+        const insert_review_sql = Database.database.prepare(
+            `INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Rating, Review, Date) VALUES (?,?,?,?,?,?)`
+        );
+        insert_review_sql.run(
+            ReviewerID,
+            BusinessID,
+            PurchaseID,
+            Rating,
+            Review,
+            new Date()
+        );
+    }
+
+    /**
+     *  Gets all reviews from a specific business
+     * @param {*} BusinessID Which business are you looking for
+     * @returns All reviews from a specific business
+     */
+    function getBusinessReviews(BusinessID) {
+        return Database.getRecord("Review", "BusinessID", BusinessID);
+    }
+
+    /**
+     *  Gets the overall rating of the business 1-5
+     * @param {*} BusinessID  Which business are you looking for
+     * @returns  Rating of business
+     */
+    function getBusinessRating(BusinessID) {
+        let total = 0;
+        const reviews = Database.getRecord(
+            "Review",
+            "BusinessID",
+            BusinessID
+        ).forEach((review) => {
+            total += review.Rating;
+        });
+        return total / reviews.length;
+    }
+
+    /**
+     *  Gets all reviews of a specific rating
+     * @param {*} BusinessID    Which business are you looking for
+     * @param {*} Rating  Which rating are you looking for
+     * @returns  All reviews of a specific rating
+     */
+    function filterReviews(BusinessID, Rating) {
+        const reviews = Database.getRecord(
+            "Review",
+            "BusinessID",
+            BusinessID
+        ).filter((review) => {
+            return review.Rating === Rating;
+        });
+        return reviews;
+    }
+
+    /**
+     *  Gets the number of reviews a business has
+     * @param {*} BusinessID Which business are you looking for
+     * @returns Number of reviews a business has
+     */
+    function countBusinessReviews(BusinessID) {
+        return Database.getRecord("Review", "BusinessID", BusinessID).length;
+    }
+
+    /**
+     *  Gets all reviews from a specific user
+     * @param {*} UserID Which user are you looking for
+     * @returns All reviews from a specific user
+     */
+    function getUserReviews(UserID) {
+        return Database.getRecord("Review", "ReviewerID", UserID);
+    }
+
+    /**
+     * Gets the count of reviews a user has
+     * @param {*} UserID Which user are you looking for
+     * @returns Count of reviews a user has
+     */
+    function getReviewCount(UserID) {
+        return Database.getRecord("Review", "ReviewerID", UserID).length;
+    }
 
     return {
         Database,
@@ -380,5 +476,12 @@ module.exports = (dbName = "Database") => {
         getSoldItems,
         getItemHistory,
         getPurchase,
+        createReview,
+        getBusinessReviews,
+        getBusinessRating,
+        filterReviews,
+        countBusinessReviews,
+        getUserReviews,
+        getReviewCount,
     };
 };
