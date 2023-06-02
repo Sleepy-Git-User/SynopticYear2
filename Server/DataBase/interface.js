@@ -21,21 +21,28 @@ module.exports = (dbName = "Database") => {
     //loginChecker
     //console.log(loginChecker(""));
 
-    function makeUser(
-        Email,
-        PhoneNumber,
-        Fname,
-        Lname,
-        DoB,
-        Password,
-        Line1,
-        Line2,
-        City,
-        Postcode
-    ) {
+    function makeUser(body)
+
+     {
+        const {
+            Email,
+            PhoneNumber,
+            Fname,
+            Lname,
+            DoB,
+            Password,
+            Line1,
+            Line2,
+            City,
+            Postcode
+        } = body;
+
+        console.log(body);
+
         const user_id = Database.generateUUID("User", "UserID"); //Creates users UUID.
         if (Database.inTable("User", "Email", Email) === true) {
             //Checks if the Email is already in the table and returns fales if its taken.
+            console.log("Email Already in use");
             return "Email Already in use";
         } else {
             if (PhoneNumber != null) {
@@ -49,7 +56,7 @@ module.exports = (dbName = "Database") => {
                 //SQL to insert data in to the User table.
                 const insert_user_sql = Database.database.prepare(`
             INSERT INTO User
-            (UserID, Email, PhoneNumber, Fname, Lname, Bname, DoB)
+            (UserID, Email, PhoneNumber, Fname, Lname, DoB)
             VALUES (?,?,?,?,?,?)`);
 
                 //Creates the salt for the new user, and hashes it with the users inputted password.

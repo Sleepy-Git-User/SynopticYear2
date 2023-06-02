@@ -16,8 +16,8 @@ module.exports = (components) => {
     })
 
     router.post('/makeUser', (req, res)=>{
-        interface.makeUser(req.body.Email,req.body.PhoneNumber,req.body.Fname,req.body.Lname,req.body.DoB,req.body.Password);
-        res.json({success:true})
+        return interface.makeUser(req.body);
+        //res.json({success:true})
     });
 
     router.post('/loginChecker', async (req, res) => {
