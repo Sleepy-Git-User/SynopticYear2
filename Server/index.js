@@ -12,7 +12,7 @@ app.use(
 		optionsSuccessStatus: 200,
 	})
 );
-
+ 
 app.use(
 	express.static(path.resolve(__dirname, "../client/dist"), { index: false })
 );

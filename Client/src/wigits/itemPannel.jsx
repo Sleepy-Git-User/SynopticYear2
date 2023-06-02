@@ -16,7 +16,7 @@ export default function ItemPannel(PurchaseID) {
 
 	const getListing = (ID) => {
 		console.log(ID);
-		axios.get("/api/getListingPannel/" + ID).then((res) => {
+		axios.get("/api/getItemPannel/" + ID).then((res) => {
 			console.log(res.data);
 			setListing(res.data);
 		});
@@ -45,9 +45,11 @@ export default function ItemPannel(PurchaseID) {
 				</div>
 			</div>
 			<div className="itemMain">
-				<img className="itemLogo" src={listing.IMG} alt="Item Image" />
-				<p className="itemName">Test Item</p>
-				<p className="itemQuantity">Quantity</p>
+				<img id="itemLogo" src={listing.img} alt="Item Image" />
+				<div className="itemInfo">
+					<p id="itemName">Test Item</p>
+					<p id="itemQuantity">Quantity</p>
+				</div>
 			</div>
 		</div>
 	);

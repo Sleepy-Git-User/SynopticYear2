@@ -40,7 +40,7 @@ export default function BusinessPannel(BusinessID) {
 					icon={faEnvelope}
 					style={{ color: "#000000" }}
 				/>
-				<p className="businessEmail">Conact Seller</p>
+				<p className="businessEmail">Contact Seller</p>
 			</div>
 		</div>
 	);

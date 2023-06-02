@@ -13,6 +13,7 @@ import ItemPannel from "./wigits/itemPannel";
 export default function ReviewTemplate() {
 	const [loading, setLoading] = useState(false); // add this state
 	const [purchaseID, setPurchaseID] = useState();
+
 	const [form, setForm] = useState({
 		PurchaseID: null,
 		BusinessID: null,
@@ -77,7 +78,7 @@ export default function ReviewTemplate() {
 	return (
 		<div>
 			<h1>Review Template</h1>
-			<h2>purchaseId: {purchaseID}</h2>
+			<h2>purchaseID: {purchaseID}</h2>
 			<h2>
 				{loading ? (
 					"Loading..."
@@ -86,11 +87,11 @@ export default function ReviewTemplate() {
 						<BusinessPannel businessID={null} />
 						<ItemPannel itemID={null} />
 						<div className="review">
-							<h1>Write a Review</h1>
-							<form action="/api/submitReview" method="POST">
+							<h1 id="formTitle">Write a Review:</h1>
+							<form id="reviewForm">
 								<label for="rating">Rating:</label>
 								<input
-									type="number"
+									type="range"
 									id="Rating"
 									name="Rating"
 									min="1"
@@ -100,17 +101,22 @@ export default function ReviewTemplate() {
 									required
 								></input>
 								<label for="review">Review:</label>
-								<input
+								<textarea
 									type="text"
 									id="Review"
 									name="Review"
 									value={form.Review}
 									onChange={handleChange}
 									required
-								></input>
-								<button type="submit" onSubmit={handleSubmit}>
-									Submit
-								</button>
+								></textarea>
+								<div id="reviewBtn">
+									<button
+										type="submit"
+										onSubmit={handleSubmit}
+									>
+										Submit
+									</button>
+								</div>
 							</form>
 						</div>
 					</div>
