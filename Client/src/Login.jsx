@@ -4,6 +4,7 @@ import CreateUser from "./CreateUser";
 import CreateBusiness from "./CreateBusiness";
 import LoginForm from "./LoginForm";
 import CreateListing from "./CreateListing";
+import ReviewTemplate from "./ReviewTemplate";
 
 export default function Login({saveId}) {
 
@@ -27,6 +28,10 @@ export default function Login({saveId}) {
         <br/>
         <br/>
         <CreateListing />
+        <br />
+        <br />
+        <br />
+        <ReviewTemplate />
         
         </div>
     );
