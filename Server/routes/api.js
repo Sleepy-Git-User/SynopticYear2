@@ -36,8 +36,7 @@ module.exports = (components) => {
 
 	router.post("/loginChecker", async (req, res) => {
 		try {
-			const { Email } = req?.Email;
-			const { Password } = req?.Password;
+			const { Email, Password } = req.body;
 			if (!Email || !Password ) {
 				return res
 					.status(400)
