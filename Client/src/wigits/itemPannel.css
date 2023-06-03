@@ -1,0 +1,131 @@
+.itemPannel {
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	align-items: start;
+	min-width: 0;
+	max-width: 1100px;
+	margin: 0;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.itemHeader {
+	display: grid;
+	grid-template-columns: auto auto;
+	width: 99.9%;
+	overflow: hidden;
+	background-color: #f0f2f2;
+	padding: 0 0 10px 0;
+	border: 1px #d5d9d9 solid;
+	border-radius: 8px 8px 0 0;
+}
+
+.itemDP {
+	display: flex;
+	overflow: hidden;
+
+	font-size: 10px;
+	align-items: flex-start;
+	margin: 0;
+	padding: 0;
+}
+
+.itemDP h1 {
+	padding: 10px 30px;
+	margin: 0;
+	font-size: 20px;
+}
+
+.itemDate {
+	display: flex;
+	flex-direction: column;
+	padding: 0 30px;
+	margin: 0;
+}
+
+#purchaseDateInput {
+	padding: 0 30px;
+	margin: 0;
+	font-size: 15px;
+}
+
+.itemPrice {
+	display: flex;
+	flex-direction: column;
+}
+
+#purchasePriceInput {
+	padding: 0 30px;
+	margin: 0;
+	font-size: 15px;
+}
+
+.purchaseID {
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-start;
+}
+
+.purchaseID h1 {
+	padding: 10px 30px;
+	margin: 0;
+	font-size: 20px;
+}
+
+#purchaseIDInput {
+	padding: 10px 30px;
+	margin: 0;
+	font-size: 20px;
+}
+
+.itemMain {
+	display: flex;
+	flex-direction: row;
+	width: 99.9%;
+	height: 134px;
+	overflow: hidden;
+	padding: 0 0 10px 0;
+	border: 1px #d5d9d9 solid;
+	border-radius: 0 0 8px 8px;
+	margin-bottom: 30px;
+}
+
+#itemLogo {
+	display: flex;
+	width: 30%;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+.itemInfo {
+	display: flex;
+	flex-direction: column;
+	width: 70%;
+	margin: 0;
+	padding: 0;
+}
+
+.itemInfo p {
+	margin: 0;
+	padding: 0;
+}
+
+#itemName {
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	overflow: hidden;
+	font-size: 30px;
+	padding-top: 10px;
+}
+
+#itemQuantity {
+	grid-column: 2 / span 2;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	overflow: hidden;
+	font-size: 15px;
+}
