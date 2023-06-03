@@ -16,7 +16,7 @@ export default function LoginForm({saveId}) {
         fetch("http://localhost:3000/api/loginChecker", {
             method: "POST",
             //CHANGE TO NOT MAKE IT JUST THIS ONE USER
-            body: JSON.stringify({userID: "2418895d-6f24-49ba-9bdc-b6f83646100d"}),
+            body: JSON.stringify(form),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -26,13 +26,8 @@ export default function LoginForm({saveId}) {
             .then((info) => {
                 if (info.success) {
                     
-                    //CHANGE TO NOT SET THE ID TO JUST THE ONE USER
                     setError("");
-                    setUserId(info.data);
-                    console.log("Success!");
-                    const userIdTest = getUserId();
-                    console.log(userIdTest);
-                    saveId(userIdTest);
+                    saveId(info.data);
                     
                 } else {
                     setError(info.data);

@@ -20,7 +20,7 @@ module.exports = (components) => {
 
 	router.post("/makeUser", (req, res) => {
 		
-		res.json({ success: true , Data: interface.makeUser(
+		res.json(interface.makeUser(
 			req.body.Email,
 			req.body.PhoneNumber,
 			req.body.Fname,
@@ -31,25 +31,23 @@ module.exports = (components) => {
 			req.body.Line2,
 			req.body.City,
 			req.body.Postcode
-		)});
+		));
 	});
 
-	router.post("/loginChecker", async (req, res) => {
+	router.post("/loginChecker", (req, res) => {
+		const { Email, Password } = req.body;
+		console.log(req.body);
 		try {
-			const { Email } = req?.Email;
-			const { Password } = req?.Password;
+			console.log(Email);
+			console.log(Password);
 			if (!Email || !Password ) {
-				return res
-					.status(400)
-					.json({ success: false, message: "Missing Email or Password" });
+				return res.json({ success: false, data: "Missing Email or Password" });
 			}
-			const isValid = await interface.loginChecker(Email,Password);
-			return res.json({ success: true, Data: isValid });
+			console.log("GOT HERE!");
+			res.json(interface.loginChecker(Email,Password));
 		} catch (error) {
 			console.error(error);
-			return res
-				.status(500)
-				.json({ success: false, message: "Server error" });
+			return res.json({ success: false, data: "Server error" });
 		}
 	});
 
