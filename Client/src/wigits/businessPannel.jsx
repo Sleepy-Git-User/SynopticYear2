@@ -16,15 +16,15 @@ export default function BusinessPannel(BusinessID) {
 
 	const getBusiness = (ID) => {
 		console.log(ID);
-		axios.get("/api/getBusinessPannel/" + ID).then((res) => {
+		axios.get("/api/getBusinessPannel/" + ID.businessID).then((res) => {
 			console.log(res.data);
 			setBusiness(res.data);
 		});
 	};
 
-	// useEffect(() => {
-	//     getBusiness(BusinessID);
-	// }, []);
+	useEffect(() => {
+		getBusiness(BusinessID);
+	}, []);
 
 	return (
 		<div className="businessPannel">

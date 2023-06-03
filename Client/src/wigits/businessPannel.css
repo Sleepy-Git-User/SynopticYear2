@@ -30,7 +30,7 @@
 }
 
 .businessInfo {
-	width: 100%;
+	width: 99.9%;
 	height: 100%;
 	grid-column: span 3;
 	grid-row: span 2;

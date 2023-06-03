@@ -6,20 +6,23 @@ import businessPannel from "./wigits/businessPannel";
 import itemPannel from "./wigits/itemPannel";
 import BusinessPannel from "./wigits/businessPannel";
 import ItemPannel from "./wigits/itemPannel";
-
+import emptystr from "/emptystr.svg";
+import fullstr from "/fullstr.svg";
+import { useNavigate } from "react-router-dom";
 //I want this to be the page that leads from a email link
 //I want to import and purchaseID from the link
 
 export default function ReviewTemplate() {
 	const [loading, setLoading] = useState(false); // add this state
 	const [purchaseID, setPurchaseID] = useState();
+	const navigate = useNavigate();
 
 	const [form, setForm] = useState({
 		PurchaseID: null,
 		BusinessID: null,
 		BuyerID: null,
-		Rating: null,
-		Review: null,
+		Rating: 0,
+		Review: "",
 		Date: null,
 	});
 
@@ -59,6 +62,37 @@ export default function ReviewTemplate() {
 		});
 	};
 
+	const stars = (rating, fullstr, emptystr, handleClick) => {
+		let stars = [];
+		for (let i = 0; i < rating; i++) {
+			stars.push(
+				<button
+					className="strBtn"
+					value={i}
+					onClick={() => handleClick(i)}
+				>
+					<img src={fullstr} alt="star" />
+				</button>
+			);
+		}
+		for (let i = rating; i < 5; i++) {
+			stars.push(
+				<button
+					className="strBtn"
+					value={i}
+					onClick={() => handleClick(i)}
+				>
+					<img src={emptystr} alt="star" />
+				</button>
+			);
+		}
+		return stars;
+	};
+
+	const handleClick = (i) => {
+		setForm({ ...form, Rating: i + 1 });
+	};
+
 	const handleChange = (e) => {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
@@ -66,40 +100,47 @@ export default function ReviewTemplate() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		console.log("submitting");
+		console.log(form);
 		axios.post("/api/submitReview", form).then((res) => {
 			console.log(res.status);
 		});
+		navigate("/");
 	};
 
-	// useEffect(() => {
-	// 	getPurchaseID();
-	// }, [purchaseID]);
+	useEffect(() => {
+		getPurchaseID();
+	}, [purchaseID]);
 
 	return (
 		<div>
-			<h1>Review Template</h1>
-			<h2>purchaseID: {purchaseID}</h2>
+			<h1 id="reviewHeader">Create Review</h1>
 			<h2>
 				{loading ? (
 					"Loading..."
 				) : (
 					<div>
-						<BusinessPannel businessID={null} />
-						<ItemPannel itemID={null} />
+						<BusinessPannel businessID={purchase.BusinessID} />
+						<ItemPannel purchaseID={purchase.PurchaseID} />
 						<div className="review">
 							<h1 id="formTitle">Write a Review:</h1>
-							<form id="reviewForm">
-								<label for="rating">Rating:</label>
-								<input
-									type="range"
-									id="Rating"
-									name="Rating"
-									min="1"
-									max="5"
-									value={form.Rating}
-									onChange={handleChange}
-									required
-								></input>
+							<div id="rating">
+								<label htmlFor="rating">Rating:</label>
+								<div id="stars" value={form.Rating}>
+									{stars(
+										form.Rating,
+										fullstr,
+										emptystr,
+										handleClick
+									)}
+									<button
+										id="clearBtn"
+										onClick={() => handleClick(-1)}
+									>
+										Clear
+									</button>
+								</div>
+							</div>
+							<form id="reviewForm" onSubmit={handleSubmit}>
 								<label for="review">Review:</label>
 								<textarea
 									type="text"
@@ -110,12 +151,7 @@ export default function ReviewTemplate() {
 									required
 								></textarea>
 								<div id="reviewBtn">
-									<button
-										type="submit"
-										onSubmit={handleSubmit}
-									>
-										Submit
-									</button>
+									<button type="submit">Submit</button>
 								</div>
 							</form>
 						</div>

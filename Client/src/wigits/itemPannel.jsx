@@ -16,7 +16,7 @@ export default function ItemPannel(PurchaseID) {
 
 	const getListing = (ID) => {
 		console.log(ID);
-		axios.get("/api/getItemPannel/" + ID).then((res) => {
+		axios.get("/api/getItemPannel/" + ID.purchaseID).then((res) => {
 			console.log(res.data);
 			setListing(res.data);
 		});
