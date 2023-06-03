@@ -13,7 +13,7 @@
 .itemHeader {
 	display: grid;
 	grid-template-columns: auto auto;
-	width: 100%;
+	width: 99.9%;
 	overflow: hidden;
 	background-color: #f0f2f2;
 	padding: 0 0 10px 0;
@@ -82,12 +82,13 @@
 .itemMain {
 	display: flex;
 	flex-direction: row;
-	width: 100%;
+	width: 99.9%;
 	height: 134px;
 	overflow: hidden;
 	padding: 0 0 10px 0;
 	border: 1px #d5d9d9 solid;
 	border-radius: 0 0 8px 8px;
+	margin-bottom: 30px;
 }
 
 #itemLogo {

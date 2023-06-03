@@ -12,7 +12,7 @@ app.use(
 		optionsSuccessStatus: 200,
 	})
 );
- 
+
 app.use(
 	express.static(path.resolve(__dirname, "../client/dist"), { index: false })
 );
@@ -40,6 +40,14 @@ app.use("/api", APIRoute);
 app.get("*", (req, res) => {
 	res.sendFile(path.resolve(__dirname, "../Client/dist", "index.html"));
 });
+
+app.set("view engine", "ejs");
+
+app.get("/", (req, res) => {
+	res.render("../emails/welcome.ejs");
+});
+
+app.use(express.static("emails"));
 
 // Open listener
 app.listen(port, () => {

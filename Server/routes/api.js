@@ -19,48 +19,38 @@ module.exports = (components) => {
 	});
 
 	router.post("/makeUser", (req, res) => {
-		interface.makeUser(
+		
+		res.json({ success: true , Data: interface.makeUser(
 			req.body.Email,
 			req.body.PhoneNumber,
 			req.body.Fname,
 			req.body.Lname,
 			req.body.DoB,
-			req.body.Password
-		);
-		res.json({ success: true });
+			req.body.Password,
+			req.body.Line1,
+			req.body.Line2,
+			req.body.City,
+			req.body.Postcode
+		)});
 	});
 
 	router.post("/loginChecker", async (req, res) => {
 		try {
-			const { userID } = req?.body;
-			if (!userID) {
+			const { Email } = req?.Email;
+			const { Password } = req?.Password;
+			if (!Email || !Password ) {
 				return res
 					.status(400)
-					.json({ success: false, message: "Missing userID" });
+					.json({ success: false, message: "Missing Email or Password" });
 			}
-			const isValid = await interface.loginChecker(userID);
-			return res.json({ success: isValid });
+			const isValid = await interface.loginChecker(Email,Password);
+			return res.json({ success: true, Data: isValid });
 		} catch (error) {
 			console.error(error);
 			return res
 				.status(500)
 				.json({ success: false, message: "Server error" });
 		}
-	});
-
-	router.post("/removeUser", (req, res) => {
-		interface.removeUser(req.body.userID);
-		res.json({ success: true });
-	});
-
-	router.post("/editFname", (req, res) => {
-		interface.editFname(req.body.userID, req.body.Fname);
-		res.json({ success: true });
-	});
-
-	router.post("/editLname", (req, res) => {
-		interface.editLname(req.body.userID, req.body.Lname);
-		res.json({ success: true });
 	});
 
 	router.get("/getPurchase/:purchaseID", (req, res) => {
