@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS User
     Lname TEXT NOT NULL,
     DoB TEXT NOT NULL,
     img TEXT,
+    AddressID VARCHAR(128) NOT NULL,
     Email_Confirmed BIT DEFAULT 0 NOT NULL,
     Account_Status BIT DEFAULT 0 NOT NULL, 
     FOREIGN KEY (AddressID) REFERENCES Address(AddressID)
@@ -26,11 +27,11 @@ CREATE TABLE IF NOT EXISTS Business
     FOREIGN KEY (AddressID) REFERENCES Address(AddressID)
 );
 
-CREATE TABLE IF NOT EXISTS user_business
+CREATE TABLE IF NOT EXISTS User_Business
 (
     UserID VARCHAR(128) NOT NULL,
     BusinessID VARCHAR(128) NOT NULL,
-    privilege BIT DEFAULT 0 NOT NULL, -- 0 = staff, 1 = admin
+    Privilege BIT DEFAULT 0 NOT NULL, -- 0 = staff, 1 = admin
     PRIMARY KEY (UserID, BusinessID),
     FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE
     FOREIGN KEY (BusinessID) REFERENCES Business(BusinessID) ON DELETE CASCADE
@@ -39,12 +40,10 @@ CREATE TABLE IF NOT EXISTS user_business
 CREATE TABLE IF NOT EXISTS Password
 (
     UserID VARCHAR(128),
-    BusinessID VARCHAR(128),
     Password VARCHAR(64) NOT NULL,
     Salt VARCHAR(64) NOT NULL,
-    PRIMARY KEY (UserID, BusinessID),
+    PRIMARY KEY (UserID),
     FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE
-    FOREIGN KEY (BusinessID) REFERENCES Business(BusinessID) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Address

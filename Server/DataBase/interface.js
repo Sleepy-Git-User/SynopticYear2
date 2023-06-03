@@ -492,6 +492,7 @@ module.exports = (dbName = "Database") => {
 		data.Date = purchase.Date;
 		return data;
 	}
+
 	return {
 		Database,
 		loginChecker,
