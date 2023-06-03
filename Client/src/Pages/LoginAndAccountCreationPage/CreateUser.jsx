@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 
-function CreateUser({  }) {
+function CreateUser({saveId}) {
     
     //Form data for creating a user (including address)
     const [form, setForm] = useState({
@@ -16,6 +16,8 @@ function CreateUser({  }) {
         City: "",
         Postcode: ""
     });
+
+    const [error, setError] = useState("");
 
     //Used to show error messages for invalid data
     //const [emailError, setEmailError] = useState("");
@@ -37,13 +39,18 @@ function CreateUser({  }) {
         })
             .then((response) => response.json())
 
-            .then((data) => {
+            .then((info) => {
                 //May need to be updated to another page
-                if (data) {
+                if (info.success) {
+                    setError("");
+                    setUserId(info.data);
+                    console.log("Success!");
+                    const userIdTest = getUserId();
+                    console.log(userIdTest);
+                    saveId(userIdTest);
                     
-                    alert("Account Created!");
                 } else {
-                    alert("Invalid account creation details.");
+                    setError(info.data);
                 }
             })
             .catch((error) => {
@@ -185,6 +192,8 @@ function CreateUser({  }) {
             <br />
             <br />
             <br />
+
+            <p>{error}</p>
 
             <button type="submit">
                 Create Account

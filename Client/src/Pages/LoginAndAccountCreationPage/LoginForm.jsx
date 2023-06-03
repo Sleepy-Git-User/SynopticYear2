@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setUserId, getUserId } from "./auth";
+import { setUserId, getUserId } from "../../auth";
 
 
 export default function LoginForm({saveId}) {
@@ -7,6 +7,8 @@ export default function LoginForm({saveId}) {
         Email: "",
         Password: "",
     });
+
+    const [error, setError] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -21,17 +23,19 @@ export default function LoginForm({saveId}) {
         })
             .then((response) => response.json())
 
-            .then((data) => {
-                if (data.success) {
+            .then((info) => {
+                if (info.success) {
                     
-                    setUserId("2418895d-6f24-49ba-9bdc-b6f83646100d");
+                    //CHANGE TO NOT SET THE ID TO JUST THE ONE USER
+                    setError("");
+                    setUserId(info.data);
                     console.log("Success!");
                     const userIdTest = getUserId();
                     console.log(userIdTest);
                     saveId(userIdTest);
                     
                 } else {
-                    alert(data.message);
+                    setError(info.data);
                 }
             })
             .catch((error) => {
@@ -55,7 +59,7 @@ export default function LoginForm({saveId}) {
     return (
         <div>
         <form class="login-form" onSubmit={handleSubmit}>
-            <label htmlFor="email">Username:</label>
+            <label htmlFor="email">Email:</label>
             <input
                 type="email"
                 id="email"
@@ -76,7 +80,7 @@ export default function LoginForm({saveId}) {
             />
 
             <br />
-
+            <p>{error}</p>
             <button class="login-btn" type="submit">
                 Log In
             </button>
