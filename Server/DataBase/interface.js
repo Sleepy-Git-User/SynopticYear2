@@ -37,15 +37,7 @@ module.exports = (dbName = "Database") => {
         if (Database.inTable("User", "Email", Email) === true) {
             //Checks if the Email is already in the table and returns fales if its taken.
             return "Email Already in use";
-        } else {
-            if (PhoneNumber != null) {
-                if (
-                    Database.inTable("User", "PhoneNumber", PhoneNumber) ===
-                    true
-                ) {
-                    return "Phone number already taken.";
-                }
-            } else {
+            }else {
                 //SQL to insert data in to the User table.
                 const insert_user_sql = Database.database.prepare(`
             INSERT INTO User
@@ -76,7 +68,6 @@ module.exports = (dbName = "Database") => {
                 return "Account Created Successfully";
             }
         }
-    }
     //makeUser Test
     //console.log(makeUser("car@gmail.com","12313232","Tester","Jones","02/04/2000","Game"));
 
