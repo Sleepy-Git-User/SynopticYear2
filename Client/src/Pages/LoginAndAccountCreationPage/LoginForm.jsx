@@ -27,7 +27,7 @@ export default function LoginForm({saveId}) {
                 if (info.success) {
                     
                     setError("");
-                    saveId(info.data);
+                    saveId(info.data[0].UserID);
                     
                 } else {
                     setError(info.data);
