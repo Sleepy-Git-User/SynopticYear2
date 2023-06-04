@@ -38,6 +38,7 @@
 		/>
 		<h1 style="font-family: 'Roboto Slab', sans-serif">Grab-It & Govan</h1>
 	</header>
+
 	<body
 		style="
 			font-family: 'Roboto Slab', sans-serif;
@@ -67,31 +68,85 @@
 				"
 			>
 				<div
-					class="itemImage"
+					class="itemDetails"
 					style="
 						font-family: 'Roboto Slab', sans-serif;
-						flex: 0.6;
-						display: flex;
+						flex: 1.2;
 						padding: 0 10px;
-						justify-content: center;
+						display: grid;
+						grid-template-columns: 0.5fr 1fr;
 					"
 				>
-					<img
-						src=<%= data.img %>
-						alt="item image"
-						width="200"
-						height="200"
-						style="font-family: 'Roboto Slab', sans-serif"
-					/>
+					<h1
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-size: 20px;
+							font-weight: 750;
+							grid-column: span 2;
+						"
+					>
+						Order Summary:
+					</h1>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						Order #:
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						<%= data.ID %>
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						Collection Date:
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						<%= data.Date %> before 5pm
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						Order Total:
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						£<%= data.Total %>
+					</p>
 				</div>
 				<div
-					class="itemInfo"
+					class="itemAddress"
 					style="
 						font-family: 'Roboto Slab', sans-serif;
 						flex: 1;
-						display: flex;
-						flex-direction: column;
-						justify-content: center;
 						margin-left: 20px;
 						padding: 0 20px;
 						border-left: 1px solid #d5d9d9;
@@ -102,32 +157,116 @@
 							font-family: 'Roboto Slab', sans-serif;
 							font-size: 20px;
 							font-weight: 750;
+							margin-bottom: 20px;
 						"
 					>
-						Name: <%= purchase.Name %>
+						Collection Address:
 					</h1>
-					<h1
+					<p
 						style="
 							font-family: 'Roboto Slab', sans-serif;
-							font-size: 20px;
-							font-weight: 750;
+							font-weight: 540;
 						"
 					>
-						Comapany: <%= purchase.Seller %>
-					</h1>
-					<h1
+						<%= data.Name %>
+					</p>
+					<p
 						style="
 							font-family: 'Roboto Slab', sans-serif;
-							font-size: 20px;
-							font-weight: 750;
+							font-weight: 540;
 						"
 					>
-						Date: <%= purchase.Date %>
-					</h1>
+						<%= data.Line1 %>
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+						"
+					>
+						<%= data.Line2 %><%= data.Postcode %>
+					</p>
 				</div>
 			</div>
 			<div
-				class="reviewBox"
+				class="itemTable"
+				style="
+					font-family: 'Roboto Slab', sans-serif;
+					border: 1px solid #d5d9d9;
+					margin: 20px 0;
+					display: flex;
+					justify-content: space-evenly;
+				"
+			>
+				<table
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						text-align: left;
+						width: 100%;
+					"
+				>
+					<tr style="font-family: 'Roboto Slab', sans-serif">
+						<th
+							style="
+								font-family: 'Roboto Slab', sans-serif;
+								padding-left: 15px;
+							"
+						>
+							Name
+						</th>
+						<th style="font-family: 'Roboto Slab', sans-serif">
+							QTY
+						</th>
+						<th style="font-family: 'Roboto Slab', sans-serif">
+							Price
+						</th>
+					</tr>
+					<tr style="font-family: 'Roboto Slab', sans-serif">
+						<td
+							id="col1"
+							style="
+								font-family: 'Roboto Slab', sans-serif;
+								padding: 5px;
+								font-size: 20px;
+								display: flex;
+								align-items: center;
+							"
+						>
+							<img
+								src=<%= data.img %>
+								alt="logo"
+								width="100"
+								height="100"
+								style="
+									font-family: 'Roboto Slab', sans-serif;
+									margin-right: 15px;
+								"
+							/>
+							<%= data.Item %>
+						</td>
+						<td
+							style="
+								font-family: 'Roboto Slab', sans-serif;
+								padding: 5px;
+								font-size: 20px;
+							"
+						>
+							<%= data.Quantity %>
+						</td>
+						<td
+							style="
+								font-family: 'Roboto Slab', sans-serif;
+								padding: 5px;
+								font-size: 20px;
+							"
+						>
+							£<%= data.Price %>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div
+				class="reserveCode"
 				style="
 					font-family: 'Roboto Slab', sans-serif;
 					display: flex;
@@ -135,7 +274,7 @@
 					align-items: center;
 					margin: 50px auto 0 auto;
 					width: 70%;
-					height: 350px;
+					height: 300px;
 					padding: 20px;
 					background-color: #ffd6e1;
 				"
@@ -149,7 +288,7 @@
 					"
 				>
 					<h1 style="font-family: 'Roboto Slab', sans-serif">
-						We would love to hear from you!
+						Reserve Code
 					</h1>
 					<p
 						style="
@@ -157,15 +296,13 @@
 							font-size: 20px;
 						"
 					>
-						Your reviews truly matter. They guide fellow customers,
-						support local businesses, and help us improve. By
-						sharing your experiences, you contribute to our vibrant
-						community. Thank you for being an important part of our
-						community.
+						This is a unique code given to you. When going to
+						recieve your items show this to the seller to confirm
+						your order
 					</p>
 				</div>
 				<div
-					class="button"
+					class="code"
 					style="
 						font-family: 'Roboto Slab', sans-serif;
 						font-size: 50px;
@@ -177,14 +314,12 @@
 						margin-top: 5px;
 					"
 				>
-					<a href=<%=url %>
-						style=" font-family: 'Roboto Slab', sans-serif; color:
-						#fff; text-decoration: none; " >Write a review!</a
-					>
+					<%= code %>
 				</div>
 			</div>
 		</div>
 	</body>
+
 	<footer
 		class="footer"
 		style="

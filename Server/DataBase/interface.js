@@ -4,6 +4,16 @@ const { DataBaseSystem } = require("./database.js");
 const DDLPath = path.join(__dirname, "/ddl.sql");
 const DbPath = path.join(__dirname, "/");
 const crypto = require("../utili/password.js");
+const nodemailer = require("nodemailer");
+const ejs = require("ejs");
+
+const transporter = nodemailer.createTransport({
+	service: "gmail",
+	auth: {
+		user: "se.healthtracker101@gmail.com",
+		pass: "btssdtghvfwpyiyo",
+	},
+});
 
 module.exports = (dbName = "Database") => {
 	//Creates the Database class
@@ -493,6 +503,154 @@ module.exports = (dbName = "Database") => {
 		return data;
 	}
 
+	//********************************************************/
+
+	//********************** Emails *************************/
+
+	function sendWelcomeEmail(email) {
+		//TODO
+
+		ejs.renderFile(path.join(__dirname, "./emails/welcome.ejs"), function (err, str) {
+		if (err) {
+			console.log(err);
+			return
+		}
+		let mailOptions = {
+			from:  '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
+			to: email,
+			subject: "Welcome to Grab-It & Govan!",
+			html: str
+		}
+
+		transporter.sendMail(mailOptions, function (err, data) {
+			if (err) {
+				console.log(err);
+				return
+			}
+			console.log("Email sent successfully");
+		}
+		)
+		});
+
+	}
+
+	function sendVerificationEmail(userID) {
+		//TODO
+		let email = getUser(userID).Email;
+		url = "http://localhost:3000/verify?userID=" + userID;
+		ejs.renderFile(path.join(__dirname, "./emails/verify.ejs"), {
+			url
+		}, function (err, str) {
+			if (err) {
+				console.log(err);
+				return
+			}
+			let mailOptions = {
+				from:  '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
+				to: email,
+				subject: "Verify your email address",
+				html: str
+			}
+	
+			transporter.sendMail(mailOptions, function (err, data) {
+				if (err) {
+					console.log(err);
+					return
+				}
+				console.log("Email sent successfully");
+			}
+			)
+			});
+		
+	}
+
+	function sendReservedEmail(purchaseID) {
+		//TODO
+		let purchase = getPurchase(purchaseID);
+		let listing = getListing(purchase.ListingID);
+		let business = getBusiness(listing.BusinessID);
+		let address = getBusinessAddress(listing.BusinessID);
+		let email = getUser(purchase.UserID).Email;
+
+
+		data = {
+			ID: purchase.PurchaseID,
+			Date: purchase.Date,
+			Total: purchase.Quantity * listing.Price,
+			img: listing.img,
+			Item: listing.Name,
+			Quantity: purchase.Quantity,
+			Price: listing.Price,
+			code: purchase.Code,
+			Name: business.Name,
+			Line1: address.Line1,
+			Line2: address.Line2,
+			postcode: address.postcode,
+			
+		};
+		ejs.renderFile(path.join(__dirname, "./emails/reservedItem"), {
+			data
+		}, function (err, str) {
+			if (err) {
+				console.log(err);
+				return
+			}
+			let mailOptions = {
+				from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
+				to: email,
+				subject: "You've reserved an item!",
+				html: str
+			}
+	
+			transporter.sendMail(mailOptions, function (err, data) {
+				if (err) {
+					console.log(err);
+					return
+				}
+				console.log("Email sent successfully");
+			}
+			)
+			});
+		}
+	
+
+	function sendReviewEmail(purchaseID) {
+		//TODO
+		let purchase = getPurchase(purchaseID);
+		let listing = getListing(purchase.ListingID);
+		let business = getBusiness(listing.BusinessID);
+		let email = getUser(purchase.UserID).Email;
+
+		let data = {
+			Name: listing.Name,
+			Seller: business.Name,
+			Date: purchase.Date,
+		};
+		let url =
+			"https://localhost:5173/review?purchaseID="+purchaseID;
+		ejs.render("../emails/review", { data, url }, function (err, str) {
+			if (err) {
+				console.log(err);
+				return
+			}
+			let mailOptions = {
+				from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
+				to: email,
+				subject: "Leave a reivew on your recent purchase!",
+				html: str
+			}
+	
+			transporter.sendMail(mailOptions, function (err, data) {
+				if (err) {
+					console.log(err);
+					return
+				}
+				console.log("Email sent successfully");
+			}
+			)
+			});
+	}
+
 	return {
 		Database,
 		loginChecker,
@@ -524,5 +682,9 @@ module.exports = (dbName = "Database") => {
 		getReviewCount,
 		getBusinessPannel,
 		getItemPannel,
+		sendReservedEmail,
+		sendReviewEmail,
+		sendWelcomeEmail,
+		sendVerificationEmail,
 	};
 };
