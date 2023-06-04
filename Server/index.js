@@ -41,13 +41,7 @@ app.get("*", (req, res) => {
 	res.sendFile(path.resolve(__dirname, "../Client/dist", "index.html"));
 });
 
-app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-	res.render("../emails/welcome.ejs");
-});
-
-app.use(express.static("emails"));
 
 // Open listener
 app.listen(port, () => {
