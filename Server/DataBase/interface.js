@@ -6,6 +6,9 @@ const DbPath = path.join(__dirname, "/");
 const crypto = require("../utili/password.js");
 const nodemailer = require("nodemailer");
 const ejs = require("ejs");
+const Identicon = require("identicon.js");
+const { default: Identicon } = require("identicon.js");
+
 
 const transporter = nodemailer.createTransport({
 	service: "gmail",
@@ -115,13 +118,20 @@ function loginChecker(Email, Password) {
 					address_id
 				);
 				insert_Password.run(user_id, hashedPassword, salt);
-
+				generateProfPic(user_id);
+				sendWelcomeEmail(Email);
+				sendVerificationEmail(Email);
 				//Returns true after creating the new user.
 				return {success: true, data: user_id};
 			}
 		}
 	//makeUser Test
 	//console.log(makeUser("bike@gmail.com","12313232","Tester","Jones","02/04/2000","Game","Party","Lane","London","LN169NG"));
+	function generateProfPic(userID) {
+		var data= new Identicon(userID, {size: 420, format: 'svg'}).toString();
+		console.log("Icon "+data);
+		Database.updateRecord("User", "UserID", userID, "img", data);
+	} 
 
 	function removeUser(UserID) {
 		Database.deleteRecord("User", "UserID", UserID);
@@ -341,7 +351,10 @@ function loginChecker(Email, Password) {
 					ListingID
 				);
 			}
+
+			sendReservedEmail(purchase_id);
 			return "Purchase Successful";
+
 		}
 		return "Listing does not exist";
 	}
@@ -644,12 +657,13 @@ function loginChecker(Email, Password) {
 		let purchase = getPurchase(purchaseID);
 		let listing = getListing(purchase.ListingID);
 		let business = getBusiness(listing.BusinessID);
-		let email = getUser(purchase.UserID).Email;
+		let email = getUserDetails(purchase.UserID).Email;
 
 		let data = {
 			Name: listing.Name,
 			Seller: business.Name,
 			Date: purchase.Date,
+			img: listing.img,
 		};
 		let url =
 			"https://localhost:5173/review?purchaseID="+purchaseID;
