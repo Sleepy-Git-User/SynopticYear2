@@ -1,18 +1,20 @@
-
+import FoodPageUserView from "./FoodPageUserView.jsx";
+import FoodPageBusinessView from "./FoodPageBusinessView.jsx";
+import React, { useState } from 'react'
 
 export default function FoodPage() {
-    return (
-        <div id="pageContainer">
-            <div class="banner">
-                <h1>Food</h1>
-                
-            </div>
-            <div class="mainInfo">
-                <p> Text goes in here aaaaaaaaaaaaaaaaaaaaaa </p>
-                <img></img>
-            </div>
+  const [tab, setTab] = useState(<FoodPageUserView />);
 
-
-        </div>
-    );
+  return (
+    <div id="pageContainer">
+      <div className="banner">
+        <h1>Food</h1>
+      </div>
+      <div className="mainInfo">
+        <button onClick={() => setTab(<FoodPageUserView />)}>User View</button>
+        <button onClick={() => setTab(<FoodPageBusinessView />)}>Business View</button>
+      </div>
+      {tab}
+    </div>
+  );
 }
