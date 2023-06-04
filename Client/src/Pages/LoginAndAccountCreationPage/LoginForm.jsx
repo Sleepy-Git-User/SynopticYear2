@@ -1,17 +1,21 @@
 import React, { useState } from "react";
-import { setUserId, getUserId } from "./auth";
+import { setUserId, getUserId } from "../../auth";
 
-export default function Login({saveId}) {
+
+export default function LoginForm({saveId}) {
     const [form, setForm] = useState({
-        username: "",
-        password: "",
+        Email: "",
+        Password: "",
     });
+
+    const [error, setError] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
         fetch("http://localhost:3000/api/loginChecker", {
             method: "POST",
+            //CHANGE TO NOT MAKE IT JUST THIS ONE USER
             body: JSON.stringify({userID: "2418895d-6f24-49ba-9bdc-b6f83646100d"}),
             headers: {
                 "Content-Type": "application/json",
@@ -19,17 +23,19 @@ export default function Login({saveId}) {
         })
             .then((response) => response.json())
 
-            .then((data) => {
-                if (data.success) {
+            .then((info) => {
+                if (info.success) {
                     
-                    setUserId("2418895d-6f24-49ba-9bdc-b6f83646100d");
+                    //CHANGE TO NOT SET THE ID TO JUST THE ONE USER
+                    setError("");
+                    setUserId(info.data);
                     console.log("Success!");
                     const userIdTest = getUserId();
                     console.log(userIdTest);
                     saveId(userIdTest);
                     
                 } else {
-                    alert(data.message);
+                    setError(info.data);
                 }
             })
             .catch((error) => {
@@ -51,18 +57,14 @@ export default function Login({saveId}) {
 
 
     return (
-        <div id="pageContainer">
-        <h1> LOGIN PAGE </h1>
-        <br/>
-        <h1>SCOTLAND = BAD???</h1>
-        <br/>
+        <div>
         <form class="login-form" onSubmit={handleSubmit}>
-            <label htmlFor="username">Username:</label>
+            <label htmlFor="email">Email:</label>
             <input
-                type="text"
-                id="username"
-                name="username"
-                value={form.username}
+                type="email"
+                id="email"
+                name="Email"
+                value={form.Email}
                 onChange={handleChange}
             />
 
@@ -72,23 +74,19 @@ export default function Login({saveId}) {
             <input
                 type="password"
                 id="password"
-                name="password"
-                value={form.password}
+                name="Password"
+                value={form.Password}
                 onChange={handleChange}
             />
 
             <br />
-
+            <p>{error}</p>
             <button class="login-btn" type="submit">
                 Log In
             </button>
+
         </form>
         </div>
     );
 }
-
-
-
-
-
 

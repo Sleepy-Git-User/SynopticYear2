@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "test"
+    "test": "nodemon testHarness.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "i": "^0.3.7",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "uuid": "^9.0.0"
   }
