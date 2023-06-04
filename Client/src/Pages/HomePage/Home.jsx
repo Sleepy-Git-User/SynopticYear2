@@ -1,7 +1,19 @@
+
+import "./Home.css";
+
 export default function Home() {
     return (
         <div id="pageContainer">
-            <h1> home goes here </h1>
+            <div class="banner">
+                <h1>Welcome</h1>
+                
+            </div>
+            <div class="mainInfo">
+                <p> Text goes in here aaaaaaaaaaaaaaaaaaaaaa </p>
+                <img></img>
+            </div>
+
+
         </div>
     );
 }

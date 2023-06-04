@@ -22,9 +22,10 @@ module.exports = (dbName = "Database") => {
  * @returns true is the user can be allowed to loging, and fale if the details are wrong.
  */
 function loginChecker(Email, Password) {
+
 	const checkEmail = Database.inTable("User", "Email", Email); //Checks if the Email is in the system.
 	if (checkEmail === false) {
-	  return "Email or Password incorrect";
+	  return {success: false, data: "Email or Password incorrect"};
 	} else {
 	  const getUserID = Database.getField("User", "UserID", "Email", Email); //Gets the UserID by using the email.
 	  const grabSalt = Database.getField("Password","Salt","UserID",getUserID[0].UserID
@@ -37,9 +38,9 @@ function loginChecker(Email, Password) {
 		hashedPassword[0].Password
 	  ) {
 		//Hashes the inputted password and comparess it to the stored password.
-		return getUserID;
+		return {success: true, data: getUserID};
 	  } else {
-		return "Email or Password incorrect";
+		return {success: false, data: "Email or Password incorrect"} ;
 	  }
 	}
   }
@@ -63,7 +64,7 @@ function loginChecker(Email, Password) {
 		const address_id = Database.generateUUID("Address", "AddressID"); //Creates address UUID.
 		if (Database.inTable("User", "Email", Email) === true) {
 			//Checks if the Email is already in the table and returns fales if its taken.
-			return "Email Already in use";
+			return {success: false, data: "Email Already in use"};
 		} else {
 				//SQL to insert data in to the User table.
 				const insert_user_sql = Database.database.prepare(`
@@ -106,7 +107,7 @@ function loginChecker(Email, Password) {
 				insert_Password.run(user_id, hashedPassword, salt);
 
 				//Returns true after creating the new user.
-				return user_id;
+				return {success: true, data: user_id};
 			}
 		}
 	//makeUser Test

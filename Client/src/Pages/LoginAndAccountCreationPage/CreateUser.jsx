@@ -43,11 +43,8 @@ function CreateUser({saveId}) {
                 //May need to be updated to another page
                 if (info.success) {
                     setError("");
-                    setUserId(info.data);
+                    saveId(info.data);
                     console.log("Success!");
-                    const userIdTest = getUserId();
-                    console.log(userIdTest);
-                    saveId(userIdTest);
                     
                 } else {
                     setError(info.data);
@@ -73,6 +70,8 @@ function CreateUser({saveId}) {
     //Returns the create user form
     return (
         <form onSubmit={handleSubmit}>
+                <h1>Create Account</h1>
+                <br />
 
             <label htmlFor="email">Email:</label>
                 <input
@@ -81,6 +80,7 @@ function CreateUser({saveId}) {
                     name="Email"
                     value={form.Email}
                     onChange={handleChange}
+                    required
                 />
 
             <br />
@@ -92,6 +92,7 @@ function CreateUser({saveId}) {
                     name="PhoneNumber"
                     value={form.PhoneNumber}
                     onChange={handleChange}
+                    required
                 />
 
             <br />
@@ -103,6 +104,7 @@ function CreateUser({saveId}) {
                 name="Fname"
                 value={form.Fname}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -114,6 +116,7 @@ function CreateUser({saveId}) {
                 name="Lname"
                 value={form.Lname}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -125,6 +128,7 @@ function CreateUser({saveId}) {
                 name="DoB"
                 value={form.DoB}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -136,6 +140,7 @@ function CreateUser({saveId}) {
                 name="Password"
                 value={form.Password}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -149,6 +154,7 @@ function CreateUser({saveId}) {
                 name="Line1"
                 value={form.Line1}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -161,6 +167,7 @@ function CreateUser({saveId}) {
                 name="Line2"
                 value={form.Line2}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -173,6 +180,7 @@ function CreateUser({saveId}) {
                 name="City"
                 value={form.City}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -185,6 +193,7 @@ function CreateUser({saveId}) {
                 name="Postcode"
                 value={form.Postcode}
                 onChange={handleChange}
+                required
             />
 
 
