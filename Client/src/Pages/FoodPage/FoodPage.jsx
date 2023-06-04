@@ -10,6 +10,7 @@ export default function FoodPage() {
       <div className="banner">
         <h1>Food</h1>
       </div>
+      <br/>
       <div className="mainInfo">
         <button onClick={() => setTab(<FoodPageUserView />)}>User View</button>
         <button onClick={() => setTab(<FoodPageBusinessView />)}>Business View</button>

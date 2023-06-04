@@ -37,6 +37,7 @@ function CreateBusiness({ }) {
                 if (info.success) {
                     setError("")
                     alert("Business Created!");
+                    //Upon creation, refresh the page with the businessID now set
                 } else {
                     setError(info.data);
                 }
