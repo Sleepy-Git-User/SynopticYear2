@@ -53,7 +53,9 @@ export default function LoginForm({saveId}) {
 
     return (
         <div>
+        
         <form class="login-form" onSubmit={handleSubmit}>
+        <h1>Log In</h1>
             <label htmlFor="email">Email:</label>
             <input
                 type="email"

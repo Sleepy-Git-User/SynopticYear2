@@ -25,7 +25,6 @@ function loginChecker(Email, Password) {
 
 	const checkEmail = Database.inTable("User", "Email", Email); //Checks if the Email is in the system.
 	if (checkEmail === false) {
-	  console.log("WHOOPS");
 	  return {success: false, data: "Email or Password incorrect"};
 	} else {
 	  const getUserID = Database.getField("User", "UserID", "Email", Email); //Gets the UserID by using the email.

@@ -38,12 +38,10 @@ module.exports = (components) => {
 		const { Email, Password } = req.body;
 		console.log(req.body);
 		try {
-			console.log(Email);
-			console.log(Password);
 			if (!Email || !Password ) {
 				return res.json({ success: false, data: "Missing Email or Password" });
 			}
-			console.log("GOT HERE!");
+			
 			res.json(interface.loginChecker(Email,Password));
 		} catch (error) {
 			console.error(error);

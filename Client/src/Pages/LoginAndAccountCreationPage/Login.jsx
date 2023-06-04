@@ -3,36 +3,30 @@ import { setUserId, getUserId } from "../../auth";
 import CreateUser from "./CreateUser";
 import CreateBusiness from "../AccountPage/CreateBusiness";
 import LoginForm from "./LoginForm";
-import CreateListing from "../ListingsPage/CreateListing";
+import CreateListing from "../FoodPage/CreateListing";
 import ReviewTemplate from "../../ReviewTemplate";
 
 export default function Login({saveId}) {
 
+    const [form, setForm] = useState(<LoginForm saveId={saveId}/>);
+    const [number, setNumber] = useState(0);
+
+    const toggleForm = () => {
+        if (number === 0){
+            setForm(<CreateUser saveId={saveId}/>);
+            setNumber(1);
+        } else {
+            setForm(<LoginForm saveId={saveId}/>);
+            setNumber(0);
+        }
+    }
     return (
         <div id="pageContainer">
-        <h1> LOGIN PAGE </h1>
-        <br/>
-        <h1>SCOTLAND = BAD???</h1>
-        <br/>
 
-        <LoginForm saveId={saveId} />
+        {form}
         <br/>
         <br/>
-        <br/>
-        <CreateUser saveId={saveId} />
-        <br/>
-        <br/>
-        <br/>
-        <CreateBusiness />
-        <br/>
-        <br/>
-        <br/>
-        <CreateListing />
-        <br />
-        <br />
-        <br />
-        <ReviewTemplate />
-        
+        <button onClick={toggleForm}>Change Form</button>
         </div>
     );
 }

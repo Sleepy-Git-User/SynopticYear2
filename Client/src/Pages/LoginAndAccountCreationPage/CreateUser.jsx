@@ -70,6 +70,8 @@ function CreateUser({saveId}) {
     //Returns the create user form
     return (
         <form onSubmit={handleSubmit}>
+                <h1>Create Account</h1>
+                <br />
 
             <label htmlFor="email">Email:</label>
                 <input
