@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 //I want to import and purchaseID from the link
 
 export default function ReviewTemplate() {
-	/*const [loading, setLoading] = useState(false); // add this state
+	const [loading, setLoading] = useState(false); // add this state
 	const [purchaseID, setPurchaseID] = useState();
 	const navigate = useNavigate();
 
@@ -159,6 +159,6 @@ export default function ReviewTemplate() {
 				)}
 			</h2>
 		</div>
-	); */
+	); 
 }
 

@@ -61,6 +61,7 @@ function CreateBusiness({ }) {
     //Returns the create business form
     return (
         <form onSubmit={handleSubmit}>
+            <h2>Create Business</h2>
 
             <label htmlFor="bname">Business Name:</label>
             <input

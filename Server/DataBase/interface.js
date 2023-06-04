@@ -661,7 +661,7 @@ function loginChecker(Email, Password) {
 			let mailOptions = {
 				from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
 				to: email,
-				subject: "Leave a reivew on your recent purchase!",
+				subject: "Leave a review on your recent purchase!",
 				html: str
 			}
 	
