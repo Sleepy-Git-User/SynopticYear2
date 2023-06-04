@@ -8,9 +8,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { setUserId, getUserId } from "./auth";
 
-import Login from "./Login.jsx";
+import Login from "./Pages/LoginAndAccountCreationPage/Login.jsx";
 import Navbar from "./Navbar.jsx";
-import Home from "./Home.jsx";
+import Home from "./Pages/HomePage/Home.jsx";
+
+import AdvicePage from "./Pages/AdvicePage/AdvicePage.jsx";
+import AccountPage from "./Pages/AccountPage/AccountPage.jsx";
+import FoodPage from "./Pages/FoodPage/FoodPage.jsx";
 
 
 
@@ -39,6 +43,10 @@ function Main() {
 
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Advice" element={<AdvicePage />} />
+          <Route path="/Account" element={<AccountPage />} />
+          <Route path="/Food" element={<FoodPage />} />
+          
 
           <Route
             path="*"

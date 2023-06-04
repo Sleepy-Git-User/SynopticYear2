@@ -25,11 +25,38 @@ module.exports = (dbName = "Database") => {
 		console.log(error);
 	}
 	//Login Page
-	function loginChecker(UserID) {
-		return Database.inTable("User", "UserID", UserID);
+/**
+ *
+ * @param {*} Email that the user wants to use to login with.
+ * @param {*} Password that the user wants to use to login with.
+ * @returns true is the user can be allowed to loging, and fale if the details are wrong.
+ */
+function loginChecker(Email, Password) {
+
+	const checkEmail = Database.inTable("User", "Email", Email); //Checks if the Email is in the system.
+	if (checkEmail === false) {
+	  return {success: false, data: "Email or Password incorrect"};
+	} else {
+	  const getUserID = Database.getField("User", "UserID", "Email", Email); //Gets the UserID by using the email.
+	  const grabSalt = Database.getField("Password","Salt","UserID",getUserID[0].UserID
+	  ); //Gets the Salt from the pasword table using the UserID.
+	  const hashedPassword = Database.getField("Password","Password","UserID",
+		getUserID[0].UserID
+	  ); //Gets the hashed password from password table.
+	  if (
+		crypto.saltNhash(Password, grabSalt[0].Salt) ===
+		hashedPassword[0].Password
+	  ) {
+		//Hashes the inputted password and comparess it to the stored password.
+		return {success: true, data: getUserID};
+	  } else {
+		return {success: false, data: "Email or Password incorrect"} ;
+	  }
 	}
+  }
 	//loginChecker
-	//console.log(loginChecker(""));
+	//console.log(loginChecker("bike@gmail.com","Game"));
+
 
 	function makeUser(
 		Email,
@@ -44,23 +71,16 @@ module.exports = (dbName = "Database") => {
 		Postcode
 	) {
 		const user_id = Database.generateUUID("User", "UserID"); //Creates users UUID.
+		const address_id = Database.generateUUID("Address", "AddressID"); //Creates address UUID.
 		if (Database.inTable("User", "Email", Email) === true) {
 			//Checks if the Email is already in the table and returns fales if its taken.
-			return "Email Already in use";
+			return {success: false, data: "Email Already in use"};
 		} else {
-			if (PhoneNumber != null) {
-				if (
-					Database.inTable("User", "PhoneNumber", PhoneNumber) ===
-					true
-				) {
-					return "Phone number already taken.";
-				}
-			} else {
 				//SQL to insert data in to the User table.
 				const insert_user_sql = Database.database.prepare(`
             INSERT INTO User
-            (UserID, Email, PhoneNumber, Fname, Lname, Bname, DoB)
-            VALUES (?,?,?,?,?,?)`);
+            (UserID, Email, PhoneNumber, Fname, Lname, DoB, AddressID)
+            VALUES (?,?,?,?,?,?,?)`);
 
 				//Creates the salt for the new user, and hashes it with the users inputted password.
 				let salt = crypto.makeSalt();
@@ -70,48 +90,53 @@ module.exports = (dbName = "Database") => {
 				const insert_Password = Database.database.prepare(`
             INSERT INTO Password (UserID, Password, Salt)
             VALUES (?,?,?)`);
+			
+			//SQL to insert data in to the User table.
+			const insert_address_sql = Database.database.prepare(`
+            INSERT INTO Address
+            (AddressID, Line1, Line2, City, Postcode)
+            VALUES (?,?,?,?,?)`);
 
 				//Runs the SQL statments
+				insert_address_sql.run(
+					address_id,
+					Line1,
+					Line2,
+					City,
+					Postcode
+				);
 				insert_user_sql.run(
 					user_id,
 					Email,
 					PhoneNumber,
 					Fname,
 					Lname,
-					DoB
+					DoB,
+					address_id
 				);
 				insert_Password.run(user_id, hashedPassword, salt);
 
 				//Returns true after creating the new user.
-				return "Account Created Successfully";
+				return {success: true, data: user_id};
 			}
 		}
-	}
 	//makeUser Test
-	//console.log(makeUser("car@gmail.com","12313232","Tester","Jones","02/04/2000","Game"));
+	//console.log(makeUser("bike@gmail.com","12313232","Tester","Jones","02/04/2000","Game","Party","Lane","London","LN169NG"));
 
 	function removeUser(UserID) {
 		Database.deleteRecord("User", "UserID", UserID);
 	}
-	//removeUser Test
-	//removeUser("")
 
-	function editFname(UserID, Fname) {
-		Database.updateRecord("User", "Fname", Fname, "UserID", UserID);
+	function getUserID(Email){
+		return Database.getField("User","UserID","Email",Email);
 	}
-	function editLname(UserID, Lname) {
-		Database.updateRecord("User", "Lname", Lname, "UserID", UserID);
-	}
-
-	//editFname + editLname Test
-	//editFname("","");
-	//editLname("","");
+	//console.log(getUserID("bike@gmail.com"));
 
 	function getUserDetails(userID) {
 		return Database.getRecord("User", "UserID", userID);
 	}
 	//getUserDetails Test
-	//console.log(getUserDetails(""));
+	//console.log(getUserDetails("4bca30a0-0f4c-4c99-97e9-080e39d95365"));
 
 	function getAllUserDetails() {
 		return Database.getAllRecords("User");
@@ -656,8 +681,6 @@ module.exports = (dbName = "Database") => {
 		loginChecker,
 		makeUser,
 		removeUser,
-		editFname,
-		editLname,
 		getUserDetails,
 		getAllUserDetails,
 		createListing,
@@ -686,5 +709,6 @@ module.exports = (dbName = "Database") => {
 		sendReviewEmail,
 		sendWelcomeEmail,
 		sendVerificationEmail,
+		getUserID,
 	};
 };
