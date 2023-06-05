@@ -3,6 +3,8 @@ import React, { useState } from "react";
 
 function CreateBusiness({ }) {
     
+    const userID = sessionStorage.getItem('userId');
+
     //Form data for creating a business (including address)
     const [form, setForm] = useState({
         Bname: "",
@@ -11,7 +13,8 @@ function CreateBusiness({ }) {
         Line1: "",
         Line2: "",
         City: "",
-        Postcode: ""
+        Postcode: "",
+        UserID: userID
     });
 
 
@@ -38,6 +41,8 @@ function CreateBusiness({ }) {
                     setError("")
                     alert("Business Created!");
                     //Upon creation, refresh the page with the businessID now set
+                    sessionStorage.setItem('businessId', info.data);
+                    window.location.reload();
                 } else {
                     setError(info.data);
                 }

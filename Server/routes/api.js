@@ -49,6 +49,20 @@ module.exports = (components) => {
 		}
 	});
 
+
+	router.post("/makeBusiness", (req, res) => {
+		const { Bname, Email, PhoneNumber, Line1, Line2, City, Postcode, UserID } = req.body;
+		console.log(req.body);
+		res.json(interface.makeBusiness(Bname, Email, PhoneNumber, Line1, Line2, City, Postcode, UserID));
+	});
+
+
+	router.post("/getBusinessDetails", (req, res) => {
+		const { BusinessID } = req.body;
+		console.log(req.body);
+		res.json(interface.getBusinessDetails(BusinessID));
+	});
+
 	router.get("/getPurchase/:purchaseID", (req, res) => {
 		const data = {
 			PurchaseID: null,
