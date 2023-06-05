@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import axios from "axios";
 import "./ReviewTemplate.css";
-import businessPannel from "../wigits/businessPannel";
-import itemPannel from "../wigits/itemPannel";
-import BusinessPannel from "../wigits/businessPannel";
-import ItemPannel from "../wigits/itemPannel";
+import businessPannel from "../../wigits/businessPannel";
+import itemPannel from "../../wigits/itemPannel";
+import BusinessPannel from "../../wigits/businessPannel";
+import ItemPannel from "../../wigits/itemPannel";
 import emptystr from "/emptystr.svg";
 import fullstr from "/fullstr.svg";
 //I want this to be the page that leads from a email link

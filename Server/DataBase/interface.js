@@ -8,6 +8,7 @@ const nodemailer = require("nodemailer");
 const ejs = require("ejs");
 const identicon = require("identicon");
 const { log } = require("console");
+const fs = require("fs");
 const { create } = require("domain");
 
 const transporter = nodemailer.createTransport({
@@ -148,7 +149,7 @@ module.exports = (dbName = "Database") => {
 		}
 	}
 	//makeUser Test
-	//console.log(makeUser("joshfranks910@gmail.com","12313232","t4fin","5over","02/04/2000","Game","Party","Lane","London","LN169NG"));
+	// console.log(makeUser("omgitsblackbeard@gmail.com","13313232","tafin","nover","02/04/2000","Game","Party","Lane","London","LN169NG"));
 
 	function generateProfPic(userID) {
 		identicon.generate({ id: userID, size: 150 }, (err, buffer) => {
@@ -460,6 +461,7 @@ module.exports = (dbName = "Database") => {
 				"ListingID",
 				ListingID
 			);
+			console.log(Listing);
 			if (Listing.status === 1) {
 				return "Listing is no longer active";
 			}
@@ -469,20 +471,26 @@ module.exports = (dbName = "Database") => {
 
 			//Insert into purchases section\
 			let date = new Date();
+			let code = Database.generate4Code("Purchase", "Code", 4);
 			purchase_id = Database.generateUUID("Purchase", "PurchaseID");
 			const insert_purchase_sql = Database.database.prepare(`
-        INSERT INTO Purchase(PurchaseID, ListingID, BuyerID, Date, Quantity) VALUES (?,?,?,?,?)`);
+        INSERT INTO Purchase(PurchaseID, ListingID, BuyerID, Date, Quantity, Code) VALUES (?,?,?,?,?,?)`);
 
 			insert_purchase_sql.run(
 				purchase_id,
 				ListingID,
 				BuyerID,
 				date.toISOString(),
-				Quantity
+				Quantity,
+				code
+				
 			);
 
 			//Update Quantity in listing
-			NewQuantity = Listing.Quantity - Quantity;
+			console.log(Listing[0].Quantity)
+			console.log(Quantity)
+			let NewQuantity = Listing[0].Quantity - Quantity;
+			console.log(NewQuantity);
 
 			Database.updateRecord(
 				"Listing",
@@ -509,7 +517,7 @@ module.exports = (dbName = "Database") => {
 		return "Listing does not exist";
 	}
 
-	console.log(reserveItem("bc31c1a5-9ead-4d0e-8a99-f192073c1f07","ec4a26f7-52c6-42ba-aef9-f88dc2bfa8d9", 1));
+	//  console.log(reserveItem("bc31c1a5-9ead-4d0e-8a99-f192073c1f07","627fcfe3-9dda-467c-8cf4-d515caa72235", 1));
 
 	/**
 	 *  Gets all purchases from a specific buyer
@@ -744,9 +752,9 @@ module.exports = (dbName = "Database") => {
 		//TODO
 		const userID = Database.getRecord("User", "Email", email).UserID;
 		
-		url = "http://localhost:3000/verify?userID=" + userID;
+		url = "http://localhost:5173/verify?userID=" + userID;
 		ejs.renderFile(
-			path.join(__dirname, "./emails/verify.ejs"),
+			path.join(__dirname, "../emails/verifyEmail.ejs"),
 			{
 				url,
 			},
@@ -773,32 +781,35 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	// console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
+	 console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
 
 	function sendReservedEmail(purchaseID) {
 		//TODO
 		let purchase = getPurchase(purchaseID);
-		let listing = getListing(purchase.ListingID);
-		let business = getBusiness(listing.BusinessID);
-		let address = getBusinessAddress(listing.BusinessID);
-		let email = getUser(purchase.UserID).Email;
-
+		let listing = getListing(purchase[0].ListingID);
+		console.log("1");
+		let business = Database.getRecord("Business", "BusinessID", listing[0].SellerID);
+		console.log("2");
+		let address = Database.getRecord("Address","AddressID",business[0].AddressID);
+		let user = Database.getRecord("User","UserID",purchase[0].BuyerID);
+		let email = user[0].Email;
 		data = {
-			ID: purchase.PurchaseID,
-			Date: purchase.Date,
-			Total: purchase.Quantity * listing.Price,
-			img: listing.img,
-			Item: listing.Name,
-			Quantity: purchase.Quantity,
-			Price: listing.Price,
-			code: purchase.Code,
-			Name: business.Name,
-			Line1: address.Line1,
-			Line2: address.Line2,
-			postcode: address.postcode,
+			ID: purchase[0].PurchaseID,
+			Date: purchase[0].Date,
+			Total: purchase[0].Quantity * listing[0].Price,
+			img: listing[0].img,
+			Item: listing[0].Name,
+			Quantity: purchase[0].Quantity,
+			Price: listing[0].Price,
+			code: purchase[0].Code,
+			Name: business[0].BName,
+			Line1: address[0].Line1,
+			Line2: address[0].Line2,
+			postcode: address[0].postcode,
 		};
+		console.log(data);
 		ejs.renderFile(
-			path.join(__dirname, "./emails/reservedItem"),
+			path.join(__dirname, "../emails/reservedItem.ejs"),
 			{
 				data,
 			},
@@ -824,45 +835,53 @@ module.exports = (dbName = "Database") => {
 			}
 		);
 	}
-		// console.log(sendReservedEmail("omgitsblackbeard@gmail.com"));
+		// console.log(sendReservedEmail("8aa4a437-646a-4679-b6de-438073ef5d67"));
 
 	function sendReviewEmail(purchaseID) {
 		//TODO
 		let purchase = getPurchase(purchaseID);
-		let listing = getListing(purchase.ListingID);
-		let business = getBusiness(listing.BusinessID);
-		let email = getUserDetails(purchase.UserID).Email;
-
+		let listing = getListing(purchase[0].ListingID);
+		let business = Database.getRecord("Business", "BusinessID", listing[0].SellerID);
+		let user = Database.getRecord("User","UserID",purchase[0].BuyerID);
+		let email = user[0].Email;
+		
 		let data = {
-			Name: listing.Name,
-			Seller: business.Name,
-			Date: purchase.Date,
-			img: listing.img,
+			Name: listing[0].Name,
+			Seller: business[0].Name,
+			Date: purchase[0].Date,
+			img: listing[0].img,
 		};
 		let url = "https://localhost:5173/review?purchaseID=" + purchaseID;
-		ejs.render("../emails/review", { data, url }, function (err, str) {
-			if (err) {
-				console.log(err);
-				return;
-			}
-			let mailOptions = {
-				from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
-				to: email,
-				subject: "Leave a reivew on your recent purchase!",
-				html: str,
-			};
-
-			transporter.sendMail(mailOptions, function (err, data) {
+		ejs.renderFile(
+			path.join(__dirname, "../emails/review.ejs"),
+			{
+				data,
+				url,
+			},
+			function (err, str) {
 				if (err) {
 					console.log(err);
 					return;
 				}
-				console.log("Email sent successfully");
-			});
-		});
+				let mailOptions = {
+					from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
+					to: email,
+					subject: "Leave a review on a recent purchase!",
+					html: str,
+				};
+
+				transporter.sendMail(mailOptions, function (err, data) {
+					if (err) {
+						console.log(err);
+						return;
+					}
+					console.log("Email sent successfully");
+				});
+			}
+		);
 	}
 
-	// console.log(sendReviewEmail("omgitsblackbeard@gmail.com"));
+	//  console.log(sendReviewEmail("8aa4a437-646a-4679-b6de-438073ef5d67"));
 
 	return {
 		Database,
