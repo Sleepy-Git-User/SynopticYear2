@@ -123,5 +123,20 @@ module.exports = (components) => {
 		)
 	});
 
+
+	router.post("/getListings", (req, res) => {
+		console.log(req.body);
+		console.log(interface.getListings());
+		res.json(interface.getListings());
+
+	});
+
+
+	router.post("/reserveItem", (req, res) => {
+		console.log(req.body);
+		res.json(interface.reserveItem(req.body.ListingID, req.body.BuyerID, req.body.Quantity));
+
+	});
+
 	return router;
 };

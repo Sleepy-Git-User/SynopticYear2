@@ -382,7 +382,8 @@ function loginChecker(Email, Password) {
 	 * @returns All listings that are active
 	 */
 	function getListings() {
-		return Database.getRecord("Listing", "Status", 0);
+		console.log(Database.getRecord("Listing", "Status", 0));
+		return {success: true, data: Database.getRecord("Listing", "Status", 0)};
 	}
 
 	/**
@@ -445,22 +446,28 @@ function loginChecker(Email, Password) {
 	 */
 	function reserveItem(ListingID, BuyerID, Quantity) {
 		//Get listing
+		console.log("AAAAA");
+		console.log(ListingID);
+		console.log(BuyerID);
+		console.log(Quantity);
 		if (Database.inTable("Listing", "ListingID", ListingID) === true) {
 			//Check if listing is still active
+			
 			const Listing = Database.getRecord(
 				"Listing",
 				"ListingID",
 				ListingID
 			);
 			if (Listing.status === 1) {
-				return "Listing is no longer active";
+				return {success: false, data: "Listing is no longer active"};
 			}
 			if (Quantity > Listing.Quantity) {
-				return "Not enough items in stock";
+				return {success: false, data: "Not enough items in stock"};
 			}
 
 			//Insert into purchases section
 			purchase_id = Database.generateUUID("Purchase", "PurchaseID");
+			
 			const insert_purchase_sql = Database.database.prepare(`
         INSERT INTO Purchase(PurchaseID, ListingID, BuyerID, Date, Quantity) VALUES (?,?,?,?,?)`);
 
@@ -471,6 +478,8 @@ function loginChecker(Email, Password) {
 				new Date(),
 				Quantity
 			);
+
+			console.log("Got here");
 
 			//Update Quantity in listing
 			NewQuantity = Listing.Quantity - Quantity;
@@ -495,10 +504,10 @@ function loginChecker(Email, Password) {
 			}
 
 			sendReservedEmail(purchase_id);
-			return "Purchase Successful";
+			return {success: true, data: "Purchase Successful"};
 
 		}
-		return "Listing does not exist";
+		return {success: false, data: "Listing does not exist"};
 	}
 
 	/**
