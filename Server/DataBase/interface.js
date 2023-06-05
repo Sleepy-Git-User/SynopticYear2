@@ -161,7 +161,8 @@ function loginChecker(Email, Password) {
 	//console.log(getUserID("bike@gmail.com"));
 
 	function getUserDetails(userID) {
-		return Database.getRecord("User", "UserID", userID);
+		console.log(Database.getRecord("User", "UserID", userID));
+		return {success: true, data: Database.getRecord("User", "UserID", userID)};
 	}
 	//getUserDetails Test
 	//console.log(getUserDetails("49e59c7f-a2cc-4ac4-a445-b0d56d43178c"));

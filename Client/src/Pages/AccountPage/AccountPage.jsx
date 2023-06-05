@@ -13,10 +13,38 @@ import BusinessDetails from "./BusinessDetails.jsx";
 export default function AccountPage() {
 
     const [businessState, setBusinessState] = useState(<CreateBusiness />);
+    const [userDetails, setUserDetails] = useState();
+
+    const getUserDetails= () => {
+        fetch("http://localhost:3000/api/getUserDetails", {
+            method: "POST",
+            body: JSON.stringify({UserID: sessionStorage.getItem("userId")}),
+            headers: {
+                "Content-Type": "application/json",
+            },
+
+        })
+            .then((response) => response.json())
+
+            .then((info) => {
+                if (info.success) {
+                    setUserDetails(<div>Name: {info.data[0].Fname} {info.data[0].Lname} <br/>Email: {info.data[0].Email}<br/>Phone: {info.data[0].PhoneNumber}</div>
+
+                    );
+                } else {
+                    setUserDetails("Error getting user details.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    };
+    
 
     useEffect(() => {
         // Try and get business ID for a user
         const businessID = sessionStorage.getItem('businessId');
+       
 
         if (businessID === null){
             setBusinessState(<CreateBusiness />);
@@ -25,7 +53,7 @@ export default function AccountPage() {
         }
 
         //Get User details
-
+        getUserDetails();
         //If business does not exist, render form to add one
         
 
@@ -53,9 +81,11 @@ export default function AccountPage() {
             </div>
 
 
+
             <div>
                 <h2>User Details</h2>
                 {/*Get User Details and put in here */}
+                {userDetails}
             </div>
 
 

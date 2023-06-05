@@ -138,5 +138,12 @@ module.exports = (components) => {
 
 	});
 
+
+	router.post("/getUserDetails", (req, res) => {
+		console.log(req.body);
+		res.json(interface.getUserDetails(req.body.UserID));
+
+	});
+
 	return router;
 };
