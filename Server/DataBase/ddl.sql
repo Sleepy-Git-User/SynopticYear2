@@ -78,13 +78,11 @@ CREATE TABLE IF NOT EXISTS Listing
     Price DECIMAL(10,2) NOT NULL,
     img TEXT,
     Quantity INT NOT NULL,
-    CategoryID VARCHAR(128) NOT NULL,
     SellerID VARCHAR(128) NOT NULL,
     SDate TEXT NOT NULL,
     EDate TEXT NOT NULL,
     Status BIT DEFAULT 0 NOT NULL, -- 0 = active, 1 = Expired
     PRIMARY KEY (ListingID)
-    FOREIGN KEY (CategoryID) REFERENCES Catergories(CatergoryID) ON DELETE CASCADE
     FOREIGN KEY (SellerID) REFERENCES Business(BusinessID) ON DELETE CASCADE
 );
 
