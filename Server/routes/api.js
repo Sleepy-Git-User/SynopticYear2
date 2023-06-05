@@ -107,5 +107,21 @@ module.exports = (components) => {
 		res.json({ success: true });
 	});
 
+
+	router.post("/createListing", (req, res) => {
+		console.log(req.body);
+		res.json(interface.createListing(
+			req.body.Name,
+			req.body.Desc,
+			req.body.Price,
+			req.body.img,
+			req.body.Quantity,
+			req.body.SellerID,
+			req.body.ListingDate,
+			req.body.EndDate)
+
+		)
+	});
+
 	return router;
 };

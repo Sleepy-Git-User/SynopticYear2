@@ -8,8 +8,9 @@ function CreateListing({  }) {
         Name: "",
         Desc: "",
         Price: "",
+        img: null,
         Quantity: "",
-        SellerID: "INSERT SELLER ID",
+        SellerID: sessionStorage.getItem("businessId"),
         ListingDate: new Date(),
         EndDate: ""
     });
@@ -20,7 +21,7 @@ function CreateListing({  }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        fetch("http://localhost:3000/api/makeListing", {
+        fetch("http://localhost:3000/api/createListing", {
             method: "POST",
             body: JSON.stringify(form),
             headers: {

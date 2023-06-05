@@ -324,19 +324,19 @@ function loginChecker(Email, Password) {
 	) {
 		const listing_id = Database.generateUUID("Listing", "ListingID"); //Creates users UUID.
 		if (Quantity < 0) {
-			return "Invalid Quantity";
+			return {success: false, data: "Invalid Quantity"};
 		}
 		if (Price < 0) {
-			return "Invalid Price";
+			return {success: false, data: "Invalid Price"};
 		}
 		if (EndDate < ListingDate) {
-			return "Invalid End Date";
+			return {success: false, data: "Invalid End Date"};
 		}
 		const insert_listing_sql = Database.database.prepare(`
     INSERT INTO Listing
-    (ListingID, Name, Description, Price, img, Quantity, SellerID, SDate, EDate)
+    (ListingID, Name, Desc, Price, img, Quantity, SellerID, SDate, EDate)
     VALUES (?,?,?,?,?,?,?,?,?)`);
-		return insert_listing_sql.run(
+		return {success: insert_listing_sql.run(
 			listing_id,
 			Name,
 			Desc,
@@ -346,7 +346,7 @@ function loginChecker(Email, Password) {
 			SellerID,
 			ListingDate,
 			EndDate
-		);
+		), data: null}
 	}
 
 	/**
