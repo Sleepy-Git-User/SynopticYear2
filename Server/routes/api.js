@@ -145,5 +145,12 @@ module.exports = (components) => {
 
 	});
 
+
+	router.post("/getBusinessListings", (req, res) => {
+		console.log(req.body);
+		res.json(interface.getBusinessListings(req.body.BusinessID));
+
+	});
+
 	return router;
 };
