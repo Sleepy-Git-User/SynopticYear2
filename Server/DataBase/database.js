@@ -2,7 +2,8 @@ const Database = require("better-sqlite3");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const console = require("console");
-
+const fourcode = require("../utili/UniqueCode");
+const generateUniqueCode = require("../utili/UniqueCode");
 class DataBaseSystem {
   /**
    * Creates Database
@@ -119,8 +120,14 @@ class DataBaseSystem {
 
   generateUUID(table, field) {
     const uuid = uuidv4();
-    if (this.inTable(table, field, uuid)) return this.generateUUID();
+    if (this.inTable(table, field, uuid)) return this.generateUUID(table, field);
     return uuid;
+  }
+
+  generate4Code(table, field, length) {
+    const code = generateUniqueCode(length);
+    if (this.inTable(table, field, code)) return this.generate4Code(table, field,length);
+    return code;
   }
 }
 

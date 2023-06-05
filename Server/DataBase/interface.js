@@ -7,6 +7,8 @@ const crypto = require("../utili/password.js");
 const nodemailer = require("nodemailer");
 const ejs = require("ejs");
 const identicon = require("identicon");
+const { log } = require("console");
+const { create } = require("domain");
 
 const transporter = nodemailer.createTransport({
 	service: "gmail",
@@ -25,7 +27,10 @@ module.exports = (dbName = "Database") => {
 	} catch (error) {
 		console.log(error);
 	}
-	//Login Page
+
+	//********************************************************/
+
+	//******************** Users ***********************/
 	/**
 	 *
 	 * @param {*} Email that the user wants to use to login with.
@@ -69,6 +74,20 @@ module.exports = (dbName = "Database") => {
 	//loginChecker
 	//console.log(loginChecker("bike@gmail.com","Game"));
 
+	/**
+	 *
+	 * @param {*} Email
+	 * @param {*} PhoneNumber
+	 * @param {*} Fname
+	 * @param {*} Lname
+	 * @param {*} DoB
+	 * @param {*} Password
+	 * @param {*} Line1
+	 * @param {*} Line2
+	 * @param {*} City
+	 * @param {*} Postcode
+	 * @returns Returns Success true or false. Then data which will contain the new UserID
+	 */
 	function makeUser(
 		Email,
 		PhoneNumber,
@@ -129,7 +148,8 @@ module.exports = (dbName = "Database") => {
 		}
 	}
 	//makeUser Test
-	//console.log(makeUser("bike@gmail.com","12313232","Tester","Jones","02/04/2000","Game","Party","Lane","London","LN169NG"));
+	//console.log(makeUser("joshfranks910@gmail.com","12313232","t4fin","5over","02/04/2000","Game","Party","Lane","London","LN169NG"));
+
 	function generateProfPic(userID) {
 		identicon.generate({ id: userID, size: 150 }, (err, buffer) => {
 			if (err) throw err;
@@ -152,11 +172,134 @@ module.exports = (dbName = "Database") => {
 		return Database.getRecord("User", "UserID", userID);
 	}
 	//getUserDetails Test
-	//console.log(getUserDetails("4bca30a0-0f4c-4c99-97e9-080e39d95365"));
+	//console.log(getUserDetails("49e59c7f-a2cc-4ac4-a445-b0d56d43178c"));
 
 	function getAllUserDetails() {
 		return Database.getAllRecords("User");
 	}
+
+	//********************************************************/
+
+	//******************** Business ***********************/
+
+	/**
+	 *
+	 * @param {*} Bname Business Name
+	 * @param {*} Email Main email for business
+	 * @param {*} PhoneNumber Main Phonenumber for business
+	 * @param {*} Line1 Business address
+	 * @param {*} Line2
+	 * @param {*} City
+	 * @param {*} PostCode
+	 * @param {*} UserID UserID for User who made the business.
+	 * @returns Success true or false depending on errors. Data has business id if success or an error message.
+	 */
+	function makeBusiness(
+		Bname,
+		Email,
+		PhoneNumber,
+		Line1,
+		Line2,
+		City,
+		PostCode,
+		UserID
+	) {
+		const business_id = Database.generateUUID("Business", "BusinessID"); //Creates users UUID.
+		const address_id = Database.generateUUID("Address", "AddressID"); //Creates address UUID.
+		const InvCode = Database.generate4Code("Business", "BusinessID", 8);
+		console.log("I am here"); //Makes an 8 digit invite code.
+		if (Database.inTable("Business", "Email", Email) === true) {
+			//Checks if the Email is already in the table and returns fales if its taken.
+			return { success: false, data: "Email Already in use" };
+		}
+		if (Database.inTable("Business", "PhoneNumber", PhoneNumber) === true) {
+			//Checks if the PhoneNumber is already in the table and returns fales if its taken.
+			return { success: false, data: "PhoneNumber Already in use" };
+		}
+		if (Database.inTable("User", "UserID", UserID) === false) {
+			return { success: false, data: "No User matching that ID" };
+		} else {
+			//SQL to insert data in to the User table.
+			const insert_business_sql = Database.database.prepare(`
+            INSERT INTO Business
+            (BusinessID, Bname, Email, PhoneNumber, AddressID, InvCode)
+            VALUES (?,?,?,?,?,?)`);
+
+			//SQL to insert data in to the User table.
+			const insert_address_sql = Database.database.prepare(`
+            INSERT INTO Address
+            (AddressID, Line1, Line2, City, Postcode)
+            VALUES (?,?,?,?,?)`);
+
+			//Runs the SQL statments
+			insert_address_sql.run(address_id, Line1, Line2, City, PostCode);
+			insert_business_sql.run(
+				business_id,
+				Bname,
+				Email,
+				PhoneNumber,
+				address_id,
+				InvCode
+			);
+
+			const User_Business_sql = Database.database.prepare(`
+            INSERT INTO User_Business
+            (UserID, BusinessID)
+            VALUES (?,?)`);
+
+			User_Business_sql.run(UserID, business_id);
+
+			return { success: true, data: business_id };
+		}
+	}
+
+	//console.log(makeBusiness("Tar Farm","tar@farm.org","0f9321303","4 Road","Clark","Nowhere","IDGAF4","fca50a50-2833-4279-ab36-0396328aafac"));
+
+	function getBusinessDetails(BusinessID) {
+		return Database.getRecord("Business", "BusinessID", BusinessID);
+	}
+	//console.log(getBusinessDetails("cbfa8b95-ffb4-4d73-8952-bf281af015c2"));
+
+	/**
+	 *
+	 * @param {*} UserID  User ID to add to Business.
+	 * @param {*} InvCode InvCode for the Buisness the User wants to join.
+	 * @returns Success: True or False. Data: Error message or success message.
+	 */
+	function addUserToBusiness(UserID, InvCode) {
+		if (Database.inTable("User", "UserID", UserID) === false) {
+			return { success: false, data: "No User matching that ID" };
+		}
+		const bdata = Database.getRecord("Business", "InvCode", InvCode);
+		if (bdata === false) {
+			return { success: false, data: "Invalid Business Invite Code" };
+		}
+
+		const userBusinesLinks_sql = Database.database.prepare(
+			"SELECT * FROM User_Business WHERE UserID = ? AND BusinessID = ?"
+		);
+		const linkeddata = userBusinesLinks_sql.all(
+			UserID,
+			bdata[0].BusinessID
+		);
+		console.log(linkeddata);
+		console.log(linkeddata.length);
+		if (linkeddata.length != 0) {
+			return { success: false, data: "User already apart of Business" };
+		} else {
+			const User_Business_sql = Database.database.prepare(`
+            INSERT INTO User_Business
+            (UserID, BusinessID)
+            VALUES (?,?)`);
+
+			User_Business_sql.run(UserID, bdata[0].BusinessID);
+			return { success: true, data: "User added to Business" };
+		}
+	}
+
+	// console.log(addUserToBusiness("fca50a50-2833-4279-ab36-0396328aafac","81433579"));
+
+	function updateBusinessDetails() {}
 
 	//********************************************************/
 
@@ -198,7 +341,7 @@ module.exports = (dbName = "Database") => {
 		}
 		const insert_listing_sql = Database.database.prepare(`
     INSERT INTO Listing
-    (ListingID, Name, Description, Price, img, Quantity, SellerID, SDate, EDate)
+    (ListingID, Name, Desc, Price, img, Quantity, SellerID, SDate, EDate)
     VALUES (?,?,?,?,?,?,?,?,?)`);
 		return insert_listing_sql.run(
 			listing_id,
@@ -212,6 +355,8 @@ module.exports = (dbName = "Database") => {
 			EndDate
 		);
 	}
+
+	// console.log(createListing("Tar", "Tar", 10, "Tar", 10, "c9c1f3d1-c728-46e1-ba83-828c882babbf", "2021-04-20", "2021-04-21"));
 
 	/**
 	 * Updates one column in the listing table
@@ -283,7 +428,7 @@ module.exports = (dbName = "Database") => {
 	 *  Gets all listings from the database
 	 * @returns All listings from the database
 	 */
-	function getAllRecords() {
+	function getAllListingRecords() {
 		return Database.getAllRecords("Listing");
 	}
 
@@ -323,7 +468,8 @@ module.exports = (dbName = "Database") => {
 				return "Not enough items in stock";
 			}
 
-			//Insert into purchases section
+			//Insert into purchases section\
+			let date = new Date();
 			purchase_id = Database.generateUUID("Purchase", "PurchaseID");
 			const insert_purchase_sql = Database.database.prepare(`
         INSERT INTO Purchase(PurchaseID, ListingID, BuyerID, Date, Quantity) VALUES (?,?,?,?,?)`);
@@ -332,7 +478,7 @@ module.exports = (dbName = "Database") => {
 				purchase_id,
 				ListingID,
 				BuyerID,
-				new Date(),
+				date.toISOString(),
 				Quantity
 			);
 
@@ -363,6 +509,8 @@ module.exports = (dbName = "Database") => {
 		}
 		return "Listing does not exist";
 	}
+
+	console.log(reserveItem("bc31c1a5-9ead-4d0e-8a99-f192073c1f07","ec4a26f7-52c6-42ba-aef9-f88dc2bfa8d9", 1));
 
 	/**
 	 *  Gets all purchases from a specific buyer
@@ -565,9 +713,9 @@ module.exports = (dbName = "Database") => {
 
 	function sendWelcomeEmail(email) {
 		//TODO
-
 		ejs.renderFile(
-			path.join(__dirname, "./emails/welcome.ejs"),
+			
+			path.join(__dirname, "../emails/welcome.ejs"),
 			function (err, str) {
 				if (err) {
 					console.log(err);
@@ -591,9 +739,12 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	function sendVerificationEmail(userID) {
+	// console.log(sendWelcomeEmail("omgitsblackbeard@gmail.com"));
+
+	function sendVerificationEmail(email) {
 		//TODO
-		let email = getUser(userID).Email;
+		const userID = Database.getRecord("User", "Email", email).UserID;
+		
 		url = "http://localhost:3000/verify?userID=" + userID;
 		ejs.renderFile(
 			path.join(__dirname, "./emails/verify.ejs"),
@@ -622,6 +773,8 @@ module.exports = (dbName = "Database") => {
 			}
 		);
 	}
+
+	// console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
 
 	function sendReservedEmail(purchaseID) {
 		//TODO
@@ -672,6 +825,7 @@ module.exports = (dbName = "Database") => {
 			}
 		);
 	}
+		// console.log(sendReservedEmail("omgitsblackbeard@gmail.com"));
 
 	function sendReviewEmail(purchaseID) {
 		//TODO
@@ -709,6 +863,8 @@ module.exports = (dbName = "Database") => {
 		});
 	}
 
+	// console.log(sendReviewEmail("omgitsblackbeard@gmail.com"));
+
 	return {
 		Database,
 		loginChecker,
@@ -722,7 +878,7 @@ module.exports = (dbName = "Database") => {
 		getListing,
 		getBusinessListings,
 		getAllBusinessListings,
-		getAllRecords,
+		getAllListingRecords,
 		getExpiredListings,
 		reserveItem,
 		getBoughtItems,
@@ -743,5 +899,8 @@ module.exports = (dbName = "Database") => {
 		sendWelcomeEmail,
 		sendVerificationEmail,
 		getUserID,
+		makeBusiness,
+		addUserToBusiness,
+		getBusinessDetails,
 	};
 };
