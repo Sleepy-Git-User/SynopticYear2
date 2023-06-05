@@ -6,9 +6,7 @@ const DbPath = path.join(__dirname, "/");
 const crypto = require("../utili/password.js");
 const nodemailer = require("nodemailer");
 const ejs = require("ejs");
-const Identicon = require("identicon.js");
-const { default: Identicon } = require("identicon.js");
-
+const identicon = require("identicon");
 
 const transporter = nodemailer.createTransport({
 	service: "gmail",
@@ -28,38 +26,48 @@ module.exports = (dbName = "Database") => {
 		console.log(error);
 	}
 	//Login Page
-/**
- *
- * @param {*} Email that the user wants to use to login with.
- * @param {*} Password that the user wants to use to login with.
- * @returns true is the user can be allowed to loging, and fale if the details are wrong.
- */
-function loginChecker(Email, Password) {
-
-	const checkEmail = Database.inTable("User", "Email", Email); //Checks if the Email is in the system.
-	if (checkEmail === false) {
-	  return {success: false, data: "Email or Password incorrect"};
-	} else {
-	  const getUserID = Database.getField("User", "UserID", "Email", Email); //Gets the UserID by using the email.
-	  const grabSalt = Database.getField("Password","Salt","UserID",getUserID[0].UserID
-	  ); //Gets the Salt from the pasword table using the UserID.
-	  const hashedPassword = Database.getField("Password","Password","UserID",
-		getUserID[0].UserID
-	  ); //Gets the hashed password from password table.
-	  if (
-		crypto.saltNhash(Password, grabSalt[0].Salt) ===
-		hashedPassword[0].Password
-	  ) {
-		//Hashes the inputted password and comparess it to the stored password.
-		return {success: true, data: getUserID};
-	  } else {
-		return {success: false, data: "Email or Password incorrect"} ;
-	  }
+	/**
+	 *
+	 * @param {*} Email that the user wants to use to login with.
+	 * @param {*} Password that the user wants to use to login with.
+	 * @returns true is the user can be allowed to loging, and fale if the details are wrong.
+	 */
+	function loginChecker(Email, Password) {
+		const checkEmail = Database.inTable("User", "Email", Email); //Checks if the Email is in the system.
+		if (checkEmail === false) {
+			return { success: false, data: "Email or Password incorrect" };
+		} else {
+			const getUserID = Database.getField(
+				"User",
+				"UserID",
+				"Email",
+				Email
+			); //Gets the UserID by using the email.
+			const grabSalt = Database.getField(
+				"Password",
+				"Salt",
+				"UserID",
+				getUserID[0].UserID
+			); //Gets the Salt from the pasword table using the UserID.
+			const hashedPassword = Database.getField(
+				"Password",
+				"Password",
+				"UserID",
+				getUserID[0].UserID
+			); //Gets the hashed password from password table.
+			if (
+				crypto.saltNhash(Password, grabSalt[0].Salt) ===
+				hashedPassword[0].Password
+			) {
+				//Hashes the inputted password and comparess it to the stored password.
+				return { success: true, data: getUserID };
+			} else {
+				return { success: false, data: "Email or Password incorrect" };
+			}
+		}
 	}
-  }
 	//loginChecker
 	//console.log(loginChecker("bike@gmail.com","Game"));
-
 
 	function makeUser(
 		Email,
@@ -77,68 +85,66 @@ function loginChecker(Email, Password) {
 		const address_id = Database.generateUUID("Address", "AddressID"); //Creates address UUID.
 		if (Database.inTable("User", "Email", Email) === true) {
 			//Checks if the Email is already in the table and returns fales if its taken.
-			return {success: false, data: "Email Already in use"};
+			return { success: false, data: "Email Already in use" };
 		} else {
-				//SQL to insert data in to the User table.
-				const insert_user_sql = Database.database.prepare(`
+			//SQL to insert data in to the User table.
+			const insert_user_sql = Database.database.prepare(`
             INSERT INTO User
             (UserID, Email, PhoneNumber, Fname, Lname, DoB, AddressID)
             VALUES (?,?,?,?,?,?,?)`);
 
-				//Creates the salt for the new user, and hashes it with the users inputted password.
-				let salt = crypto.makeSalt();
-				let hashedPassword = crypto.saltNhash(Password, salt);
+			//Creates the salt for the new user, and hashes it with the users inputted password.
+			let salt = crypto.makeSalt();
+			let hashedPassword = crypto.saltNhash(Password, salt);
+			generateProfPic(user_id);
 
-				//SQL to insert the users hashed password in to the database as well as the users salt.
-				const insert_Password = Database.database.prepare(`
+			//SQL to insert the users hashed password in to the database as well as the users salt.
+			const insert_Password = Database.database.prepare(`
             INSERT INTO Password (UserID, Password, Salt)
             VALUES (?,?,?)`);
-			
+
 			//SQL to insert data in to the User table.
 			const insert_address_sql = Database.database.prepare(`
             INSERT INTO Address
             (AddressID, Line1, Line2, City, Postcode)
             VALUES (?,?,?,?,?)`);
 
-				//Runs the SQL statments
-				insert_address_sql.run(
-					address_id,
-					Line1,
-					Line2,
-					City,
-					Postcode
-				);
-				insert_user_sql.run(
-					user_id,
-					Email,
-					PhoneNumber,
-					Fname,
-					Lname,
-					DoB,
-					address_id
-				);
-				insert_Password.run(user_id, hashedPassword, salt);
-				generateProfPic(user_id);
-				sendWelcomeEmail(Email);
-				sendVerificationEmail(Email);
-				//Returns true after creating the new user.
-				return {success: true, data: user_id};
-			}
+			//Runs the SQL statments
+			insert_address_sql.run(address_id, Line1, Line2, City, Postcode);
+			insert_user_sql.run(
+				user_id,
+				Email,
+				PhoneNumber,
+				Fname,
+				Lname,
+				DoB,
+				address_id
+			);
+			insert_Password.run(user_id, hashedPassword, salt);
+
+			sendWelcomeEmail(Email);
+			sendVerificationEmail(Email);
+			//Returns true after creating the new user.
+			return { success: true, data: user_id };
 		}
+	}
 	//makeUser Test
 	//console.log(makeUser("bike@gmail.com","12313232","Tester","Jones","02/04/2000","Game","Party","Lane","London","LN169NG"));
 	function generateProfPic(userID) {
-		var data= new Identicon(userID, {size: 420, format: 'svg'}).toString();
-		console.log("Icon "+data);
-		Database.updateRecord("User", "UserID", userID, "img", data);
-	} 
+		identicon.generate({ id: userID, size: 150 }, (err, buffer) => {
+			if (err) throw err;
+
+			// buffer is identicon in PNG format.
+			fs.writeFileSync(__dirname + "/identicon.png", buffer);
+		});
+	}
 
 	function removeUser(UserID) {
 		Database.deleteRecord("User", "UserID", UserID);
 	}
 
-	function getUserID(Email){
-		return Database.getField("User","UserID","Email",Email);
+	function getUserID(Email) {
+		return Database.getField("User", "UserID", "Email", Email);
 	}
 	//console.log(getUserID("bike@gmail.com"));
 
@@ -354,7 +360,6 @@ function loginChecker(Email, Password) {
 
 			sendReservedEmail(purchase_id);
 			return "Purchase Successful";
-
 		}
 		return "Listing does not exist";
 	}
@@ -411,21 +416,34 @@ function loginChecker(Email, Password) {
 	 * @param {*} ReviewerID Who is writing the review
 	 * @param {*} PurchaseID Which purchase is being reviewed
 	 * @param {*} BusinessID Which business is being reviewed
+	 * @param {*} Title What is the title of the review
 	 * @param {*} Rating What rating is being given
 	 * @param {*} Review What is being said
 	 */
-	function createReview(ReviewerID, PurchaseID, BusinessID, Rating, Review) {
+	function createReview(
+		ReviewerID,
+		PurchaseID,
+		BusinessID,
+		Title,
+		Rating,
+		Review
+	) {
 		const insert_review_sql = Database.database.prepare(
-			`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Rating, Review, Date) VALUES (?,?,?,?,?,?)`
+			`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Title, Rating, Review, Date) VALUES (?,?,?,?,?,?,?)`
 		);
-		insert_review_sql.run(
+		let success = insert_review_sql.run(
 			ReviewerID,
 			BusinessID,
 			PurchaseID,
+			Title,
 			Rating,
 			Review,
 			new Date()
 		);
+
+		if (success.changes === 0) {
+			return "Review failed to be created";
+		}
 	}
 
 	/**
@@ -548,58 +566,61 @@ function loginChecker(Email, Password) {
 	function sendWelcomeEmail(email) {
 		//TODO
 
-		ejs.renderFile(path.join(__dirname, "./emails/welcome.ejs"), function (err, str) {
-		if (err) {
-			console.log(err);
-			return
-		}
-		let mailOptions = {
-			from:  '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
-			to: email,
-			subject: "Welcome to Grab-It & Govan!",
-			html: str
-		}
+		ejs.renderFile(
+			path.join(__dirname, "./emails/welcome.ejs"),
+			function (err, str) {
+				if (err) {
+					console.log(err);
+					return;
+				}
+				let mailOptions = {
+					from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
+					to: email,
+					subject: "Welcome to Grab-It & Govan!",
+					html: str,
+				};
 
-		transporter.sendMail(mailOptions, function (err, data) {
-			if (err) {
-				console.log(err);
-				return
+				transporter.sendMail(mailOptions, function (err, data) {
+					if (err) {
+						console.log(err);
+						return;
+					}
+					console.log("Email sent successfully");
+				});
 			}
-			console.log("Email sent successfully");
-		}
-		)
-		});
-
+		);
 	}
 
 	function sendVerificationEmail(userID) {
 		//TODO
 		let email = getUser(userID).Email;
 		url = "http://localhost:3000/verify?userID=" + userID;
-		ejs.renderFile(path.join(__dirname, "./emails/verify.ejs"), {
-			url
-		}, function (err, str) {
-			if (err) {
-				console.log(err);
-				return
-			}
-			let mailOptions = {
-				from:  '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
-				to: email,
-				subject: "Verify your email address",
-				html: str
-			}
-	
-			transporter.sendMail(mailOptions, function (err, data) {
+		ejs.renderFile(
+			path.join(__dirname, "./emails/verify.ejs"),
+			{
+				url,
+			},
+			function (err, str) {
 				if (err) {
 					console.log(err);
-					return
+					return;
 				}
-				console.log("Email sent successfully");
+				let mailOptions = {
+					from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
+					to: email,
+					subject: "Verify your email address",
+					html: str,
+				};
+
+				transporter.sendMail(mailOptions, function (err, data) {
+					if (err) {
+						console.log(err);
+						return;
+					}
+					console.log("Email sent successfully");
+				});
 			}
-			)
-			});
-		
+		);
 	}
 
 	function sendReservedEmail(purchaseID) {
@@ -609,7 +630,6 @@ function loginChecker(Email, Password) {
 		let business = getBusiness(listing.BusinessID);
 		let address = getBusinessAddress(listing.BusinessID);
 		let email = getUser(purchase.UserID).Email;
-
 
 		data = {
 			ID: purchase.PurchaseID,
@@ -624,33 +644,34 @@ function loginChecker(Email, Password) {
 			Line1: address.Line1,
 			Line2: address.Line2,
 			postcode: address.postcode,
-			
 		};
-		ejs.renderFile(path.join(__dirname, "./emails/reservedItem"), {
-			data
-		}, function (err, str) {
-			if (err) {
-				console.log(err);
-				return
-			}
-			let mailOptions = {
-				from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
-				to: email,
-				subject: "You've reserved an item!",
-				html: str
-			}
-	
-			transporter.sendMail(mailOptions, function (err, data) {
+		ejs.renderFile(
+			path.join(__dirname, "./emails/reservedItem"),
+			{
+				data,
+			},
+			function (err, str) {
 				if (err) {
 					console.log(err);
-					return
+					return;
 				}
-				console.log("Email sent successfully");
+				let mailOptions = {
+					from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
+					to: email,
+					subject: "You've reserved an item!",
+					html: str,
+				};
+
+				transporter.sendMail(mailOptions, function (err, data) {
+					if (err) {
+						console.log(err);
+						return;
+					}
+					console.log("Email sent successfully");
+				});
 			}
-			)
-			});
-		}
-	
+		);
+	}
 
 	function sendReviewEmail(purchaseID) {
 		//TODO
@@ -665,29 +686,27 @@ function loginChecker(Email, Password) {
 			Date: purchase.Date,
 			img: listing.img,
 		};
-		let url =
-			"https://localhost:5173/review?purchaseID="+purchaseID;
+		let url = "https://localhost:5173/review?purchaseID=" + purchaseID;
 		ejs.render("../emails/review", { data, url }, function (err, str) {
 			if (err) {
 				console.log(err);
-				return
+				return;
 			}
 			let mailOptions = {
 				from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
 				to: email,
 				subject: "Leave a reivew on your recent purchase!",
-				html: str
-			}
-	
+				html: str,
+			};
+
 			transporter.sendMail(mailOptions, function (err, data) {
 				if (err) {
 					console.log(err);
-					return
+					return;
 				}
 				console.log("Email sent successfully");
-			}
-			)
 			});
+		});
 	}
 
 	return {

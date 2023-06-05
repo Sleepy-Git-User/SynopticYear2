@@ -19,30 +19,34 @@ module.exports = (components) => {
 	});
 
 	router.post("/makeUser", (req, res) => {
-		
-		res.json(interface.makeUser(
-			req.body.Email,
-			req.body.PhoneNumber,
-			req.body.Fname,
-			req.body.Lname,
-			req.body.DoB,
-			req.body.Password,
-			req.body.Line1,
-			req.body.Line2,
-			req.body.City,
-			req.body.Postcode
-		));
+		res.json(
+			interface.makeUser(
+				req.body.Email,
+				req.body.PhoneNumber,
+				req.body.Fname,
+				req.body.Lname,
+				req.body.DoB,
+				req.body.Password,
+				req.body.Line1,
+				req.body.Line2,
+				req.body.City,
+				req.body.Postcode
+			)
+		);
 	});
 
 	router.post("/loginChecker", (req, res) => {
 		const { Email, Password } = req.body;
 		console.log(req.body);
 		try {
-			if (!Email || !Password ) {
-				return res.json({ success: false, data: "Missing Email or Password" });
+			if (!Email || !Password) {
+				return res.json({
+					success: false,
+					data: "Missing Email or Password",
+				});
 			}
-			
-			res.json(interface.loginChecker(Email,Password));
+
+			res.json(interface.loginChecker(Email, Password));
 		} catch (error) {
 			console.error(error);
 			return res.json({ success: false, data: "Server error" });
@@ -87,6 +91,7 @@ module.exports = (components) => {
 			req.body.BuyerID,
 			req.body.PurchaseID,
 			req.body.BusinessID,
+			req.body.Title,
 			req.body.Rating,
 			req.body.Review
 		);

@@ -8,19 +8,19 @@ import BusinessPannel from "../wigits/businessPannel";
 import ItemPannel from "../wigits/itemPannel";
 import emptystr from "/emptystr.svg";
 import fullstr from "/fullstr.svg";
-import { useNavigate } from "react-router-dom";
 //I want this to be the page that leads from a email link
 //I want to import and purchaseID from the link
 
 export default function ReviewTemplate() {
-	/*const [loading, setLoading] = useState(false); // add this state
+	const [loading, setLoading] = useState(false); // add this state
 	const [purchaseID, setPurchaseID] = useState();
-	const navigate = useNavigate();
+
 
 	const [form, setForm] = useState({
 		PurchaseID: null,
 		BusinessID: null,
 		BuyerID: null,
+		Title: "",
 		Rating: 0,
 		Review: "",
 		Date: null,
@@ -104,7 +104,7 @@ export default function ReviewTemplate() {
 		axios.post("/api/submitReview", form).then((res) => {
 			console.log(res.status);
 		});
-		navigate("/");
+
 	};
 
 	useEffect(() => {
@@ -141,6 +141,15 @@ export default function ReviewTemplate() {
 								</div>
 							</div>
 							<form id="reviewForm" onSubmit={handleSubmit}>
+								<label for="Title">Title:</label>
+								<input
+									type="text"
+									id="Title"
+									name="Title" value={form.Title}
+									onChange={handleChange}
+									required
+								/>
+
 								<label for="review">Review:</label>
 								<textarea
 									type="text"
@@ -159,6 +168,6 @@ export default function ReviewTemplate() {
 				)}
 			</h2>
 		</div>
-	); */
+	);
 }
 

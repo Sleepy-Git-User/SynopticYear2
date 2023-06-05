@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS Review
     ReviewerID VARCHAR(128) NOT NULL,
     PurchaseID VARCHAR(128) NOT NULL,
     Rating INT NOT NULL,
+    Title TEXT NOT NULL,
     Review TEXT NOT NULL,
     Date INT NOT NULL,
     PRIMARY KEY (BusinessID, ReviewerID, PurchaseID, Date)
