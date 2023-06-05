@@ -191,7 +191,6 @@ function loginChecker(Email, Password) {
 		const business_id = Database.generateUUID("Business", "BusinessID"); //Creates users UUID.
 		const address_id = Database.generateUUID("Address", "AddressID"); //Creates address UUID.
 		const InvCode = Database.generate4Code("Business","BusinessID",8);
-		console.log("I am here"); //Makes an 8 digit invite code.
 		if (Database.inTable("Business", "Email", Email) === true) {
 			//Checks if the Email is already in the table and returns fales if its taken.
 			return {success: false, data: "Email Already in use"};
@@ -201,6 +200,7 @@ function loginChecker(Email, Password) {
 			return {success: false, data: "PhoneNumber Already in use"};
 		}
 		if (Database.inTable("User","UserID",UserID) === false){
+			console.log(UserID);
 			return {success: false, data: "No User matching that ID"};
 		}
 		else {
