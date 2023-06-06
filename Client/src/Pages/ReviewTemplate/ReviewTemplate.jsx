@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import axios from "axios";
 import "./ReviewTemplate.css";
-import businessPannel from "../../wigits/businessPannel";
-import itemPannel from "../../wigits/itemPannel";
 import BusinessPannel from "../../wigits/businessPannel";
 import ItemPannel from "../../wigits/itemPannel";
 import emptystr from "/emptystr.svg";
@@ -51,7 +49,7 @@ export default function ReviewTemplate() {
 		console.log(ID);
 		await axios.get("/api/getPurchase/" + ID).then((res) => {
 			console.log(res.status);
-			setPurchase(res.data);
+			setPurchase(res.data.data[0]);
 		});
 		setForm({
 			...form,
@@ -119,7 +117,8 @@ export default function ReviewTemplate() {
 					"Loading..."
 				) : (
 					<div>
-						<BusinessPannel businessID={purchase.BusinessID} />
+						<div>{console.log("HERE" + purchase)}</div>
+						<BusinessPannel purchaseID={purchase.PurchaseID} />
 						<ItemPannel purchaseID={purchase.PurchaseID} />
 						<div className="review">
 							<h1 id="formTitle">Write a Review:</h1>

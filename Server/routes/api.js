@@ -54,7 +54,7 @@ module.exports = (components) => {
 	});
 
 	router.get("/getPurchase/:purchaseID", (req, res) => {
-		const data = {
+		let data = {
 			PurchaseID: null,
 			ListingID: null,
 			BuyerID: null,
@@ -63,9 +63,12 @@ module.exports = (components) => {
 			Quantity: null,
 			BusinessID: null,
 		};
-
+		console.log(req.params.purchaseID)
 		data = interface.getPurchase(req.params.purchaseID);
-		data.BusinessID = interface.getListing(data.listingID).businessID;
+		console.log("ListingID "+data[0].ListingID)
+		let listing = interface.getListing(data[0].ListingID);
+		console.log("BusinessID "+listing[0].businessID)
+		data.BusinessID = listing[0].businessID;
 		res.json({
 			success: true,
 			data: data,

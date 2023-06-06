@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { setUserId, getUserId } from "../../auth";
+import axios from "axios";
 
-
-export default function LoginForm({saveId}) {
+export default function LoginForm({ saveId }) {
     const [form, setForm] = useState({
         Email: "",
         Password: "",
@@ -13,29 +13,20 @@ export default function LoginForm({saveId}) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        fetch("http://localhost:3000/api/loginChecker", {
-            method: "POST",
-            //CHANGE TO NOT MAKE IT JUST THIS ONE USER
-            body: JSON.stringify(form),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => response.json())
-
-            .then((info) => {
-                if (info.success) {
-                    
+        axios.post("/api/loginChecker",
+            form).then((response) => {
+                if (response.data.success) {
                     setError("");
-                    saveId(info.data[0].UserID);
-                    
+                    saveId(response.data.data[0].UserID);
                 } else {
-                    setError(info.data);
+                    setError(response.data.data);
                 }
             })
             .catch((error) => {
-                alert("Error:", error);
-            });
+                console.log(error);
+            }
+            );
+
     };
 
 
@@ -53,36 +44,36 @@ export default function LoginForm({saveId}) {
 
     return (
         <div>
-        
-        <form class="login-form" onSubmit={handleSubmit}>
-        <h1>Log In</h1>
-            <label htmlFor="email">Email:</label>
-            <input
-                type="email"
-                id="email"
-                name="Email"
-                value={form.Email}
-                onChange={handleChange}
-            />
 
-            <br />
+            <form class="login-form" onSubmit={handleSubmit}>
+                <h1>Log In</h1>
+                <label htmlFor="email">Email:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="Email"
+                    value={form.Email}
+                    onChange={handleChange}
+                />
 
-            <label htmlFor="password">Password:</label>
-            <input
-                type="password"
-                id="password"
-                name="Password"
-                value={form.Password}
-                onChange={handleChange}
-            />
+                <br />
 
-            <br />
-            <p>{error}</p>
-            <button class="login-btn" type="submit">
-                Log In
-            </button>
+                <label htmlFor="password">Password:</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="Password"
+                    value={form.Password}
+                    onChange={handleChange}
+                />
 
-        </form>
+                <br />
+                <p>{error}</p>
+                <button class="login-btn" type="submit">
+                    Log In
+                </button>
+
+            </form>
         </div>
     );
 }

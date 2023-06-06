@@ -675,13 +675,15 @@ module.exports = (dbName = "Database") => {
 
 	//********************** Page Specifics *************************/
 
-	function getBusinessPannel(BusinessID) {
+	function getBusinessPannel(PurchaseID) {
 		//ID, Name, IMG, Rating, Rating count
-		const business = Database.getRecord(
-			"Business",
-			"BusinessID",
-			BusinessID
+		const Purchase = Database.getRecord(
+			"Purchase",
+			"PurchaseID",
+			PurchaseID
 		);
+		const Listing = Database.getRecord("Listing", "ListingID", Purchase[0].ListingID);
+		const BusinessID = Listing[0].SellerID;
 		const rating = getBusinessRating(BusinessID);
 		const ratingCount = countBusinessReviews(BusinessID);
 		return {
@@ -704,13 +706,13 @@ module.exports = (dbName = "Database") => {
 			Date: null,
 		};
 		const purchase = getPurchase(PurchaseID);
-		const listing = getListing(purchase.ListingID);
-		data.ID = purchase.PurchaseID;
-		data.Name = listing.Name;
-		data.img = listing.img;
-		data.Price = listing.Price * purchase.Quantity;
-		data.Quantity = purchase.Quantity;
-		data.Date = purchase.Date;
+		const listing = getListing(purchase[0].ListingID);
+		data.ID = purchase[0].PurchaseID;
+		data.Name = listing[0].Name;
+		data.img = listing[0].img;
+		data.Price = listing[0].Price * purchase[0].Quantity;
+		data.Quantity = purchase[0].Quantity;
+		data.Date = purchase[0].Date;
 		return data;
 	}
 
@@ -781,7 +783,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	 console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
+	//  console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
 
 	function sendReservedEmail(purchaseID) {
 		//TODO
