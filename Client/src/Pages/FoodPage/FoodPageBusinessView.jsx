@@ -62,7 +62,7 @@ export default function FoodPageBusinessView() {
                         <div>
                             <div>{listing.Name}</div>
                             <div>{listing.Description}</div>
-                            <div>Price: {listing.Price}</div>
+                            <div>Price: £{listing.Price}</div>
                             <div>Total Quantity: {listing.Quantity}</div>
                             
                         </div>

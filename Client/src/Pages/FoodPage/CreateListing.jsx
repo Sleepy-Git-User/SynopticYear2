@@ -88,6 +88,7 @@ function CreateListing({  }) {
                     type="number"
                     id="price"
                     min="0"
+                    step="0.01"
                     name="Price"
                     value={form.Price}
                     onChange={handleChange}

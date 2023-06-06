@@ -8,7 +8,7 @@ export default function FoodPageUserView() {
     const [listings, setListings] = useState([]);
     const [QuantityValue, setQuantityValue] = useState(1)
     const getListings = () => {
-        fetch("http://localhost:3000/api/getListings", {
+        fetch("/api/getListings", {
             method: "POST",
 
             headers: {
@@ -30,7 +30,7 @@ export default function FoodPageUserView() {
 
 
     const reserveItem = (passedIn) => {
-        fetch("http://localhost:3000/api/reserveItem", {
+        fetch("/api/reserveItem", {
             method: "POST",
             body: JSON.stringify(passedIn),
             headers: {
@@ -75,7 +75,7 @@ export default function FoodPageUserView() {
                         <form key={listing.ListingID}>
                             <div>{listing.Name}</div>
                             <div>{listing.Description}</div>
-                            <div>Price: {listing.Price}</div>
+                            <div>Price: £{listing.Price}</div>
                             <div>Total Quantity: {listing.Quantity}</div>
                             <label htmlFor="name">Quantity: </label>
                         <input
@@ -87,7 +87,7 @@ export default function FoodPageUserView() {
                             onChange={(e) => setQuantityValue(e.target.value)}
                             max={listing.Quantity}
                         />
-                        <button onClick={reserveItem({ListingID: listing.ListingID, BuyerID: sessionStorage.getItem("userId"), Quantity: QuantityValue.toString() })}>Reserve</button>
+                        <button onClick={() => reserveItem({ListingID: listing.ListingID, BuyerID: sessionStorage.getItem("userId"), Quantity: QuantityValue.toString() })}>Reserve</button>
 
 
                         </form>
