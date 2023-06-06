@@ -17,27 +17,7 @@
 		/>
 	</head>
 
-	<header
-		class="header"
-		style="
-			font-family: 'Roboto Slab', sans-serif;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 20px;
-			margin: 30px 0;
-			background-color: #defaff;
-		"
-	>
-		<img
-			src="./logo.png"
-			alt="logo"
-			width="100"
-			height="100"
-			style="font-family: 'Roboto Slab', sans-serif; margin-right: 15px"
-		/>
-		<h1 style="font-family: 'Roboto Slab', sans-serif">Grab-It & Govan</h1>
-	</header>
+	
 
 	<body
 		style="
@@ -46,8 +26,41 @@
 			padding: 0;
 			max-width: 900px;
 			background-color: #f1f1f1;
+			color: #000 !important;
 		"
 	>
+	<header
+			class="header"
+			style="
+				font-family: 'Roboto Slab', sans-serif;
+				padding: 20px;
+				margin: 30px 0;
+				background-color: #defaff;
+			"
+		>
+		<table cellspacing="0" cellpadding="0" border="0" align="center">
+			<tr>
+
+			<td>
+			<img
+				src="./logo.png"
+				alt="logo"
+				width="100"
+				height="100"
+				style="
+					font-family: 'Roboto Slab', sans-serif;
+					margin-right: 15px;
+				"
+			/>
+			</td>
+			<td>
+			<h1 style="font-family: 'Roboto Slab', sans-serif">
+				Grab-It & Govan
+			</h1>
+			</td>
+			</tr>
+			</table>
+		</header>
 		<div
 			class="content"
 			style="
@@ -58,35 +71,41 @@
 				padding-bottom: 60px;
 			"
 		>
-			<div
+			<table
 				class="itemSummary"
 				style="
 					font-family: 'Roboto Slab', sans-serif;
-					display: flex;
-					flex-direction: row;
+					width: 100%;
 					border: 1px solid #d5d9d9;
 				"
 			>
-				<div
+				<tr
 					class="itemDetails"
 					style="
 						font-family: 'Roboto Slab', sans-serif;
-						flex: 1.2;
+						
 						padding: 0 10px;
-						display: grid;
-						grid-template-columns: 0.5fr 1fr;
+						
 					"
 				>
+				<td width="60%">
+					<ul style="list-style: none;">
+						
 					<h1
 						style="
 							font-family: 'Roboto Slab', sans-serif;
 							font-size: 20px;
 							font-weight: 750;
-							grid-column: span 2;
+							
 						"
 					>
 						Order Summary:
 					</h1>
+					<li>
+						<table cellspacing="0" cellpadding="0" border="0" >
+							<tr>
+				
+							<td>
 					<p
 						style="
 							font-family: 'Roboto Slab', sans-serif;
@@ -96,6 +115,8 @@
 					>
 						Order #:
 					</p>
+					</td>
+					<td>
 					<p
 						style="
 							font-family: 'Roboto Slab', sans-serif;
@@ -105,6 +126,16 @@
 					>
 						<%= data.ID %>
 					</p>
+					</td>
+					</tr>
+					</table>
+						</li>
+				
+					
+						<table cellspacing="0" cellpadding="0" border="0" >
+							<tr>
+				
+							<td>
 					<p
 						style="
 							font-family: 'Roboto Slab', sans-serif;
@@ -114,6 +145,9 @@
 					>
 						Collection Date:
 					</p>
+					</td>
+					<td>
+					
 					<p
 						style="
 							font-family: 'Roboto Slab', sans-serif;
@@ -123,6 +157,17 @@
 					>
 						<%= data.Date %> before 5pm
 					</p>
+					</td>
+					</tr>
+					</table>
+						
+					</li>
+					<li>
+					
+						<table cellspacing="0" cellpadding="0" border="0">
+							<tr>
+				
+							<td>
 					<p
 						style="
 							font-family: 'Roboto Slab', sans-serif;
@@ -132,6 +177,8 @@
 					>
 						Order Total:
 					</p>
+					</td>
+					<td>
 					<p
 						style="
 							font-family: 'Roboto Slab', sans-serif;
@@ -141,12 +188,18 @@
 					>
 						£<%= data.Total %>
 					</p>
-				</div>
-				<div
+					</td>
+					</tr>
+					</table>
+					</li>
+					</ul>
+					
+				</td>
+				<td
 					class="itemAddress"
 					style="
 						font-family: 'Roboto Slab', sans-serif;
-						flex: 1;
+						
 						margin-left: 20px;
 						padding: 0 20px;
 						border-left: 1px solid #d5d9d9;
@@ -184,18 +237,21 @@
 							font-weight: 540;
 						"
 					>
-						<%= data.Line2 %><%= data.Postcode %>
+						<%= data.Line2 %> <%= data.Postcode %>
 					</p>
-				</div>
-			</div>
+				</td>
+				</tr>
+			</table>
+
 			<div
 				class="itemTable"
 				style="
 					font-family: 'Roboto Slab', sans-serif;
 					border: 1px solid #d5d9d9;
 					margin: 20px 0;
-					display: flex;
-					justify-content: space-evenly;
+					height: 123px;
+					text-align: center;
+				
 				"
 			>
 				<table
@@ -228,9 +284,9 @@
 								font-family: 'Roboto Slab', sans-serif;
 								padding: 5px;
 								font-size: 20px;
-								display: flex;
-								align-items: center;
+								
 							"
+							
 						>
 							<img
 								src=<%= data.img %>
@@ -245,7 +301,9 @@
 							<%= data.Item %>
 						</td>
 						<td
+						
 							style="
+								line-height: 100px;
 								font-family: 'Roboto Slab', sans-serif;
 								padding: 5px;
 								font-size: 20px;
@@ -269,9 +327,7 @@
 				class="reserveCode"
 				style="
 					font-family: 'Roboto Slab', sans-serif;
-					display: flex;
-					flex-direction: column;
-					align-items: center;
+					
 					margin: 50px auto 0 auto;
 					width: 70%;
 					height: 300px;
@@ -311,7 +367,8 @@
 						padding: 10px 20px;
 						border-radius: 10px;
 						color: #fff;
-						margin-top: 5px;
+						margin-top: 55px;
+						text-align: center;
 					"
 				>
 					<%= data.code %>

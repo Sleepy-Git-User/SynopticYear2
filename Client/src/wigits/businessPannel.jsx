@@ -38,7 +38,6 @@ export default function BusinessPannel(purchaseID) {
 	const getBusiness = async (ID) => {
 		setLoading(true);
 		axios.get("/api/getBusinessPannel/" + ID.purchaseID).then((res) => {
-			console.log(res.data.data);
 			setBusiness(res.data.data);
 		});
 		setLoading(false);

@@ -46,9 +46,7 @@ export default function ReviewTemplate() {
 	};
 
 	const getPurchase = async (ID) => {
-		console.log(ID);
 		await axios.get("/api/getPurchase/" + ID).then((res) => {
-			console.log("DATA " + res.data.data);
 			setPurchase(res.data.data[0]);
 		});
 		setForm({
@@ -97,7 +95,6 @@ export default function ReviewTemplate() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("submitting");
 		console.log(form);
 		axios.post("/api/submitReview", form).then((res) => {
 			console.log(res.status);
@@ -117,7 +114,7 @@ export default function ReviewTemplate() {
 					"Loading..."
 				) : (
 					<div>
-						<div>{console.log("HERE" + purchase)}</div>
+
 						<BusinessPannel purchaseID={purchase.PurchaseID} />
 						<ItemPannel purchaseID={purchase.PurchaseID} />
 						<div className="review">
