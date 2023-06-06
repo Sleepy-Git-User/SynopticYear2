@@ -170,6 +170,10 @@ function loginChecker(Email, Password) {
 		return Database.getAllRecords("User");	
 	}
 
+    function getUserBusinessIDs(UserID){
+        return Database.getRecord("User_Business","UserID",UserID)[0].BusinessID
+    }
+    //console.log(getUserBusinessIDs("f987b616-7008-4257-af6e-cb2239a52def"));
 
 	//********************************************************/
 
@@ -245,7 +249,7 @@ function loginChecker(Email, Password) {
 		}
 	}
 
-	//console.log(makeBusiness("Tar Farm","tar@farm.org","0f9321303","4 Road","Clark","Nowhere","IDGAF4","fca50a50-2833-4279-ab36-0396328aafac"));
+	//console.log(makeBusiness("TarT Farm","tarT@farm.org","0989321303","4 Road","Clark","Nowhere","IDGAF4","f987b616-7008-4257-af6e-cb2239a52def"));
 
 	function getBusinessDetails(BusinessID){
 		return Database.getRecord("Business","BusinessID",BusinessID);
@@ -868,6 +872,7 @@ function loginChecker(Email, Password) {
 		getUserID,
 		makeBusiness,
 		addUserToBusiness,
-		getBusinessDetails
+		getBusinessDetails,
+        getUserBusinessIDs
 	};
 };
