@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
@@ -15,11 +15,12 @@ import Home from "./Pages/HomePage/Home.jsx";
 import AdvicePage from "./Pages/AdvicePage/AdvicePage.jsx";
 import AccountPage from "./Pages/AccountPage/AccountPage.jsx";
 import FoodPage from "./Pages/FoodPage/FoodPage.jsx";
+import ReviewTemplate from './Pages/ReviewTemplate/ReviewTemplate.jsx';
 
 
 
 function Main() {
-  
+
   const [userIdUpdate, setUserIdUpdate] = useState(null);
   const storedId = sessionStorage.getItem('userId');
 
@@ -39,14 +40,15 @@ function Main() {
   if (userIdUpdate !== null) {
     return (
       <BrowserRouter>
-        <Navbar saveId={saveId}/>
+        <Navbar saveId={saveId} />
 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Advice" element={<AdvicePage />} />
           <Route path="/Account" element={<AccountPage />} />
           <Route path="/Food" element={<FoodPage />} />
-          
+          <Route path="/Review" element={<ReviewTemplate />} />
+
 
           <Route
             path="*"

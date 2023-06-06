@@ -16,7 +16,7 @@ export default function BusinessPannel(BusinessID) {
 
 	const getBusiness = (ID) => {
 		console.log(ID);
-		axios.get("/api/getBusinessPannel/" + ID.businessID).then((res) => {
+		axios.get("/api/getBusinessPannel/" + ID.purchaseID).then((res) => {
 			console.log(res.data);
 			setBusiness(res.data);
 		});
@@ -30,10 +30,10 @@ export default function BusinessPannel(BusinessID) {
 		<div className="businessPannel">
 			<img className="businessLogo" src={null} alt="Business Image" />
 
-			<p className="businessName">Test Business</p>
+			<p className="businessName">{business.Name}</p>
 			<div className="businessStats">
-				<p className="businessRating">___ Rating </p>
-				<p className="businessSold"> Items Sold: </p>
+				<p className="businessRating">{business.Rating} Rating </p>
+				<p className="businessSold"> Items Sold: {business.RatingCount} </p>
 			</div>
 			<div className="businessContact">
 				<FontAwesomeIcon
