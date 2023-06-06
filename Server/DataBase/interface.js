@@ -24,6 +24,7 @@ module.exports = (dbName = "Database") => {
 	const Database = new DataBaseSystem(dbName, DbPath);
 	try {
 		//Imports the DDL
+		// Database.database.prepare("DROP TABLE Review").run();
 		Database.importDDL(DDLPath);
 	} catch (error) {
 		console.log(error);
@@ -150,7 +151,7 @@ module.exports = (dbName = "Database") => {
 		}
 	}
 	//makeUser Test
-	// console.log(makeUser("omgitsblackbeard@gmail.com","13313232","tafin","nover","02/04/2000","Game","Party","Lane","London","LN169NG"));
+	//  console.log(makeUser("omgitsblackbeard@gmail.com","13313232","tafin","nover","02/04/2000","Game","Party","Lane","London","LN169NG"));
 
 	function generateProfPic(userID) {
 		identicon.generate({ id: userID, size: 150 }, (err, buffer) => {
@@ -362,7 +363,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	// console.log(createListing("Tar", "Tar", 10, "Tar", 10, "c9c1f3d1-c728-46e1-ba83-828c882babbf", "2021-04-20", "2021-04-21"));
+	//  console.log(createListing("Tar", "Tar", 10, "Tar", 10, "2f3f4bd9-4236-42d8-ac39-93500601ea82", "2021-04-20", "2021-04-21"));
 
 	/**
 	 * Updates one column in the listing table
@@ -523,7 +524,7 @@ module.exports = (dbName = "Database") => {
 		return "Listing does not exist";
 	}
 
-	//  console.log(reserveItem("bc31c1a5-9ead-4d0e-8a99-f192073c1f07","627fcfe3-9dda-467c-8cf4-d515caa72235", 1));
+	//  console.log(reserveItem("56babe8e-c90d-475a-904a-92252cb39c46","4078deab-da6c-4bc6-89f6-7c59f9bc6fb3", 1));
 
 	/**
 	 *  Gets all purchases from a specific buyer
@@ -565,7 +566,19 @@ module.exports = (dbName = "Database") => {
 	 * @returns A specific purchase
 	 */
 	function getPurchase(PurchaseID) {
-		return Database.getRecord("Purchase", "PurchaseID", PurchaseID);
+		let data ={
+			PurchaseID: null,
+			ListingID: null,
+			BusinessID: null,
+			BuyerID: null,
+			Quantity: null,
+			Date: null,
+			BusinessID: null,
+		}
+		data= Database.getRecord("Purchase", "PurchaseID", PurchaseID);
+		let listing= Database.getRecord("Listing", "ListingID", data[0].ListingID)
+		data[0].BusinessID= listing[0].SellerID;
+		return data;
 	}
 
 	//********************************************************/
@@ -589,6 +602,8 @@ module.exports = (dbName = "Database") => {
 		Rating,
 		Review
 	) {
+		console.log(BusinessID);
+		let date = new Date();
 		const insert_review_sql = Database.database.prepare(
 			`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Title, Rating, Review, Date) VALUES (?,?,?,?,?,?,?)`
 		);
@@ -599,7 +614,7 @@ module.exports = (dbName = "Database") => {
 			Title,
 			Rating,
 			Review,
-			new Date()
+			date.toISOString()
 		);
 
 		if (success.changes === 0) {
@@ -622,15 +637,17 @@ module.exports = (dbName = "Database") => {
 	 * @returns  Rating of business
 	 */
 	function getBusinessRating(BusinessID) {
+		console.log(BusinessID)
 		let total = 0;
-		const reviews = Database.getRecord(
-			"Review",
-			"BusinessID",
-			BusinessID
-		).forEach((review) => {
+		const stmt = Database.database.prepare("SELECT * FROM Review WHERE BusinessID = ?");
+		let sql_select_stmt= stmt.all(BusinessID);
+		sql_select_stmt.forEach((review) => {
 			total += review.Rating;
 		});
-		return total / reviews.length;
+		if(sql_select_stmt.length === 0){
+			return "N/A";
+		}
+		return total / sql_select_stmt.length;
 	}
 
 	/**
@@ -656,7 +673,8 @@ module.exports = (dbName = "Database") => {
 	 * @returns Number of reviews a business has
 	 */
 	function countBusinessReviews(BusinessID) {
-		return Database.getRecord("Review", "BusinessID", BusinessID).length;
+		const stmt = Database.database.prepare("SELECT * FROM Review WHERE BusinessID = ?");
+		return sql_select_stmt= stmt.all(BusinessID).length;
 	}
 
 	/**
@@ -688,9 +706,12 @@ module.exports = (dbName = "Database") => {
 			"PurchaseID",
 			PurchaseID
 		);
+		console.log(Purchase);
 		const Listing = Database.getRecord("Listing", "ListingID", Purchase[0].ListingID);
+		console.log(Listing);
 		const BusinessID = Listing[0].SellerID;
 		const business = Database.getRecord("Business", "BusinessID", BusinessID);
+		console.log(business);
 		const rating = getBusinessRating(BusinessID);
 		const ratingCount = countBusinessReviews(BusinessID);
 		return {

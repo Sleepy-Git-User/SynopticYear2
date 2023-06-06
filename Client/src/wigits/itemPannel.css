@@ -1,3 +1,7 @@
+#loading{
+	width: 99.9%;
+}
+
 .itemPannel {
 	display: flex;
 	flex-direction: column;
@@ -12,7 +16,7 @@
 
 .itemHeader {
 	display: grid;
-	grid-template-columns: auto auto;
+	grid-template-columns: 60% 40%;
 	width: 99.9%;
 	overflow: hidden;
 	background-color: #f0f2f2;
@@ -63,20 +67,22 @@
 
 .purchaseID {
 	display: flex;
+	flex: 1;
 	justify-content: flex-end;
-	align-items: flex-start;
+	align-items: center;
+	font-size: 10px;
 }
 
 .purchaseID h1 {
-	padding: 10px 30px;
+	padding: 10px 15px;
 	margin: 0;
-	font-size: 20px;
+	font-size: 15px;
 }
 
 #purchaseIDInput {
-	padding: 10px 30px;
+	padding: 10px ;
 	margin: 0;
-	font-size: 20px;
+	font-size: 15px;
 }
 
 .itemMain {
