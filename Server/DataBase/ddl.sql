@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS User
 CREATE TABLE IF NOT EXISTS Business
 (
     BusinessID VARCHAR(128) NOT NULL UNIQUE PRIMARY KEY,
-    Bname TEXT NOT NULL,
+    Name TEXT NOT NULL,
     Email VARCHAR(320) NOT NULL UNIQUE, --Contact details for business
     PhoneNumber TEXT NOT NULL UNIQUE,
     img TEXT,
@@ -99,9 +99,18 @@ CREATE TABLE IF NOT EXISTS Purchase
     FOREIGN KEY (BuyerID) REFERENCES User(UserID) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Catergories
+CREATE TABLE IF NOT EXISTS Category
 (
-    CatergoryID VARCHAR(128) NOT NULL UNIQUE,
+    CategoryID VARCHAR(128) NOT NULL UNIQUE,
     Name VARCHAR(128) NOT NULL UNIQUE,
-    PRIMARY KEY (CatergoryID)
+    PRIMARY KEY (CategoryID)
 );
+
+CREATE TABLE IF NOT EXISTS Item_Category
+(
+    CategoryID INT NOT NULL,
+    ListingID INT NOT NULL,
+    PRIMARY KEY(CategoryID, ListingID)
+    FOREIGN KEY(CategoryID) REFERENCES Category(CategoryID)
+    FOREIGN KEY(ListingID) REFERENCES Listing(ListingID)
+)

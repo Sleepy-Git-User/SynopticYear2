@@ -684,12 +684,13 @@ module.exports = (dbName = "Database") => {
 		);
 		const Listing = Database.getRecord("Listing", "ListingID", Purchase[0].ListingID);
 		const BusinessID = Listing[0].SellerID;
+		const business = Database.getRecord("Business", "BusinessID", BusinessID);
 		const rating = getBusinessRating(BusinessID);
 		const ratingCount = countBusinessReviews(BusinessID);
 		return {
-			ID: business.BusinessID,
-			Name: business.Name,
-			IMG: business.img,
+			ID: BusinessID,
+			Name: business[0].Name,
+			IMG: business[0].img,
 			Rating: rating,
 			RatingCount: ratingCount,
 		};
