@@ -4,6 +4,8 @@ import axios from "axios";
 import "./businessPannel.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import emptystr from "/emptystr.svg";
+import fullstr from "/fullstr.svg";
 
 export default function BusinessPannel(purchaseID) {
 	const [loading, setLoading] = useState(true); // add this state
@@ -14,6 +16,24 @@ export default function BusinessPannel(purchaseID) {
 		Rating: null,
 		RatingCount: null,
 	});
+
+	const stars = (rating, fullstr, emptystr) => {
+		let stars = [];
+		for (let i = 0; i < rating; i++) {
+			stars.push(
+				<img src={fullstr} alt="star" width="20" height="20" />
+
+			);
+		}
+		for (let i = rating; i < 5; i++) {
+			stars.push(
+
+				<img src={emptystr} alt="star" width="20" height="20" />
+
+			);
+		}
+		return stars;
+	};
 
 	const getBusiness = async (ID) => {
 		setLoading(true);
@@ -40,7 +60,8 @@ export default function BusinessPannel(purchaseID) {
 
 					<p className="businessName">{business.Name}</p>
 					<div className="businessStats">
-						<p className="businessRating">{business.Rating} Rating </p>
+
+						<p className="businessRating">Rating:  {stars(business.Rating, fullstr, emptystr)}</p>
 						<p className="businessSold"> Items Sold: {business.RatingCount} </p>
 					</div>
 					<div className="businessContact">
