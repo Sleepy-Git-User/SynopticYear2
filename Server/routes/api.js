@@ -4,6 +4,7 @@
  */
 
 const interface = require("../DataBase/interface.js")();
+const Auth = require("../Auth/Auth.js");
 
 module.exports = (components) => {
 	const { database, express } = components;
