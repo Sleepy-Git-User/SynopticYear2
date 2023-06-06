@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS User
 CREATE TABLE IF NOT EXISTS Business
 (
     BusinessID VARCHAR(128) NOT NULL UNIQUE PRIMARY KEY,
-    Bname TEXT NOT NULL,
+    Name TEXT NOT NULL,
     Email VARCHAR(320) NOT NULL UNIQUE, --Contact details for business
     PhoneNumber TEXT NOT NULL UNIQUE,
     img TEXT,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Address
 (
     AddressID VARCHAR(128) NOT NULL UNIQUE PRIMARY KEY,
     Line1 VARCHAR(128) NOT NULL,
-    Line2 VARCHAR(128),
+    Line2 VARCHAR(128) NOT NULL,
     City VARCHAR(128) NOT NULL,
     Postcode VARCHAR(128) NOT NULL
     
@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS Review
     ReviewerID VARCHAR(128) NOT NULL,
     PurchaseID VARCHAR(128) NOT NULL,
     Rating INT NOT NULL,
+    Title TEXT NOT NULL,
     Review TEXT NOT NULL,
     Date INT NOT NULL,
     PRIMARY KEY (BusinessID, ReviewerID, PurchaseID, Date)
@@ -77,13 +78,11 @@ CREATE TABLE IF NOT EXISTS Listing
     Price DECIMAL(10,2) NOT NULL,
     img TEXT,
     Quantity INT NOT NULL,
-    CategoryID VARCHAR(128),
     SellerID VARCHAR(128) NOT NULL,
     SDate TEXT NOT NULL,
     EDate TEXT NOT NULL,
     Status BIT DEFAULT 0 NOT NULL, -- 0 = active, 1 = Expired
     PRIMARY KEY (ListingID)
-    FOREIGN KEY (CategoryID) REFERENCES Catergories(CatergoryID) ON DELETE CASCADE
     FOREIGN KEY (SellerID) REFERENCES Business(BusinessID) ON DELETE CASCADE
 );
 
@@ -100,9 +99,18 @@ CREATE TABLE IF NOT EXISTS Purchase
     FOREIGN KEY (BuyerID) REFERENCES User(UserID) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Catergories
+CREATE TABLE IF NOT EXISTS Category
 (
-    CatergoryID VARCHAR(128) NOT NULL UNIQUE,
+    CategoryID VARCHAR(128) NOT NULL UNIQUE,
     Name VARCHAR(128) NOT NULL UNIQUE,
-    PRIMARY KEY (CatergoryID)
+    PRIMARY KEY (CategoryID)
 );
+
+CREATE TABLE IF NOT EXISTS Item_Category
+(
+    CategoryID INT NOT NULL,
+    ListingID INT NOT NULL,
+    PRIMARY KEY(CategoryID, ListingID)
+    FOREIGN KEY(CategoryID) REFERENCES Category(CategoryID)
+    FOREIGN KEY(ListingID) REFERENCES Listing(ListingID)
+)

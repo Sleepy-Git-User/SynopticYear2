@@ -19,30 +19,34 @@ module.exports = (components) => {
 	});
 
 	router.post("/makeUser", (req, res) => {
-		
-		res.json(interface.makeUser(
-			req.body.Email,
-			req.body.PhoneNumber,
-			req.body.Fname,
-			req.body.Lname,
-			req.body.DoB,
-			req.body.Password,
-			req.body.Line1,
-			req.body.Line2,
-			req.body.City,
-			req.body.Postcode
-		));
+		res.json(
+			interface.makeUser(
+				req.body.Email,
+				req.body.PhoneNumber,
+				req.body.Fname,
+				req.body.Lname,
+				req.body.DoB,
+				req.body.Password,
+				req.body.Line1,
+				req.body.Line2,
+				req.body.City,
+				req.body.Postcode
+			)
+		);
 	});
 
 	router.post("/loginChecker", (req, res) => {
 		const { Email, Password } = req.body;
 		console.log(req.body);
 		try {
-			if (!Email || !Password ) {
-				return res.json({ success: false, data: "Missing Email or Password" });
+			if (!Email || !Password) {
+				return res.json({
+					success: false,
+					data: "Missing Email or Password",
+				});
 			}
-			
-			res.json(interface.loginChecker(Email,Password));
+
+			res.json(interface.loginChecker(Email, Password));
 		} catch (error) {
 			console.error(error);
 			return res.json({ success: false, data: "Server error" });
@@ -64,7 +68,7 @@ module.exports = (components) => {
 	});
 
 	router.get("/getPurchase/:purchaseID", (req, res) => {
-		const data = {
+		let data = {
 			PurchaseID: null,
 			ListingID: null,
 			BuyerID: null,
@@ -73,9 +77,12 @@ module.exports = (components) => {
 			Quantity: null,
 			BusinessID: null,
 		};
-
+		console.log(req.params.purchaseID)
 		data = interface.getPurchase(req.params.purchaseID);
-		data.BusinessID = interface.getListing(data.listingID).businessID;
+		console.log("ListingID "+data[0].ListingID)
+		let listing = interface.getListing(data[0].ListingID);
+		console.log("BusinessID "+listing[0].businessID)
+		data.BusinessID = listing[0].businessID;
 		res.json({
 			success: true,
 			data: data,
@@ -101,6 +108,7 @@ module.exports = (components) => {
 			req.body.BuyerID,
 			req.body.PurchaseID,
 			req.body.BusinessID,
+			req.body.Title,
 			req.body.Rating,
 			req.body.Review
 		);

@@ -4,6 +4,7 @@ const fs = require("fs");
 const console = require("console");
 const fourcode = require("../utili/UniqueCode");
 const generateUniqueCode = require("../utili/UniqueCode");
+const { log } = require("console");
 class DataBaseSystem {
   /**
    * Creates Database
