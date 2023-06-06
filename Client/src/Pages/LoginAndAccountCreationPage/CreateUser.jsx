@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 
-function CreateUser({  }) {
+function CreateUser({saveId}) {
     
     //Form data for creating a user (including address)
     const [form, setForm] = useState({
@@ -16,6 +16,8 @@ function CreateUser({  }) {
         City: "",
         Postcode: ""
     });
+
+    const [error, setError] = useState("");
 
     //Used to show error messages for invalid data
     //const [emailError, setEmailError] = useState("");
@@ -37,13 +39,15 @@ function CreateUser({  }) {
         })
             .then((response) => response.json())
 
-            .then((data) => {
+            .then((info) => {
                 //May need to be updated to another page
-                if (data) {
+                if (info.success) {
+                    setError("");
+                    saveId(info.data);
+                    console.log("Success!");
                     
-                    alert("Account Created!");
                 } else {
-                    alert("Invalid account creation details.");
+                    setError(info.data);
                 }
             })
             .catch((error) => {
@@ -66,6 +70,8 @@ function CreateUser({  }) {
     //Returns the create user form
     return (
         <form onSubmit={handleSubmit}>
+                <h1>Create Account</h1>
+                <br />
 
             <label htmlFor="email">Email:</label>
                 <input
@@ -74,6 +80,7 @@ function CreateUser({  }) {
                     name="Email"
                     value={form.Email}
                     onChange={handleChange}
+                    required
                 />
 
             <br />
@@ -85,6 +92,7 @@ function CreateUser({  }) {
                     name="PhoneNumber"
                     value={form.PhoneNumber}
                     onChange={handleChange}
+                    required
                 />
 
             <br />
@@ -96,6 +104,7 @@ function CreateUser({  }) {
                 name="Fname"
                 value={form.Fname}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -107,6 +116,7 @@ function CreateUser({  }) {
                 name="Lname"
                 value={form.Lname}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -118,6 +128,7 @@ function CreateUser({  }) {
                 name="DoB"
                 value={form.DoB}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -129,6 +140,7 @@ function CreateUser({  }) {
                 name="Password"
                 value={form.Password}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -142,6 +154,7 @@ function CreateUser({  }) {
                 name="Line1"
                 value={form.Line1}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -154,6 +167,7 @@ function CreateUser({  }) {
                 name="Line2"
                 value={form.Line2}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -166,6 +180,7 @@ function CreateUser({  }) {
                 name="City"
                 value={form.City}
                 onChange={handleChange}
+                required
             />
 
             <br />
@@ -178,6 +193,7 @@ function CreateUser({  }) {
                 name="Postcode"
                 value={form.Postcode}
                 onChange={handleChange}
+                required
             />
 
 
@@ -185,6 +201,8 @@ function CreateUser({  }) {
             <br />
             <br />
             <br />
+
+            <p>{error}</p>
 
             <button type="submit">
                 Create Account

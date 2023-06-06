@@ -29,13 +29,10 @@ export default function Navbar() {
                     <nav>
                         <ul>
                             <li>
-                                <Link to="/Home">Home</Link>
+                                <Link to="/">INSERT LOGO</Link>
                             </li>
                             <li>
                                 <Link to="/Food">Food</Link>
-                            </li>
-                            <li>
-                                <Link to="/Items">Items</Link>
                             </li>
                             <li>
                                 <Link to="/Advice">Advice</Link>
@@ -44,6 +41,9 @@ export default function Navbar() {
                                 <Link id="logout" onClick={handleLogout}>
                                     Logout
                                 </Link>
+                            </li>
+                            <li>
+                                <Link to="/Account">INSERT PROFILE LOGO</Link>
                             </li>
                         </ul>
                     </nav>

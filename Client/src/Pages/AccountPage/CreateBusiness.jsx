@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 
-function CreateBusiness({  }) {
+function CreateBusiness({ }) {
     
     //Form data for creating a business (including address)
     const [form, setForm] = useState({
@@ -13,6 +13,9 @@ function CreateBusiness({  }) {
         City: "",
         Postcode: ""
     });
+
+
+    const [error, setError] = useState("");
 
 
     //Handles submission of a new account - will need a
@@ -30,12 +33,12 @@ function CreateBusiness({  }) {
         })
             .then((response) => response.json())
 
-            .then((data) => {
-                if (data) {
-                    
+            .then((info) => {
+                if (info.success) {
+                    setError("")
                     alert("Business Created!");
                 } else {
-                    alert("Invalid business creation details.");
+                    setError(info.data);
                 }
             })
             .catch((error) => {
@@ -147,6 +150,8 @@ function CreateBusiness({  }) {
             <br />
             <br />
             <br />
+
+            <p>{error}</p>
 
             <button type="submit">
                 Create Business

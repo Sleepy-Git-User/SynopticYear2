@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html style="font-family: 'Roboto Slab', sans-serif">
+	<head style="font-family: 'Roboto Slab', sans-serif">
+		<title style="font-family: 'Roboto Slab', sans-serif">
+			Grab-It & Govan
+		</title>
+		<link
+			rel="preconnect"
+			href="https://fonts.googleapis.com"
+			style="font-family: 'Roboto Slab', sans-serif"
+		/>
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin
+			style="font-family: 'Roboto Slab', sans-serif"
+		/>
+	</head>
+
+	<header
+		class="header"
+		style="
+			font-family: 'Roboto Slab', sans-serif;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			margin: 30px 0;
+			background-color: #defaff;
+		"
+	>
+		<img
+			src="./logo.png"
+			alt="logo"
+			width="100"
+			height="100"
+			style="font-family: 'Roboto Slab', sans-serif; margin-right: 15px"
+		/>
+		<h1 style="font-family: 'Roboto Slab', sans-serif">Grab-It & Govan</h1>
+	</header>
+
+	<body
+		style="
+			font-family: 'Roboto Slab', sans-serif;
+			margin: 0 auto;
+			padding: 0;
+			max-width: 900px;
+			background-color: #f1f1f1;
+		"
+	>
+		<div
+			class="content"
+			style="
+				font-family: 'Roboto Slab', sans-serif;
+				background-color: white;
+				margin: 0 auto;
+				padding: 50px 20px;
+				padding-bottom: 60px;
+			"
+		>
+			<div
+				class="itemSummary"
+				style="
+					font-family: 'Roboto Slab', sans-serif;
+					display: flex;
+					flex-direction: row;
+					border: 1px solid #d5d9d9;
+				"
+			>
+				<div
+					class="itemDetails"
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						flex: 1.2;
+						padding: 0 10px;
+						display: grid;
+						grid-template-columns: 0.5fr 1fr;
+					"
+				>
+					<h1
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-size: 20px;
+							font-weight: 750;
+							grid-column: span 2;
+						"
+					>
+						Order Summary:
+					</h1>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						Order #:
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						<%= data.ID %>
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						Collection Date:
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						<%= data.Date %> before 5pm
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						Order Total:
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+							margin: 10px;
+						"
+					>
+						£<%= data.Total %>
+					</p>
+				</div>
+				<div
+					class="itemAddress"
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						flex: 1;
+						margin-left: 20px;
+						padding: 0 20px;
+						border-left: 1px solid #d5d9d9;
+					"
+				>
+					<h1
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-size: 20px;
+							font-weight: 750;
+							margin-bottom: 20px;
+						"
+					>
+						Collection Address:
+					</h1>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+						"
+					>
+						<%= data.Name %>
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+						"
+					>
+						<%= data.Line1 %>
+					</p>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-weight: 540;
+						"
+					>
+						<%= data.Line2 %><%= data.Postcode %>
+					</p>
+				</div>
+			</div>
+			<div
+				class="itemTable"
+				style="
+					font-family: 'Roboto Slab', sans-serif;
+					border: 1px solid #d5d9d9;
+					margin: 20px 0;
+					display: flex;
+					justify-content: space-evenly;
+				"
+			>
+				<table
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						text-align: left;
+						width: 100%;
+					"
+				>
+					<tr style="font-family: 'Roboto Slab', sans-serif">
+						<th
+							style="
+								font-family: 'Roboto Slab', sans-serif;
+								padding-left: 15px;
+							"
+						>
+							Name
+						</th>
+						<th style="font-family: 'Roboto Slab', sans-serif">
+							QTY
+						</th>
+						<th style="font-family: 'Roboto Slab', sans-serif">
+							Price
+						</th>
+					</tr>
+					<tr style="font-family: 'Roboto Slab', sans-serif">
+						<td
+							id="col1"
+							style="
+								font-family: 'Roboto Slab', sans-serif;
+								padding: 5px;
+								font-size: 20px;
+								display: flex;
+								align-items: center;
+							"
+						>
+							<img
+								src=<%= data.img %>
+								alt="logo"
+								width="100"
+								height="100"
+								style="
+									font-family: 'Roboto Slab', sans-serif;
+									margin-right: 15px;
+								"
+							/>
+							<%= data.Item %>
+						</td>
+						<td
+							style="
+								font-family: 'Roboto Slab', sans-serif;
+								padding: 5px;
+								font-size: 20px;
+							"
+						>
+							<%= data.Quantity %>
+						</td>
+						<td
+							style="
+								font-family: 'Roboto Slab', sans-serif;
+								padding: 5px;
+								font-size: 20px;
+							"
+						>
+							£<%= data.Price %>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div
+				class="reserveCode"
+				style="
+					font-family: 'Roboto Slab', sans-serif;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					margin: 50px auto 0 auto;
+					width: 70%;
+					height: 300px;
+					padding: 20px;
+					background-color: #ffd6e1;
+				"
+			>
+				<div
+					class="instructions"
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						margin: 20px 0;
+						text-align: center;
+					"
+				>
+					<h1 style="font-family: 'Roboto Slab', sans-serif">
+						Reserve Code
+					</h1>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-size: 20px;
+						"
+					>
+						This is a unique code given to you. When going to
+						recieve your items show this to the seller to confirm
+						your order
+					</p>
+				</div>
+				<div
+					class="code"
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						font-size: 50px;
+						font-weight: 700;
+						background-color: #232f3e;
+						padding: 10px 20px;
+						border-radius: 10px;
+						color: #fff;
+						margin-top: 5px;
+					"
+				>
+					<%= code %>
+				</div>
+			</div>
+		</div>
+	</body>
+
+	<footer
+		class="footer"
+		style="
+			font-family: 'Roboto Slab', sans-serif;
+			background-color: #131a22;
+			text-align: center;
+			padding: 10px;
+			color: white;
+			margin-top: 50px;
+		"
+	>
+		<p style="font-family: 'Roboto Slab', sans-serif">Grab-It & Govan</p>
+		<p style="font-family: 'Roboto Slab', sans-serif">123-456-7890</p>
+		<p style="font-family: 'Roboto Slab', sans-serif">
+			1234 Grab-It & Govan Street
+		</p>
+		<p style="font-family: 'Roboto Slab', sans-serif">
+			Grab-It & Govan, NY 12345
+		</p>
+	</footer>
+</html>

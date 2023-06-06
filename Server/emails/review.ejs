@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html style="font-family: 'Roboto Slab', sans-serif">
+	<head style="font-family: 'Roboto Slab', sans-serif">
+		<title style="font-family: 'Roboto Slab', sans-serif">
+			Grab-It & Govan
+		</title>
+		<link
+			rel="preconnect"
+			href="https://fonts.googleapis.com"
+			style="font-family: 'Roboto Slab', sans-serif"
+		/>
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin
+			style="font-family: 'Roboto Slab', sans-serif"
+		/>
+	</head>
+
+	<header
+		class="header"
+		style="
+			font-family: 'Roboto Slab', sans-serif;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			margin: 30px 0;
+			background-color: #defaff;
+		"
+	>
+		<img
+			src="./logo.png"
+			alt="logo"
+			width="100"
+			height="100"
+			style="font-family: 'Roboto Slab', sans-serif; margin-right: 15px"
+		/>
+		<h1 style="font-family: 'Roboto Slab', sans-serif">Grab-It & Govan</h1>
+	</header>
+	<body
+		style="
+			font-family: 'Roboto Slab', sans-serif;
+			margin: 0 auto;
+			padding: 0;
+			max-width: 900px;
+			background-color: #f1f1f1;
+		"
+	>
+		<div
+			class="content"
+			style="
+				font-family: 'Roboto Slab', sans-serif;
+				background-color: white;
+				margin: 0 auto;
+				padding: 50px 20px;
+				padding-bottom: 60px;
+			"
+		>
+			<div
+				class="itemSummary"
+				style="
+					font-family: 'Roboto Slab', sans-serif;
+					display: flex;
+					flex-direction: row;
+					border: 1px solid #d5d9d9;
+				"
+			>
+				<div
+					class="itemImage"
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						flex: 0.6;
+						display: flex;
+						padding: 0 10px;
+						justify-content: center;
+					"
+				>
+					<img
+						src=<%= data.img %>
+						alt="item image"
+						width="200"
+						height="200"
+						style="font-family: 'Roboto Slab', sans-serif"
+					/>
+				</div>
+				<div
+					class="itemInfo"
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						flex: 1;
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+						margin-left: 20px;
+						padding: 0 20px;
+						border-left: 1px solid #d5d9d9;
+					"
+				>
+					<h1
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-size: 20px;
+							font-weight: 750;
+						"
+					>
+						Name: <%= data.Name %>
+					</h1>
+					<h1
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-size: 20px;
+							font-weight: 750;
+						"
+					>
+						Comapany: <%= data.Seller %>
+					</h1>
+					<h1
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-size: 20px;
+							font-weight: 750;
+						"
+					>
+						Date: <%= data.Date %>
+					</h1>
+				</div>
+			</div>
+			<div
+				class="reviewBox"
+				style="
+					font-family: 'Roboto Slab', sans-serif;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					margin: 50px auto 0 auto;
+					width: 70%;
+					height: 350px;
+					padding: 20px;
+					background-color: #ffd6e1;
+				"
+			>
+				<div
+					class="instructions"
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						margin: 20px 0;
+						text-align: center;
+					"
+				>
+					<h1 style="font-family: 'Roboto Slab', sans-serif">
+						We would love to hear from you!
+					</h1>
+					<p
+						style="
+							font-family: 'Roboto Slab', sans-serif;
+							font-size: 20px;
+						"
+					>
+						Your reviews truly matter. They guide fellow customers,
+						support local businesses, and help us improve. By
+						sharing your experiences, you contribute to our vibrant
+						community. Thank you for being an important part of our
+						community.
+					</p>
+				</div>
+				<div
+					class="button"
+					style="
+						font-family: 'Roboto Slab', sans-serif;
+						font-size: 50px;
+						font-weight: 700;
+						background-color: #232f3e;
+						padding: 10px 20px;
+						border-radius: 10px;
+						color: #fff;
+						margin-top: 5px;
+					"
+				>
+					<a href=<%=url %>
+						style=" font-family: 'Roboto Slab', sans-serif; color:
+						#fff; text-decoration: none; " >Write a review!</a
+					>
+				</div>
+			</div>
+		</div>
+	</body>
+	<footer
+		class="footer"
+		style="
+			font-family: 'Roboto Slab', sans-serif;
+			background-color: #131a22;
+			text-align: center;
+			padding: 10px;
+			color: white;
+			margin-top: 50px;
+		"
+	>
+		<p style="font-family: 'Roboto Slab', sans-serif">Grab-It & Govan</p>
+		<p style="font-family: 'Roboto Slab', sans-serif">123-456-7890</p>
+		<p style="font-family: 'Roboto Slab', sans-serif">
+			1234 Grab-It & Govan Street
+		</p>
+		<p style="font-family: 'Roboto Slab', sans-serif">
+			Grab-It & Govan, NY 12345
+		</p>
+	</footer>
+</html>

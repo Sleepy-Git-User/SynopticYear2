@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setUserId, getUserId } from "./auth";
+import { setUserId, getUserId } from "../../auth";
 
 
 export default function LoginForm({saveId}) {
@@ -8,30 +8,29 @@ export default function LoginForm({saveId}) {
         Password: "",
     });
 
+    const [error, setError] = useState("");
+
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
         fetch("http://localhost:3000/api/loginChecker", {
             method: "POST",
             //CHANGE TO NOT MAKE IT JUST THIS ONE USER
-            body: JSON.stringify({userID: "2418895d-6f24-49ba-9bdc-b6f83646100d"}),
+            body: JSON.stringify(form),
             headers: {
                 "Content-Type": "application/json",
             },
         })
             .then((response) => response.json())
 
-            .then((data) => {
-                if (data.success) {
+            .then((info) => {
+                if (info.success) {
                     
-                    setUserId("2418895d-6f24-49ba-9bdc-b6f83646100d");
-                    console.log("Success!");
-                    const userIdTest = getUserId();
-                    console.log(userIdTest);
-                    saveId(userIdTest);
+                    setError("");
+                    saveId(info.data[0].UserID);
                     
                 } else {
-                    alert(data.message);
+                    setError(info.data);
                 }
             })
             .catch((error) => {
@@ -54,8 +53,10 @@ export default function LoginForm({saveId}) {
 
     return (
         <div>
+        
         <form class="login-form" onSubmit={handleSubmit}>
-            <label htmlFor="email">Username:</label>
+        <h1>Log In</h1>
+            <label htmlFor="email">Email:</label>
             <input
                 type="email"
                 id="email"
@@ -76,7 +77,7 @@ export default function LoginForm({saveId}) {
             />
 
             <br />
-
+            <p>{error}</p>
             <button class="login-btn" type="submit">
                 Log In
             </button>
