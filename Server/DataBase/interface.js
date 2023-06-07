@@ -4,12 +4,8 @@ const { DataBaseSystem } = require("./database.js");
 const DDLPath = path.join(__dirname, "/ddl.sql");
 const DbPath = path.join(__dirname, "/");
 const crypto = require("../utili/password.js");
-const nodemailer = require("nodemailer");
-const ejs = require("ejs");
-const identicon = require("identicon");
 const { log } = require("console");
 const fs = require("fs");
-const { create } = require("domain");
 const emailSender = require("../utili/email.js");
 
 
@@ -502,6 +498,10 @@ module.exports = (dbName = "Database") => {
 	// console.log(createCategory("Vegiterian"));
 	// console.log(createCategory("Halal"));
 	// console.log(createCategory("Kosher"));
+	// let ct = getItemCategories("ca591894-06d0-4eab-aeae-8cd7d1c6e1ff");
+	// let cid = ct[0].CategoryID;
+	// console.log(getItemCategories("ca591894-06d0-4eab-aeae-8cd7d1c6e1ff"));
+	// console.log(getCategoryName(cid));
 		
 
 	//********************************************************/
