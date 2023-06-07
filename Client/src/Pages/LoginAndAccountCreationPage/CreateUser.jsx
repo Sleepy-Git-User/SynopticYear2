@@ -40,8 +40,6 @@ function CreateUser({ saveId }) {
                 setError(info.data);
             }
         });
-
-
     };
 
 
