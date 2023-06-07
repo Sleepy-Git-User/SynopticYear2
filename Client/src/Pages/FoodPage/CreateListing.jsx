@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from 'axios';
 
 function CreateListing({  }) {
     
@@ -21,28 +21,24 @@ function CreateListing({  }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        fetch("http://localhost:3000/api/createListing", {
-            method: "POST",
-            body: JSON.stringify(form),
+        axios
+          .post("http://localhost:3000/api/createListing", form, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-
-        })
-            .then((response) => response.json())
-
-            .then((data) => {
-                if (data) {
-                    
-                    alert("Listing Created!");
-                } else {
-                    alert("Invalid listing creation details.");
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((data) => {
+            if (data) {
+              alert("Listing Created!");
+            } else {
+              alert("Invalid listing creation details.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
 
 

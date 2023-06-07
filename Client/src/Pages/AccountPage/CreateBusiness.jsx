@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from 'axios';
 
 function CreateBusiness({ }) {
     
@@ -26,31 +26,27 @@ function CreateBusiness({ }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        fetch("http://localhost:3000/api/makeBusiness", {
-            method: "POST",
-            body: JSON.stringify(form),
+        axios
+          .post("http://localhost:3000/api/makeBusiness", form, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-
-        })
-            .then((response) => response.json())
-
-            .then((info) => {
-                if (info.success) {
-                    setError("")
-                    alert("Business Created!");
-                    //Upon creation, refresh the page with the businessID now set
-                    sessionStorage.setItem('businessId', info.data);
-                    window.location.reload();
-                } else {
-                    setError(info.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info.success) {
+              setError("");
+              alert("Business Created!");
+              sessionStorage.setItem("businessId", info.data);
+              window.location.reload();
+            } else {
+              setError(info.data);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
 
 

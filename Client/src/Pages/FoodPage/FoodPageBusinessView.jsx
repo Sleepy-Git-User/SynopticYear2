@@ -1,5 +1,6 @@
 import CreateListing from "./CreateListing.jsx";
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 
 export default function FoodPageBusinessView() {
 
@@ -7,30 +8,27 @@ export default function FoodPageBusinessView() {
     const [businessUser, setBusinessUser] = useState(false);
     const businessId = sessionStorage.getItem("businessId")
 
-    const getBusinessListings= () => {
-        fetch("http://localhost:3000/api/getBusinessListings", {
-            method: "POST",
-            body: JSON.stringify({ BusinessID: businessId }),
+    const getBusinessListings = () => {
+        axios
+          .post("http://localhost:3000/api/getBusinessListings", { BusinessID: businessId }, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-
-        })
-            .then((response) => response.json())
-
-            .then((info) => {
-                if (info) {
-                    console.log(info);
-                    setListings(info);
-
-                } else {
-                    setListings("Error getting your listings.");
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info) {
+              console.log(info);
+              setListings(info);
+            } else {
+              setListings("Error getting your listings.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
+      
 
     useEffect(() => {
         console.log(sessionStorage.getItem("businessId"));

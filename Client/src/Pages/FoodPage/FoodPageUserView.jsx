@@ -1,52 +1,49 @@
 
 import React, {useState, useEffect} from 'react';
-
+import axios from 'axios';
 export default function FoodPageUserView() {
 
     //Will need functions to get listings -
 
     const [listings, setListings] = useState([]);
     const [QuantityValue, setQuantityValue] = useState(1)
+
     const getListings = () => {
-        fetch("/api/getListings", {
-            method: "POST",
-
+        axios
+          .post("/api/getListings", null, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-        })
-            .then((res) => res.json())
-            .then((info) => {
-                if(info.success){
-                    console.log("TRUE!")
-                    setListings(info.data);
-                    console.log(listings);
-                }
-                else {
-                    setListings("Error - listings cannot be shown.");
-                }
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info.success) {
+              console.log("TRUE!");
+              setListings(info.data);
+              console.log(listings);
+            } else {
+              setListings("Error - listings cannot be shown.");
+            }
+          });
+      };
 
 
-    const reserveItem = (passedIn) => {
-        fetch("/api/reserveItem", {
-            method: "POST",
-            body: JSON.stringify(passedIn),
+      const reserveItem = (passedIn) => {
+        axios
+          .post("/api/reserveItem", passedIn, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-        })
-            .then((res) => res.json())
-            .then((info) => {
-                if(info.success){
-                    alert("Reservation Successful!")
-                }
-                else {
-                    alert("Reservation failed. Please try again.")
-                }
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info.success) {
+              alert("Reservation Successful!");
+            } else {
+              alert("Reservation failed. Please try again.");
+            }
+          });
+      };
 
 
     useEffect(() => {

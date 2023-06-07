@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 //Colour blind option
-
+import axios from 'axios';
 
 const BusinessID = sessionStorage.getItem("businessId")
 
@@ -17,31 +17,31 @@ export default function AccountPage() {
         BusinessID: sessionStorage.getItem("businessId")
     });
 
-    const getBusinessDetails= () => {
-        fetch("http://localhost:3000/api/getBusinessDetails", {
-            method: "POST",
-            body: JSON.stringify(form),
+    const getBusinessDetails = () => {
+        axios
+          .post("http://localhost:3000/api/getBusinessDetails", form, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info) {
+              console.log(info);
+              setBusinessEmail(info[0].Email);
+              setBusinessPhoneNumber(info[0].PhoneNumber);
+              setBusinessName(info[0].Bname);
+            } else {
+              setBusinessInfo("Error getting business details.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
-        })
-            .then((response) => response.json())
 
-            .then((info) => {
-                if (info) {
-                    console.log(info);
-                    setBusinessEmail(info[0].Email);
-                    setBusinessPhoneNumber(info[0].PhoneNumber);
-                    setBusinessName(info[0].Bname);
-                } else {
-                    setBusinessInfo("Error getting business details.");
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+    
     
     useEffect(() => {
         getBusinessDetails();

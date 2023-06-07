@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from 'axios';
 
 function CreateUser({saveId}) {
     
@@ -19,41 +19,32 @@ function CreateUser({saveId}) {
 
     const [error, setError] = useState("");
 
-    //Used to show error messages for invalid data
-    //const [emailError, setEmailError] = useState("");
-    //const [usernameError, setUsernameError] = useState("");
 
     //Handles submission of a new account - will need a
-    // createUser method for this!
+    // makeUser method for this!
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        fetch("http://localhost:3000/api/makeUser", {
-            method: "POST",
-            body: JSON.stringify(form),
+        axios
+          .post("http://localhost:3000/api/makeUser", form, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-
-            //Will need to change the body here as it's not just string stuff!
-        })
-            .then((response) => response.json())
-
-            .then((info) => {
-                //May need to be updated to another page
-                if (info.success) {
-                    setError("");
-                    saveId(info.data);
-                    console.log("Success!");
-                    
-                } else {
-                    setError(info.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info.success) {
+              setError("");
+              saveId(info.data);
+              console.log("Success!");
+            } else {
+              setError(info.data);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
 
 

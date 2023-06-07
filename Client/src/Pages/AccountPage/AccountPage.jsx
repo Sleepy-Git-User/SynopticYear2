@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from "react";
 import CreateBusiness from "./CreateBusiness.jsx"
 import BusinessDetails from "./BusinessDetails.jsx";
+import axios from 'axios';
 //Colour blind option
 
 
@@ -15,30 +16,33 @@ export default function AccountPage() {
     const [businessState, setBusinessState] = useState(<CreateBusiness />);
     const [userDetails, setUserDetails] = useState();
 
-    const getUserDetails= () => {
-        fetch("http://localhost:3000/api/getUserDetails", {
-            method: "POST",
-            body: JSON.stringify({UserID: sessionStorage.getItem("userId")}),
+    const getUserDetails = () => {
+        axios
+          .post("http://localhost:3000/api/getUserDetails", {
+            UserID: sessionStorage.getItem("userId"),
+          }, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-
-        })
-            .then((response) => response.json())
-
-            .then((info) => {
-                if (info.success) {
-                    setUserDetails(<div>Name: {info.data[0].Fname} {info.data[0].Lname} <br/>Email: {info.data[0].Email}<br/>Phone: {info.data[0].PhoneNumber}</div>
-
-                    );
-                } else {
-                    setUserDetails("Error getting user details.");
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info.success) {
+              setUserDetails(
+                <div>
+                  Name: {info.data[0].Fname} {info.data[0].Lname} <br />
+                  Email: {info.data[0].Email}<br />
+                  Phone: {info.data[0].PhoneNumber}
+                </div>
+              );
+            } else {
+              setUserDetails("Error getting user details.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
     
 
     useEffect(() => {
