@@ -153,5 +153,11 @@ module.exports = (components) => {
 
 	});
 
+	router.post("/getBoughtItems", (req, res) => {
+		console.log(req.body);
+		res.json(interface.getBoughtItems(req.body.UserID));
+
+	});
+
 	return router;
 };
