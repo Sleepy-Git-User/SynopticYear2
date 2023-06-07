@@ -109,6 +109,7 @@ module.exports = (components) => {
 			req.body.Price,
 			req.body.img,
 			req.body.Quantity,
+			req.body.Category,
 			req.body.SellerID,
 			req.body.ListingDate,
 			req.body.EndDate)
@@ -135,6 +136,13 @@ module.exports = (components) => {
 	router.post("/getUserDetails", (req, res) => {
 		console.log(req.body);
 		res.json(interface.getUserDetails(req.body.UserID));
+
+	});
+
+
+	router.get("/categories", (req, res) => {
+		console.log(req.body);
+		res.json(interface.getCategories());
 
 	});
 

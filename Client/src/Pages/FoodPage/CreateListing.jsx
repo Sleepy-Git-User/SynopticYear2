@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
 function CreateListing({  }) {
@@ -10,10 +10,29 @@ function CreateListing({  }) {
         Price: "",
         img: null,
         Quantity: "",
+        Category: [],
         SellerID: sessionStorage.getItem("businessId"),
         ListingDate: new Date(),
         EndDate: ""
     });
+    const [categories, setCategories] = useState([]);
+
+    const fetchCategories = () => {
+        axios
+          .get("/api/categories")
+          .then((response) => response.data)
+          .then((data) => {
+            setCategories(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
+
+    
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
 
     //Handles submission of a new account - will need a
@@ -51,6 +70,24 @@ function CreateListing({  }) {
     };
 
 
+    const handleCategoryChange = (event) => {
+        const { value, checked } = event.target;
+      
+        if (checked) {
+          // Add the category
+          setForm((prevForm) => ({
+            ...prevForm,
+            Category: [...prevForm.Category, value],
+          }));
+        } else {
+          // Remove the category 
+          setForm((prevForm) => ({
+            ...prevForm,
+            Category: prevForm.Category.filter((category) => category !== value),
+          }));
+        }
+      };
+
 
     //Returns the create listing form
     return (
@@ -78,6 +115,23 @@ function CreateListing({  }) {
                 />
 
             <br />
+
+            <label htmlFor="category">Categories:</label>
+            {categories.map((category) => (
+            <div key={category.CategoryID}>
+                <input
+                type="checkbox"
+                id={category.CategoryID}
+                name="Category"
+                value={category.Name}
+                checked={form.Category.includes(category.Name)}
+                onChange={handleCategoryChange}
+                />
+                <label htmlFor={category.CategoryID}>{category.Name}</label>
+            </div>
+            ))}
+
+            <br/>
 
             <label htmlFor="price">Price:</label>
                 <input

@@ -10,7 +10,7 @@ export default function FoodPageUserView() {
 
     const getListings = () => {
         axios
-          .post("/api/getListings", null, {
+          .post("/api/getListings", {}, {
             headers: {
               "Content-Type": "application/json",
             },
