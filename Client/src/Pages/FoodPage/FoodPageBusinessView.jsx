@@ -8,6 +8,10 @@ export default function FoodPageBusinessView() {
     const [businessUser, setBusinessUser] = useState(false);
     const businessId = sessionStorage.getItem("businessId")
 
+    const [form, setForm] = useState({
+        Category: [],
+    });
+
     const getBusinessListings = () => {
         axios
           .post("/api/getBusinessListings", { BusinessID: businessId }, {
@@ -28,9 +32,44 @@ export default function FoodPageBusinessView() {
             console.error("Error:", error);
           });
       };
+    
+
+    const [categories, setCategories] = useState([]);
+    
+    const fetchCategories = () => {
+        axios
+          .get("/api/categories")
+          .then((response) => response.data)
+          .then((data) => {
+            setCategories(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+    };
+
+    const handleCategoryChange = (event) => {
+        const { value, checked } = event.target;
+      
+        if (checked) {
+          // Add the category
+          setForm((prevForm) => ({
+            ...prevForm,
+            Category: [...prevForm.Category, value],
+          }));
+        } else {
+          // Remove the category 
+          setForm((prevForm) => ({
+            ...prevForm,
+            Category: prevForm.Category.filter((category) => category !== value),
+          }));
+        }
+      };
+
 
 
     useEffect(() => {
+        fetchCategories();
         console.log(sessionStorage.getItem("businessId"));
         if (sessionStorage.getItem("businessId") !== null){
             getBusinessListings();
@@ -69,6 +108,21 @@ export default function FoodPageBusinessView() {
                 <div>
                     <h3>Filters</h3>
                     {/*Will need Georges help with filters*/}
+
+
+                    {categories.map((category) => (
+                    <div key={category.CategoryID}>
+                        <input
+                        type="checkbox"
+                        id={category.CategoryID}
+                        name="Category"
+                        value={category.Name}
+                        checked={form.Category.includes(category.Name)}
+                        onChange={handleCategoryChange}
+                        />
+                        <label htmlFor={category.CategoryID}>{category.Name}</label>
+                    </div>
+                    ))}
                 </div>
                 </div></div>}
 

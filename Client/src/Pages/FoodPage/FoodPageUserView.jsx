@@ -8,6 +8,10 @@ export default function FoodPageUserView() {
     const [listings, setListings] = useState([]);
     const [QuantityValue, setQuantityValue] = useState(1)
 
+    const [form, setForm] = useState({
+        Category: [],
+    });
+
     const getListings = () => {
         axios
           .post("/api/getListings", {}, {
@@ -46,7 +50,44 @@ export default function FoodPageUserView() {
       };
 
 
+      const [categories, setCategories] = useState([]);
+    
+      const fetchCategories = () => {
+          axios
+            .get("/api/categories")
+            .then((response) => response.data)
+            .then((data) => {
+              setCategories(data);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+      };
+  
+  
+      
+      const handleCategoryChange = (event) => {
+          const { value, checked } = event.target;
+        
+          if (checked) {
+            // Add the category
+            setForm((prevForm) => ({
+              ...prevForm,
+              Category: [...prevForm.Category, value],
+            }));
+          } else {
+            // Remove the category 
+            setForm((prevForm) => ({
+              ...prevForm,
+              Category: prevForm.Category.filter((category) => category !== value),
+            }));
+          }
+        };
+  
+
+
     useEffect(() => {
+        fetchCategories();
         getListings();
       }, [])
 
@@ -63,6 +104,21 @@ export default function FoodPageUserView() {
                 <div>
                     <h3>Filters</h3>
                     {/*Need George to help with filters really? */}
+
+                    {categories.map((category) => (
+                    <div key={category.CategoryID}>
+                        <input
+                        type="checkbox"
+                        id={category.CategoryID}
+                        name="Category"
+                        value={category.Name}
+                        checked={form.Category.includes(category.Name)}
+                        onChange={handleCategoryChange}
+                        />
+                        <label htmlFor={category.CategoryID}>{category.Name}</label>
+                    </div>
+                    ))}
+
                 </div>
                 <div>
                     <h3>Listings</h3>
