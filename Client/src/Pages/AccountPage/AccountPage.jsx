@@ -18,7 +18,7 @@ export default function AccountPage() {
 
     const getUserDetails = () => {
         axios
-          .post("http://localhost:3000/api/getUserDetails", {
+          .post("/api/getUserDetails", {
             UserID: sessionStorage.getItem("userId"),
           }, {
             headers: {

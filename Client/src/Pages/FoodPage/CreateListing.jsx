@@ -22,7 +22,7 @@ function CreateListing({  }) {
         event.preventDefault();
         console.log(form);
         axios
-          .post("http://localhost:3000/api/createListing", form, {
+          .post("/api/createListing", form, {
             headers: {
               "Content-Type": "application/json",
             },

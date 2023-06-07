@@ -19,7 +19,7 @@ export default function AccountPage() {
 
     const getBusinessDetails = () => {
         axios
-          .post("http://localhost:3000/api/getBusinessDetails", form, {
+          .post("/api/getBusinessDetails", form, {
             headers: {
               "Content-Type": "application/json",
             },

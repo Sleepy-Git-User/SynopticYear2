@@ -10,7 +10,7 @@ export default function FoodPageBusinessView() {
 
     const getBusinessListings = () => {
         axios
-          .post("http://localhost:3000/api/getBusinessListings", { BusinessID: businessId }, {
+          .post("/api/getBusinessListings", { BusinessID: businessId }, {
             headers: {
               "Content-Type": "application/json",
             },
@@ -28,7 +28,7 @@ export default function FoodPageBusinessView() {
             console.error("Error:", error);
           });
       };
-      
+
 
     useEffect(() => {
         console.log(sessionStorage.getItem("businessId"));

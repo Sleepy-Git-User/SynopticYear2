@@ -27,7 +27,7 @@ function CreateBusiness({ }) {
         event.preventDefault();
         console.log(form);
         axios
-          .post("http://localhost:3000/api/makeBusiness", form, {
+          .post("/api/makeBusiness", form, {
             headers: {
               "Content-Type": "application/json",
             },

@@ -26,7 +26,7 @@ function CreateUser({saveId}) {
         event.preventDefault();
         console.log(form);
         axios
-          .post("http://localhost:3000/api/makeUser", form, {
+          .post("/api/makeUser", form, {
             headers: {
               "Content-Type": "application/json",
             },
