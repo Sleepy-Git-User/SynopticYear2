@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from 'axios';
 
-
-function CreateUser({ saveId }) {
-
+function CreateUser({saveId}) {
+    
     //Form data for creating a user (including address)
     const [form, setForm] = useState({
         Email: "",
@@ -20,27 +19,32 @@ function CreateUser({ saveId }) {
 
     const [error, setError] = useState("");
 
-    //Used to show error messages for invalid data
-    //const [emailError, setEmailError] = useState("");
-    //const [usernameError, setUsernameError] = useState("");
 
     //Handles submission of a new account - will need a
-    // createUser method for this!
+    // makeUser method for this!
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        axios.post("/api/makeUser", form).then((res) => {
-            var info = res.data;
+        axios
+          .post("/api/makeUser", form, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => response.data)
+          .then((info) => {
             if (info.success) {
-                setError("");
-                saveId(info.data);
-                console.log("Success!");
-
+              setError("");
+              saveId(info.data);
+              console.log("Success!");
             } else {
-                setError(info.data);
+              setError(info.data);
             }
-        });
-    };
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
 
 
@@ -57,30 +61,30 @@ function CreateUser({ saveId }) {
     //Returns the create user form
     return (
         <form onSubmit={handleSubmit}>
-            <h1>Create Account</h1>
-            <br />
+                <h1>Create Account</h1>
+                <br />
 
             <label htmlFor="email">Email:</label>
-            <input
-                type="text"
-                id="email"
-                name="Email"
-                value={form.Email}
-                onChange={handleChange}
-                required
-            />
+                <input
+                    type="text"
+                    id="email"
+                    name="Email"
+                    value={form.Email}
+                    onChange={handleChange}
+                    required
+                />
 
             <br />
 
             <label htmlFor="phone">Phone Number:</label>
-            <input
-                type="text"
-                id="phone"
-                name="PhoneNumber"
-                value={form.PhoneNumber}
-                onChange={handleChange}
-                required
-            />
+                <input
+                    type="text"
+                    id="phone"
+                    name="PhoneNumber"
+                    value={form.PhoneNumber}
+                    onChange={handleChange}
+                    required
+                />
 
             <br />
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from 'axios';
 
 function CreateListing({  }) {
     
@@ -8,8 +8,9 @@ function CreateListing({  }) {
         Name: "",
         Desc: "",
         Price: "",
+        img: null,
         Quantity: "",
-        SellerID: "INSERT SELLER ID",
+        SellerID: sessionStorage.getItem("businessId"),
         ListingDate: new Date(),
         EndDate: ""
     });
@@ -20,28 +21,24 @@ function CreateListing({  }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        fetch("http://localhost:3000/api/makeListing", {
-            method: "POST",
-            body: JSON.stringify(form),
+        axios
+          .post("/api/createListing", form, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-
-        })
-            .then((response) => response.json())
-
-            .then((data) => {
-                if (data) {
-                    
-                    alert("Listing Created!");
-                } else {
-                    alert("Invalid listing creation details.");
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((data) => {
+            if (data) {
+              alert("Listing Created!");
+            } else {
+              alert("Invalid listing creation details.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
 
 
@@ -87,6 +84,7 @@ function CreateListing({  }) {
                     type="number"
                     id="price"
                     min="0"
+                    step="0.01"
                     name="Price"
                     value={form.Price}
                     onChange={handleChange}
