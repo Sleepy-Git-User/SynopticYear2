@@ -1,0 +1,8 @@
+.review {
+	display: flex;
+	flex-direction: column;
+}
+.reviewHeader {
+	display: flex;
+	flex-direction: row;
+}

@@ -74,6 +74,14 @@ module.exports = (components) => {
 		});
 	});
 
+	router.post("/getBusinessReviews", (req, res) => {
+		console.log(req.body);
+		res.json({
+			success: true,
+			data: interface.getBusinessReviews(req.body.BusinessID),
+		});
+	});
+
 	router.post("/submitReview", (req, res) => {
 		interface.createReview(
 			req.body.BuyerID,

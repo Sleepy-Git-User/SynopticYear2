@@ -45,7 +45,7 @@ export default function LoginForm({ saveId }) {
     return (
         <div>
 
-            <form class="login-form" onSubmit={handleSubmit}>
+            <form className="login-form" onSubmit={handleSubmit}>
                 <h1>Log In</h1>
                 <label htmlFor="email">Email:</label>
                 <input
@@ -69,7 +69,7 @@ export default function LoginForm({ saveId }) {
 
                 <br />
                 <p>{error}</p>
-                <button class="login-btn" type="submit">
+                <button className="login-btn" type="submit">
                     Log In
                 </button>
 

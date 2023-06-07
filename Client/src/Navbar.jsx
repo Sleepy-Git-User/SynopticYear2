@@ -25,7 +25,7 @@ export default function Navbar() {
     return (
         <>
             <header>
-                <div class="header-left">
+                <div className="header-left">
                     <nav>
                         <ul>
                             <li>
@@ -48,8 +48,8 @@ export default function Navbar() {
                         </ul>
                     </nav>
                 </div>
-                <div class="header-right">
-                    <div class="hamburger">
+                <div className="header-right">
+                    <div className="hamburger">
                         <div></div>
                         <div></div>
                         <div></div>

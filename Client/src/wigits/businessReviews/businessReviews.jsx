@@ -14,7 +14,8 @@ export default function BusinessReviews(BusinessID) {
 
     const getReviews = async (ID) => {
         setLoading(true);
-        await axios.post("/api/getBuseinessReviews", ID.BusinessID).then((res) => {
+
+        await axios.post("/api/getBusinessReviews", ID).then((res) => {
             let date = new Date(res.data.data.Date);
             res.data.data.Date = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
             setReview(res.data.data);
@@ -24,7 +25,7 @@ export default function BusinessReviews(BusinessID) {
 
     useEffect(() => {
         setLoading(true);
-        getReviews("2f3f4bd9-4236-42d8-ac39-93500601ea82");
+        getReviews({ BusinessID: "2f3f4bd9-4236-42d8-ac39-93500601ea82" });
     }, [BusinessID]);
 
     return (
@@ -35,15 +36,17 @@ export default function BusinessReviews(BusinessID) {
                 <div className="content">
                     <div className="reviews">
                         {Review.map((review) => (
-                            <div className="review">
-                                <div className="reviewRating">
-                                    <h3>{review.Rating}★</h3>
-                                </div>
-                                <div className="reviewRating">
-                                    <h3>{review.Fname} • </h3>
-                                </div>
-                                <div className="reviewDate">
-                                    <h3>{review.Date}</h3>
+                            <div className="review" key={review.ID}>
+                                <div className="reviewHeader">
+                                    <div className="reviewRating">
+                                        <h3>{review.Rating}★</h3>
+                                    </div>
+                                    <div className="reviewRating">
+                                        <h3>{review.Fname} • </h3>
+                                    </div>
+                                    <div className="reviewDate">
+                                        <h3>{review.Date}</h3>
+                                    </div>
                                 </div>
                                 <div className="reviewTitle">
                                     <h3>{review.Title}</h3>

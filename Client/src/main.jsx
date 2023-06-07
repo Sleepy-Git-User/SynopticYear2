@@ -16,6 +16,7 @@ import AdvicePage from "./Pages/AdvicePage/AdvicePage.jsx";
 import AccountPage from "./Pages/AccountPage/AccountPage.jsx";
 import FoodPage from "./Pages/FoodPage/FoodPage.jsx";
 import ReviewTemplate from './Pages/ReviewTemplate/ReviewTemplate.jsx';
+import BusinessReviews from './wigits/businessReviews/businessReviews.jsx';
 
 
 
@@ -48,6 +49,7 @@ function Main() {
           <Route path="/Account" element={<AccountPage />} />
           <Route path="/Food" element={<FoodPage />} />
           <Route path="/Review" element={<ReviewTemplate />} />
+          <Route path="/bR" element={<BusinessReviews />} />
 
 
           <Route
