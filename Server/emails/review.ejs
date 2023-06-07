@@ -16,28 +16,6 @@
 			style="font-family: 'Roboto Slab', sans-serif"
 		/>
 	</head>
-
-	<header
-		class="header"
-		style="
-			font-family: 'Roboto Slab', sans-serif;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 20px;
-			margin: 30px 0;
-			background-color: #defaff;
-		"
-	>
-		<img
-			src="./logo.png"
-			alt="logo"
-			width="100"
-			height="100"
-			style="font-family: 'Roboto Slab', sans-serif; margin-right: 15px"
-		/>
-		<h1 style="font-family: 'Roboto Slab', sans-serif">Grab-It & Govan</h1>
-	</header>
 	<body
 		style="
 			font-family: 'Roboto Slab', sans-serif;
@@ -45,8 +23,41 @@
 			padding: 0;
 			max-width: 900px;
 			background-color: #f1f1f1;
+			color: #000 !important;
 		"
 	>
+	<header
+			class="header"
+			style="
+				font-family: 'Roboto Slab', sans-serif;
+				padding: 20px;
+				margin: 30px 0;
+				background-color: #defaff;
+			"
+		>
+		<table cellspacing="0" cellpadding="0" border="0" align="center">
+			<tr>
+
+			<td>
+			<img
+				src="./logo.png"
+				alt="logo"
+				width="100"
+				height="100"
+				style="
+					font-family: 'Roboto Slab', sans-serif;
+					margin-right: 15px;
+				"
+			/>
+			</td>
+			<td>
+			<h1 style="font-family: 'Roboto Slab', sans-serif">
+				Grab-It & Govan
+			</h1>
+			</td>
+			</tr>
+			</table>
+		</header>
 		<div
 			class="content"
 			style="
@@ -57,25 +68,25 @@
 				padding-bottom: 60px;
 			"
 		>
-			<div
+			<table
 				class="itemSummary"
 				style="
 					font-family: 'Roboto Slab', sans-serif;
-					display: flex;
-					flex-direction: row;
+					width:100%;
+					height:200px;
 					border: 1px solid #d5d9d9;
 				"
 			>
-				<div
+				<tr
 					class="itemImage"
 					style="
 						font-family: 'Roboto Slab', sans-serif;
-						flex: 0.6;
-						display: flex;
+	
 						padding: 0 10px;
 						justify-content: center;
 					"
 				>
+				<td width="30%">
 					<img
 						src=<%= data.img %>
 						alt="item image"
@@ -83,20 +94,19 @@
 						height="200"
 						style="font-family: 'Roboto Slab', sans-serif"
 					/>
-				</div>
-				<div
+				</td>
+				
+				<td
 					class="itemInfo"
 					style="
 						font-family: 'Roboto Slab', sans-serif;
-						flex: 1;
-						display: flex;
-						flex-direction: column;
-						justify-content: center;
+
 						margin-left: 20px;
 						padding: 0 20px;
 						border-left: 1px solid #d5d9d9;
 					"
 				>
+				
 					<h1
 						style="
 							font-family: 'Roboto Slab', sans-serif;
@@ -124,15 +134,15 @@
 					>
 						Date: <%= data.Date %>
 					</h1>
-				</div>
-			</div>
+					
+				</td>
+				</tr>
+			</table>
 			<div
 				class="reviewBox"
 				style="
 					font-family: 'Roboto Slab', sans-serif;
-					display: flex;
-					flex-direction: column;
-					align-items: center;
+					text-align: center;
 					margin: 50px auto 0 auto;
 					width: 70%;
 					height: 350px;
@@ -177,7 +187,7 @@
 						margin-top: 5px;
 					"
 				>
-					<a href=<%=url %>
+					<a href=<%= data.url %>
 						style=" font-family: 'Roboto Slab', sans-serif; color:
 						#fff; text-decoration: none; " >Write a review!</a
 					>

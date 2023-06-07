@@ -68,31 +68,16 @@ module.exports = (components) => {
 	});
 
 	router.get("/getPurchase/:purchaseID", (req, res) => {
-		let data = {
-			PurchaseID: null,
-			ListingID: null,
-			BuyerID: null,
-			Date: null,
-			Time: null,
-			Quantity: null,
-			BusinessID: null,
-		};
-		console.log(req.params.purchaseID)
-		data = interface.getPurchase(req.params.purchaseID);
-		console.log("ListingID "+data[0].ListingID)
-		let listing = interface.getListing(data[0].ListingID);
-		console.log("BusinessID "+listing[0].businessID)
-		data.BusinessID = listing[0].businessID;
 		res.json({
 			success: true,
-			data: data,
+			data: interface.getPurchase(req.params.purchaseID),
 		});
 	});
 
-	router.get("/getBusinessPannel/:businessID", (req, res) => {
+	router.get("/getBusinessPannel/:purchaseID", (req, res) => {
 		res.json({
 			success: true,
-			data: interface.getBusinessPannel(req.params.businessID),
+			data: interface.getBusinessPannel(req.params.purchaseID),
 		});
 	});
 

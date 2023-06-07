@@ -10,20 +10,16 @@ const identicon = require("identicon");
 const { log } = require("console");
 const fs = require("fs");
 const { create } = require("domain");
+const emailSender = require("../utili/email.js");
 
-const transporter = nodemailer.createTransport({
-	service: "gmail",
-	auth: {
-		user: "se.healthtracker101@gmail.com",
-		pass: "btssdtghvfwpyiyo",
-	},
-});
+
 
 module.exports = (dbName = "Database") => {
 	//Creates the Database class
 	const Database = new DataBaseSystem(dbName, DbPath);
 	try {
 		//Imports the DDL
+		// Database.database.prepare("DROP TABLE Review").run();
 		Database.importDDL(DDLPath);
 	} catch (error) {
 		console.log(error);
@@ -150,7 +146,7 @@ module.exports = (dbName = "Database") => {
 		}
 	}
 	//makeUser Test
-	// console.log(makeUser("omgitsblackbeard@gmail.com","13313232","tafin","nover","02/04/2000","Game","Party","Lane","London","LN169NG"));
+	//  console.log(makeUser("omgitsblackbeard@gmail.com","13313232","tafin","nover","02/04/2000","Game","Party","Lane","London","LN169NG"));
 
 	function generateProfPic(userID) {
 		identicon.generate({ id: userID, size: 150 }, (err, buffer) => {
@@ -332,6 +328,7 @@ module.exports = (dbName = "Database") => {
 		Price,
 		img,
 		Quantity,
+		Category,
 		SellerID,
 		ListingDate,
 		EndDate
@@ -350,7 +347,7 @@ module.exports = (dbName = "Database") => {
     INSERT INTO Listing
     (ListingID, Name, Desc, Price, img, Quantity, SellerID, SDate, EDate)
     VALUES (?,?,?,?,?,?,?,?,?)`);
-		return {success: insert_listing_sql.run(
+		insert_listing_sql.run(
 			listing_id,
 			Name,
 			Desc,
@@ -360,10 +357,20 @@ module.exports = (dbName = "Database") => {
 			SellerID,
 			ListingDate,
 			EndDate
-		), data: null}
+		);
+		for(let i = 0; i < Category.length; i++){
+			let category = Database.getRecord("Category", "Name", Category[i]);
+			let category_id = category[0].CategoryID;
+			const insert_category_sql = Database.database.prepare(`
+			INSERT INTO Item_Category
+			(ListingID, CategoryID)
+			VALUES (?,?)`);
+			insert_category_sql.run(listing_id, category_id);
+		}
+		
 	}
 
-	// console.log(createListing("Tar", "Tar", 10, "Tar", 10, "c9c1f3d1-c728-46e1-ba83-828c882babbf", "2021-04-20", "2021-04-21"));
+	//   console.log(createListing("Tar", "Tar", 10, "Tar", 10, ["Vegan"] , "2f3f4bd9-4236-42d8-ac39-93500601ea82", "2021-04-20", "2021-04-21"));
 
 	/**
 	 * Updates one column in the listing table
@@ -393,12 +400,32 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
+	function updateListingQuantity(ListingID, Quantity) {
+		if (Quantity < 0) {
+			return "Invalid Quantity";
+		}
+		return Database.updateRecord(
+			"Listing",
+			"Quantity",
+			Quantity,
+			"ListingID",
+			ListingID
+		);
+	}
+
+	function updateListingStatus() {
+		Database.database.prepare(
+			`UPDATE Listing SET Status = 1 WHERE EDate < date('now') OR Quantity <= 0`
+		).run();
+	}
+
 	/**
 	 * Gets all listings that are active
 	 * @returns All listings that are active
 	 */
 	function getListings() {
 		console.log(Database.getRecord("Listing", "Status", 0));
+		updateListingStatus();
 		return {success: true, data: Database.getRecord("Listing", "Status", 0)};
 	}
 
@@ -448,6 +475,37 @@ module.exports = (dbName = "Database") => {
 		return Database.getRecord("Listing", "Status", 1);
 	}
 
+	function createCategory(CategoryName) {
+		const category_id = Database.generateUUID("Category", "CategoryID"); //Creates users UUID.
+			const insert_category_sql = Database.database.prepare(`\
+		INSERT INTO Category
+		(CategoryID, Name)
+		VALUES (?,?)`);
+			return insert_category_sql.run(category_id, CategoryName);
+	}
+
+	function getCategories() {
+		return Database.getAllRecords("Category");
+	}
+
+	function getItemCategories(ListingID) {
+		const category_sql = Database.database.prepare(
+			`SELECT * FROM Item_Category WHERE ListingID = ?`
+		);
+		return category_sql.all(ListingID);
+	}
+
+	function getCategoryName(CategoryID) {
+		let category = Database.getRecord("Category", "CategoryID", CategoryID);
+		return category[0].Name;
+	}
+
+	// console.log(createCategory("Vegan"));
+	// console.log(createCategory("Vegiterian"));
+	// console.log(createCategory("Halal"));
+	// console.log(createCategory("Kosher"));
+		
+
 	//********************************************************/
 
 	//******************** PURCHASE ***********************/
@@ -462,10 +520,9 @@ module.exports = (dbName = "Database") => {
 	 */
 	function reserveItem(ListingID, BuyerID, Quantity) {
 		//Get listing
-		console.log("AAAAA");
-		console.log(ListingID);
-		console.log(BuyerID);
-		console.log(Quantity);
+		if(Quantity <= 0){
+			return {success: false, data: "Invalid Quantity"};
+		}
 		if (Database.inTable("Listing", "ListingID", ListingID) === true) {
 			//Check if listing is still active
 			
@@ -475,10 +532,10 @@ module.exports = (dbName = "Database") => {
 				ListingID
 			);
 			console.log(Listing);
-			if (Listing.status === 1) {
+			if (Listing[0].Status === 1) {
 				return {success: false, data: "Listing is no longer active"};
 			}
-			if (Quantity > Listing.Quantity) {
+			if (Quantity > Listing[0].Quantity) {
 				return {success: false, data: "Not enough items in stock"};
 			}
 
@@ -500,13 +557,9 @@ module.exports = (dbName = "Database") => {
 				
 			);
 
-			console.log("Got here");
-
-			//Update Quantity in listing
-			console.log(Listing[0].Quantity)
-			console.log(Quantity)
+			
 			let NewQuantity = Listing[0].Quantity - Quantity;
-			console.log(NewQuantity);
+			
 
 			Database.updateRecord(
 				"Listing",
@@ -517,24 +570,17 @@ module.exports = (dbName = "Database") => {
 			);
 
 			//If Quantity = 0, delete listing
-			if (NewQuantity === 0) {
-				Database.updateRecord(
-					"Listing",
-					"Status",
-					1,
-					"ListingID",
-					ListingID
-				);
-			}
+			updateListingQuantity(ListingID, NewQuantity);
+			updateListingStatus(ListingID);
 
 			sendReservedEmail(purchase_id);
+			sendReviewEmail(purchase_id);
 			return {success: true, data: "Purchase Successful"};
-
 		}
 		return {success: false, data: "Listing does not exist"};
 	}
 
-	//  console.log(reserveItem("bc31c1a5-9ead-4d0e-8a99-f192073c1f07","627fcfe3-9dda-467c-8cf4-d515caa72235", 1));
+	//  console.log(reserveItem("56babe8e-c90d-475a-904a-92252cb39c46","4078deab-da6c-4bc6-89f6-7c59f9bc6fb3", 0));
 
 	/**
 	 *  Gets all purchases from a specific buyer
@@ -576,7 +622,19 @@ module.exports = (dbName = "Database") => {
 	 * @returns A specific purchase
 	 */
 	function getPurchase(PurchaseID) {
-		return Database.getRecord("Purchase", "PurchaseID", PurchaseID);
+		let data ={
+			PurchaseID: null,
+			ListingID: null,
+			BusinessID: null,
+			BuyerID: null,
+			Quantity: null,
+			Date: null,
+			BusinessID: null,
+		}
+		data= Database.getRecord("Purchase", "PurchaseID", PurchaseID);
+		let listing= Database.getRecord("Listing", "ListingID", data[0].ListingID)
+		data[0].BusinessID= listing[0].SellerID;
+		return data;
 	}
 
 	//********************************************************/
@@ -600,6 +658,8 @@ module.exports = (dbName = "Database") => {
 		Rating,
 		Review
 	) {
+		console.log(BusinessID);
+		let date = new Date();
 		const insert_review_sql = Database.database.prepare(
 			`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Title, Rating, Review, Date) VALUES (?,?,?,?,?,?,?)`
 		);
@@ -610,7 +670,7 @@ module.exports = (dbName = "Database") => {
 			Title,
 			Rating,
 			Review,
-			new Date()
+			date.toISOString()
 		);
 
 		if (success.changes === 0) {
@@ -633,15 +693,17 @@ module.exports = (dbName = "Database") => {
 	 * @returns  Rating of business
 	 */
 	function getBusinessRating(BusinessID) {
+		console.log(BusinessID)
 		let total = 0;
-		const reviews = Database.getRecord(
-			"Review",
-			"BusinessID",
-			BusinessID
-		).forEach((review) => {
+		const stmt = Database.database.prepare("SELECT * FROM Review WHERE BusinessID = ?");
+		let sql_select_stmt= stmt.all(BusinessID);
+		sql_select_stmt.forEach((review) => {
 			total += review.Rating;
 		});
-		return total / reviews.length;
+		if(sql_select_stmt.length === 0){
+			return "N/A";
+		}
+		return total / sql_select_stmt.length;
 	}
 
 	/**
@@ -667,7 +729,8 @@ module.exports = (dbName = "Database") => {
 	 * @returns Number of reviews a business has
 	 */
 	function countBusinessReviews(BusinessID) {
-		return Database.getRecord("Review", "BusinessID", BusinessID).length;
+		const stmt = Database.database.prepare("SELECT * FROM Review WHERE BusinessID = ?");
+		return sql_select_stmt= stmt.all(BusinessID).length;
 	}
 
 	/**
@@ -684,6 +747,7 @@ module.exports = (dbName = "Database") => {
 	 * @param {*} UserID Which user are you looking for
 	 * @returns Count of reviews a user has
 	 */
+	
 	function getReviewCount(UserID) {
 		return Database.getRecord("Review", "ReviewerID", UserID).length;
 	}
@@ -699,9 +763,12 @@ module.exports = (dbName = "Database") => {
 			"PurchaseID",
 			PurchaseID
 		);
+		console.log(Purchase);
 		const Listing = Database.getRecord("Listing", "ListingID", Purchase[0].ListingID);
+		console.log(Listing);
 		const BusinessID = Listing[0].SellerID;
 		const business = Database.getRecord("Business", "BusinessID", BusinessID);
+		console.log(business);
 		const rating = getBusinessRating(BusinessID);
 		const ratingCount = countBusinessReviews(BusinessID);
 		return {
@@ -715,7 +782,7 @@ module.exports = (dbName = "Database") => {
 
 	function getItemPannel(PurchaseID) {
 		//Purchase ID, Listing name, Listing img, Listing price, Purchase quantity, Purchase date\
-		data = {
+		let data = {
 			ID: null,
 			Name: null,
 			img: null,
@@ -740,82 +807,38 @@ module.exports = (dbName = "Database") => {
 
 	function sendWelcomeEmail(email) {
 		//TODO
-		ejs.renderFile(
-			
-			path.join(__dirname, "../emails/welcome.ejs"),
-			function (err, str) {
-				if (err) {
-					console.log(err);
-					return;
-				}
-				let mailOptions = {
-					from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
-					to: email,
-					subject: "Welcome to Grab-It & Govan!",
-					html: str,
-				};
-
-				transporter.sendMail(mailOptions, function (err, data) {
-					if (err) {
-						console.log(err);
-						return;
-					}
-					console.log("Email sent successfully");
-				});
-			}
-		);
+		return emailSender.sendEmail("welcome.ejs", email, "Welcome to Grab-It & Govan", {});
 	}
 
-	// console.log(sendWelcomeEmail("omgitsblackbeard@gmail.com"));
+	//    console.log(sendWelcomeEmail("Bt390@exeter.ac.uk"));
 
 	function sendVerificationEmail(email) {
 		//TODO
 		const userID = Database.getRecord("User", "Email", email).UserID;
 		
 		url = "http://localhost:5173/verify?userID=" + userID;
-		ejs.renderFile(
-			path.join(__dirname, "../emails/verifyEmail.ejs"),
-			{
-				url,
-			},
-			function (err, str) {
-				if (err) {
-					console.log(err);
-					return;
-				}
-				let mailOptions = {
-					from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
-					to: email,
-					subject: "Verify your email address",
-					html: str,
-				};
 
-				transporter.sendMail(mailOptions, function (err, data) {
-					if (err) {
-						console.log(err);
-						return;
-					}
-					console.log("Email sent successfully");
-				});
-			}
-		);
+		return emailSender.sendEmail("verifyEmail.ejs", email, "Verify your email address", {url});
 	}
 
-	//  console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
+	//  console.log(sendVerificationEmail("alexmstone03@gmail.com"));
 
 	function sendReservedEmail(purchaseID) {
 		//TODO
+		let monthNames = ["Jan", "Feb", "March", "Apr", "May", "June",
+  "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+];
 		let purchase = getPurchase(purchaseID);
-		let listing = getListing(purchase[0].ListingID);
-		console.log("1");
+		let listing = getListing(purchase[0].ListingID);	
 		let business = Database.getRecord("Business", "BusinessID", listing[0].SellerID);
-		console.log("2");
 		let address = Database.getRecord("Address","AddressID",business[0].AddressID);
 		let user = Database.getRecord("User","UserID",purchase[0].BuyerID);
 		let email = user[0].Email;
-		data = {
+		let temp = new Date(purchase[0].Date);
+		let date = temp.getFullYear() + ", " + monthNames[temp.getMonth()] + " " + temp.getDate();
+		let data = {
 			ID: purchase[0].PurchaseID,
-			Date: purchase[0].Date,
+			Date: date,
 			Total: purchase[0].Quantity * listing[0].Price,
 			img: listing[0].img,
 			Item: listing[0].Name,
@@ -825,40 +848,16 @@ module.exports = (dbName = "Database") => {
 			Name: business[0].BName,
 			Line1: address[0].Line1,
 			Line2: address[0].Line2,
-			postcode: address[0].postcode,
+			Postcode: address[0].Postcode,
 		};
-		console.log(data);
-		ejs.renderFile(
-			path.join(__dirname, "../emails/reservedItem.ejs"),
-			{
-				data,
-			},
-			function (err, str) {
-				if (err) {
-					console.log(err);
-					return;
-				}
-				let mailOptions = {
-					from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
-					to: email,
-					subject: "You've reserved an item!",
-					html: str,
-				};
 
-				transporter.sendMail(mailOptions, function (err, data) {
-					if (err) {
-						console.log(err);
-						return;
-					}
-					console.log("Email sent successfully");
-				});
-			}
-		);
+		return emailSender.sendEmail("reservedItem.ejs", email, "You've reserved an item!", data);
 	}
-		// console.log(sendReservedEmail("8aa4a437-646a-4679-b6de-438073ef5d67"));
+		//   console.log(sendReservedEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
 
 	function sendReviewEmail(purchaseID) {
 		//TODO
+		
 		let purchase = getPurchase(purchaseID);
 		let listing = getListing(purchase[0].ListingID);
 		let business = Database.getRecord("Business", "BusinessID", listing[0].SellerID);
@@ -867,41 +866,19 @@ module.exports = (dbName = "Database") => {
 		
 		let data = {
 			Name: listing[0].Name,
-			Seller: business[0].Name,
+			Seller: business[0].BName,
 			Date: purchase[0].Date,
 			img: listing[0].img,
+			url: "https://localhost:5173/review?purchaseID=" + purchaseID,
 		};
-		let url = "https://localhost:5173/review?purchaseID=" + purchaseID;
-		ejs.renderFile(
-			path.join(__dirname, "../emails/review.ejs"),
-			{
-				data,
-				url,
-			},
-			function (err, str) {
-				if (err) {
-					console.log(err);
-					return;
-				}
-				let mailOptions = {
-					from: '"Grab-It & Govan" <se.healthtracker101@gmail.com>',
-					to: email,
-					subject: "Leave a review on a recent purchase!",
-					html: str,
-				};
 
-				transporter.sendMail(mailOptions, function (err, data) {
-					if (err) {
-						console.log(err);
-						return;
-					}
-					console.log("Email sent successfully");
-				});
-			}
-		);
+		
+
+		return emailSender.sendEmail("review.ejs", email, "Leave a review on a recent purchase!", data);
+		
 	}
 
-	//  console.log(sendReviewEmail("8aa4a437-646a-4679-b6de-438073ef5d67"));
+	//  console.log(sendReviewEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
 
 	return {
 		Database,
@@ -940,6 +917,12 @@ module.exports = (dbName = "Database") => {
 		makeBusiness,
 		addUserToBusiness,
 		getBusinessDetails,
-        getUserBusinessIDs
+        getUserBusinessIDs,
+		updateListingQuantity,
+		updateBusinessDetails,
+		getBusinessDetails,
+		getCategories,
+		getCategoryName,
+		getItemCategories,
 	};
 };

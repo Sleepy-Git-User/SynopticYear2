@@ -41,6 +41,7 @@ app.get("*", (req, res) => {
 	res.sendFile(path.resolve(__dirname, "../Client/dist", "index.html"));
 });
 
+// app.use("view engine", "ejs");
 
 
 // Open listener
