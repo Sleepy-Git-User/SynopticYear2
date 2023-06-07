@@ -164,6 +164,6 @@ export default function ReviewTemplate() {
 				)}
 			</h2>
 		</div>
-	);
+	); 
 }
 

@@ -20,12 +20,9 @@ function CreateUser({ saveId }) {
 
     const [error, setError] = useState("");
 
-    //Used to show error messages for invalid data
-    //const [emailError, setEmailError] = useState("");
-    //const [usernameError, setUsernameError] = useState("");
 
     //Handles submission of a new account - will need a
-    // createUser method for this!
+    // makeUser method for this!
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);

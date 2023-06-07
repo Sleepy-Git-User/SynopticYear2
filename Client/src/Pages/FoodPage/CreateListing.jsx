@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 
 function CreateListing({  }) {
     
@@ -8,11 +8,31 @@ function CreateListing({  }) {
         Name: "",
         Desc: "",
         Price: "",
+        img: null,
         Quantity: "",
-        SellerID: "INSERT SELLER ID",
+        Category: [],
+        SellerID: sessionStorage.getItem("businessId"),
         ListingDate: new Date(),
         EndDate: ""
     });
+    const [categories, setCategories] = useState([]);
+
+    const fetchCategories = () => {
+        axios
+          .get("/api/categories")
+          .then((response) => response.data)
+          .then((data) => {
+            setCategories(data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
+
+    
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
 
     //Handles submission of a new account - will need a
@@ -20,28 +40,24 @@ function CreateListing({  }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        fetch("http://localhost:3000/api/makeListing", {
-            method: "POST",
-            body: JSON.stringify(form),
+        axios
+          .post("/api/createListing", form, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-
-        })
-            .then((response) => response.json())
-
-            .then((data) => {
-                if (data) {
-                    
-                    alert("Listing Created!");
-                } else {
-                    alert("Invalid listing creation details.");
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((data) => {
+            if (data) {
+              alert("Listing Created!");
+            } else {
+              alert("Invalid listing creation details.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
 
 
@@ -53,6 +69,24 @@ function CreateListing({  }) {
         });
     };
 
+
+    const handleCategoryChange = (event) => {
+        const { value, checked } = event.target;
+      
+        if (checked) {
+          // Add the category
+          setForm((prevForm) => ({
+            ...prevForm,
+            Category: [...prevForm.Category, value],
+          }));
+        } else {
+          // Remove the category 
+          setForm((prevForm) => ({
+            ...prevForm,
+            Category: prevForm.Category.filter((category) => category !== value),
+          }));
+        }
+      };
 
 
     //Returns the create listing form
@@ -82,11 +116,29 @@ function CreateListing({  }) {
 
             <br />
 
+            <label htmlFor="category">Categories:</label>
+            {categories.map((category) => (
+            <div key={category.CategoryID}>
+                <input
+                type="checkbox"
+                id={category.CategoryID}
+                name="Category"
+                value={category.Name}
+                checked={form.Category.includes(category.Name)}
+                onChange={handleCategoryChange}
+                />
+                <label htmlFor={category.CategoryID}>{category.Name}</label>
+            </div>
+            ))}
+
+            <br/>
+
             <label htmlFor="price">Price:</label>
                 <input
                     type="number"
                     id="price"
                     min="0"
+                    step="0.01"
                     name="Price"
                     value={form.Price}
                     onChange={handleChange}

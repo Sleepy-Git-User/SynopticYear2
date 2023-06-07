@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-
+import axios from 'axios';
 
 function CreateBusiness({ }) {
     
+    const userID = sessionStorage.getItem('userId');
+
     //Form data for creating a business (including address)
     const [form, setForm] = useState({
         Bname: "",
@@ -11,7 +13,8 @@ function CreateBusiness({ }) {
         Line1: "",
         Line2: "",
         City: "",
-        Postcode: ""
+        Postcode: "",
+        UserID: userID
     });
 
 
@@ -23,28 +26,27 @@ function CreateBusiness({ }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(form);
-        fetch("http://localhost:3000/api/makeBusiness", {
-            method: "POST",
-            body: JSON.stringify(form),
+        axios
+          .post("/api/makeBusiness", form, {
             headers: {
-                "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
-
-        })
-            .then((response) => response.json())
-
-            .then((info) => {
-                if (info.success) {
-                    setError("")
-                    alert("Business Created!");
-                } else {
-                    setError(info.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info.success) {
+              setError("");
+              alert("Business Created!");
+              sessionStorage.setItem("businessId", info.data);
+              window.location.reload();
+            } else {
+              setError(info.data);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
 
 
@@ -61,6 +63,7 @@ function CreateBusiness({ }) {
     //Returns the create business form
     return (
         <form onSubmit={handleSubmit}>
+            <h2>Create Business</h2>
 
             <label htmlFor="bname">Business Name:</label>
             <input

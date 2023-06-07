@@ -18,6 +18,7 @@ export default function Navbar() {
     //Action to logout a user
     const handleLogout = () => {
         sessionStorage.removeItem("userId");
+        sessionStorage.removeItem("businessId");
         setUserId(null);
         saveId(null)
     };

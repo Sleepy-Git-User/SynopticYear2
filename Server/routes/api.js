@@ -53,6 +53,20 @@ module.exports = (components) => {
 		}
 	});
 
+
+	router.post("/makeBusiness", (req, res) => {
+		const { Bname, Email, PhoneNumber, Line1, Line2, City, Postcode, UserID } = req.body;
+		console.log(req.body);
+		res.json(interface.makeBusiness(Bname, Email, PhoneNumber, Line1, Line2, City, Postcode, UserID));
+	});
+
+
+	router.post("/getBusinessDetails", (req, res) => {
+		const { BusinessID } = req.body;
+		console.log(req.body);
+		res.json(interface.getBusinessDetails(BusinessID));
+	});
+
 	router.get("/getPurchase/:purchaseID", (req, res) => {
 		res.json({
 			success: true,
@@ -92,6 +106,65 @@ module.exports = (components) => {
 			req.body.Review
 		);
 		res.json({ success: true });
+	});
+
+
+	router.post("/createListing", (req, res) => {
+		console.log(req.body);
+		res.json(interface.createListing(
+			req.body.Name,
+			req.body.Desc,
+			req.body.Price,
+			req.body.img,
+			req.body.Quantity,
+			req.body.Category,
+			req.body.SellerID,
+			req.body.ListingDate,
+			req.body.EndDate)
+
+		)
+	});
+
+
+	router.post("/getListings", (req, res) => {
+		console.log(req.body);
+		console.log(interface.getListings());
+		res.json(interface.getListings());
+
+	});
+
+
+	router.post("/reserveItem", (req, res) => {
+		console.log(req.body);
+		res.json(interface.reserveItem(req.body.ListingID, req.body.BuyerID, req.body.Quantity));
+
+	});
+
+
+	router.post("/getUserDetails", (req, res) => {
+		console.log(req.body);
+		res.json(interface.getUserDetails(req.body.UserID));
+
+	});
+
+
+	router.get("/categories", (req, res) => {
+		console.log(req.body);
+		res.json(interface.getCategories());
+
+	});
+
+
+	router.post("/getBusinessListings", (req, res) => {
+		console.log(req.body);
+		res.json(interface.getBusinessListings(req.body.BusinessID));
+
+	});
+
+	router.post("/getBoughtItems", (req, res) => {
+		console.log(req.body);
+		res.json(interface.getBoughtItems(req.body.UserID));
+
 	});
 
 	return router;

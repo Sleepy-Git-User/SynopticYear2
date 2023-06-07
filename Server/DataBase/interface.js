@@ -160,7 +160,11 @@ module.exports = (dbName = "Database") => {
 	//console.log(getUserID("bike@gmail.com"));
 
 	function getUserDetails(userID) {
-		return Database.getRecord("User", "UserID", userID);
+		console.log(Database.getRecord("User", "UserID", userID));
+		return {
+			success: true,
+			data: Database.getRecord("User", "UserID", userID),
+		};
 	}
 	//getUserDetails Test
 	//console.log(getUserDetails("49e59c7f-a2cc-4ac4-a445-b0d56d43178c"));
@@ -328,13 +332,13 @@ module.exports = (dbName = "Database") => {
 	) {
 		const listing_id = Database.generateUUID("Listing", "ListingID"); //Creates users UUID.
 		if (Quantity < 0) {
-			return "Invalid Quantity";
+			return { success: false, data: "Invalid Quantity" };
 		}
 		if (Price < 0) {
-			return "Invalid Price";
+			return { success: false, data: "Invalid Price" };
 		}
 		if (EndDate < ListingDate) {
-			return "Invalid End Date";
+			return { success: false, data: "Invalid End Date" };
 		}
 		const insert_listing_sql = Database.database.prepare(`
     INSERT INTO Listing
@@ -431,7 +435,10 @@ module.exports = (dbName = "Database") => {
 		//Return all listings with the listing ids from the item_category records
 		//SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name = "Vegan" OR Name = "Vegetarian"))
 		updateListingStatus();
-		return Database.getRecord("Listing", "Status", 0);
+		return {
+			success: true,
+			data: Database.getRecord("Listing", "Status", 0),
+		};
 	}
 
 	/**
@@ -529,10 +536,11 @@ module.exports = (dbName = "Database") => {
 	function reserveItem(ListingID, BuyerID, Quantity) {
 		//Get listing
 		if (Quantity <= 0) {
-			return "Invalid Quantity";
+			return { success: false, data: "Invalid Quantity" };
 		}
 		if (Database.inTable("Listing", "ListingID", ListingID) === true) {
 			//Check if listing is still active
+
 			const Listing = Database.getRecord(
 				"Listing",
 				"ListingID",
@@ -540,16 +548,17 @@ module.exports = (dbName = "Database") => {
 			);
 			console.log(Listing);
 			if (Listing[0].Status === 1) {
-				return "Listing is no longer active";
+				return { success: false, data: "Listing is no longer active" };
 			}
 			if (Quantity > Listing[0].Quantity) {
-				return "Not enough items in stock";
+				return { success: false, data: "Not enough items in stock" };
 			}
 
 			//Insert into purchases section\
 			let date = new Date();
 			let code = Database.generate4Code("Purchase", "Code", 4);
 			purchase_id = Database.generateUUID("Purchase", "PurchaseID");
+
 			const insert_purchase_sql = Database.database.prepare(`
         INSERT INTO Purchase(PurchaseID, ListingID, BuyerID, Date, Quantity, Code) VALUES (?,?,?,?,?,?)`);
 
@@ -578,9 +587,9 @@ module.exports = (dbName = "Database") => {
 
 			sendReservedEmail(purchase_id);
 			sendReviewEmail(purchase_id);
-			return "Purchase Successful";
+			return { success: true, data: "Purchase Successful" };
 		}
-		return "Listing does not exist";
+		return { success: false, data: "Listing does not exist" };
 	}
 
 	//  console.log(reserveItem("56babe8e-c90d-475a-904a-92252cb39c46","4078deab-da6c-4bc6-89f6-7c59f9bc6fb3", 0));
