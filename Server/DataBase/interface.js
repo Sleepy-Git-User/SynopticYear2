@@ -29,6 +29,9 @@ module.exports = (dbName = "Database") => {
 	}
 
 	
+	function jazz(){
+		console.log("jazz");
+	}
 	//********************************************************/
 
 	//******************** Users ***********************/
@@ -873,6 +876,7 @@ function loginChecker(Email, Password) {
 		makeBusiness,
 		addUserToBusiness,
 		getBusinessDetails,
-        getUserBusinessIDs
+        getUserBusinessIDs,
+		jazz
 	};
 };

@@ -3,12 +3,13 @@
  * @returns Express Router
  */
 
-const interface = require("../DataBase/interface.js")();
-const Auth = require("../Auth/Auth.js");
+const { interfaces } = require("mocha");
+const auth = require("../Auth/Auth.js");
 
 module.exports = (components) => {
-	const { database, express } = components;
+	const { express, interface } = components;
 	const router = express.Router();
+
 
 	router.get("/getAllUserDetails", (req, res) => {
 		res.json({
