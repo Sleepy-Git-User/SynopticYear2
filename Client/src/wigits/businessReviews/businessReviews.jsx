@@ -6,7 +6,7 @@ export default function BusinessReviews(BusinessID) {
     const [loading, setLoading] = useState(true); // add this state
     const [Review, setReview] = useState([{
         ID: null,
-        Fname: null,
+        ReviewerName: null,
         Rating: null,
         Title: null,
         Date: null,
@@ -16,8 +16,7 @@ export default function BusinessReviews(BusinessID) {
         setLoading(true);
 
         await axios.post("/api/getBusinessReviews", ID).then((res) => {
-            let date = new Date(res.data.data.Date);
-            res.data.data.Date = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+            console.log(res.data.data);
             setReview(res.data.data);
         });
         setLoading(false);
@@ -41,9 +40,10 @@ export default function BusinessReviews(BusinessID) {
                                     <div className="reviewRating">
                                         <h3>{review.Rating}★</h3>
                                     </div>
-                                    <div className="reviewRating">
-                                        <h3>{review.Fname} • </h3>
+                                    <div className="reviewName">
+                                        <h3>{review.ReviewerName} • </h3>
                                     </div>
+
                                     <div className="reviewDate">
                                         <h3>{review.Date}</h3>
                                     </div>

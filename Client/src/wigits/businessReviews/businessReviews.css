@@ -1,8 +1,39 @@
 .review {
 	display: flex;
 	flex-direction: column;
+	border: none;
+
+	border-bottom: 1px solid #e5e5e5;
+	border-radius: 0;
+	padding: 16px 0;
 }
 .reviewHeader {
 	display: flex;
 	flex-direction: row;
+	padding: 0 5px;
+	color: #707070;
+	align-items: center;
+	font-size: 15px;
+}
+
+.reviewHeader div h3 {
+	margin: 5px;
+}
+.reviewRating h3 {
+	padding-left: 15px;
+}
+.reviewDate {
+	padding: 0;
+}
+
+.reviewTitle {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	padding-left: 20px;
+}
+.reviewTitle h3 {
+	margin: 5px;
+	font-size: 25px;
 }

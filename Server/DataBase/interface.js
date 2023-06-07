@@ -591,8 +591,25 @@ module.exports = (dbName = "Database") => {
 	 * @returns All purchases from a specific buyer
 	 */
 	function getBoughtItems(BuyerID) {
-		return Database.getRecord("Purchase", "BuyerID", BuyerID);
+		let data = [];
+		let purchases = Database.getRecord("Purchase", "BuyerID", BuyerID);
+
+		purchases.forEach((purchase) => {
+			data.push({ Purchase: [], Listing: [], Buyer: [] });
+			data[data.length - 1].Purchase = purchase;
+			let listing = Database.getRecord(
+				"Listing",
+				"ListingID",
+				purchase.ListingID
+			);
+			data[data.length - 1].Listing = listing[0];
+			let user = Database.getRecord("User", "UserID", purchase.BuyerID);
+			data[data.length - 1].Buyer = user[0];
+		});
+		return data;
 	}
+
+	console.log(getBoughtItems("4078deab-da6c-4bc6-89f6-7c59f9bc6fb3"));
 
 	/**
 	 *  Gets all the items sold by a business
@@ -685,13 +702,44 @@ module.exports = (dbName = "Database") => {
 		}
 	}
 
+	// console.log(
+	// 	createReview(
+	// 		"4078deab-da6c-4bc6-89f6-7c59f9bc6fb3",
+	// 		"924ed693-4789-4739-9e87-0dfd6267fdb3",
+	// 		"2f3f4bd9-4236-42d8-ac39-93500601ea82",
+	// 		"Amazing Product",
+	// 		5,
+	// 		"This is a great product"
+	// 	)
+	// );
+
 	/**
 	 *  Gets all reviews from a specific business
 	 * @param {*} BusinessID Which business are you looking for
 	 * @returns All reviews from a specific business
 	 */
 	function getBusinessReviews(BusinessID) {
-		return Database.getRecord("Review", "BusinessID", BusinessID);
+		let data = Database.database
+			.prepare(
+				"SELECT * FROM Review WHERE BusinessID = ? ORDER BY Date DESC"
+			)
+			.all(BusinessID);
+		data.forEach((review) => {
+			review.ReviewerName = Database.getRecord(
+				"User",
+				"UserID",
+				review.ReviewerID
+			)[0].Fname;
+			let date = new Date(review.Date);
+			review.Date =
+				date.getDate() +
+				"/" +
+				date.getMonth() +
+				"/" +
+				date.getFullYear();
+		});
+		console.log(data);
+		return data;
 	}
 
 	/**
