@@ -327,6 +327,7 @@ module.exports = (dbName = "Database") => {
 		Price,
 		img,
 		Quantity,
+		Category,
 		SellerID,
 		ListingDate,
 		EndDate
@@ -345,7 +346,7 @@ module.exports = (dbName = "Database") => {
     INSERT INTO Listing
     (ListingID, Name, Desc, Price, img, Quantity, SellerID, SDate, EDate)
     VALUES (?,?,?,?,?,?,?,?,?)`);
-		return insert_listing_sql.run(
+		insert_listing_sql.run(
 			listing_id,
 			Name,
 			Desc,
@@ -356,9 +357,19 @@ module.exports = (dbName = "Database") => {
 			ListingDate,
 			EndDate
 		);
+		for(let i = 0; i < Category.length; i++){
+			let category = Database.getRecord("Category", "Name", Category[i]);
+			let category_id = category[0].CategoryID;
+			const insert_category_sql = Database.database.prepare(`
+			INSERT INTO Item_Category
+			(ListingID, CategoryID)
+			VALUES (?,?)`);
+			insert_category_sql.run(listing_id, category_id);
+		}
+		
 	}
 
-	//  console.log(createListing("Tar", "Tar", 10, "Tar", 10, "2f3f4bd9-4236-42d8-ac39-93500601ea82", "2021-04-20", "2021-04-21"));
+	//   console.log(createListing("Tar", "Tar", 10, "Tar", 10, ["Vegan"] , "2f3f4bd9-4236-42d8-ac39-93500601ea82", "2021-04-20", "2021-04-21"));
 
 	/**
 	 * Updates one column in the listing table
@@ -388,11 +399,31 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
+	function updateListingQuantity(ListingID, Quantity) {
+		if (Quantity < 0) {
+			return "Invalid Quantity";
+		}
+		return Database.updateRecord(
+			"Listing",
+			"Quantity",
+			Quantity,
+			"ListingID",
+			ListingID
+		);
+	}
+
+	function updateListingStatus() {
+		Database.database.prepare(
+			`UPDATE Listing SET Status = 1 WHERE EDate < date('now') OR Quantity <= 0`
+		).run();
+	}
+
 	/**
 	 * Gets all listings that are active
 	 * @returns All listings that are active
 	 */
 	function getListings() {
+		updateListingStatus();
 		return Database.getRecord("Listing", "Status", 0);
 	}
 
@@ -442,6 +473,37 @@ module.exports = (dbName = "Database") => {
 		return Database.getRecord("Listing", "Status", 1);
 	}
 
+	function createCategory(CategoryName) {
+		const category_id = Database.generateUUID("Category", "CategoryID"); //Creates users UUID.
+			const insert_category_sql = Database.database.prepare(`\
+		INSERT INTO Category
+		(CategoryID, Name)
+		VALUES (?,?)`);
+			return insert_category_sql.run(category_id, CategoryName);
+	}
+
+	function getCategories() {
+		return Database.getAllRecords("Category");
+	}
+
+	function getItemCategories(ListingID) {
+		const category_sql = Database.database.prepare(
+			`SELECT * FROM Item_Category WHERE ListingID = ?`
+		);
+		return category_sql.all(ListingID);
+	}
+
+	function getCategoryName(CategoryID) {
+		let category = Database.getRecord("Category", "CategoryID", CategoryID);
+		return category[0].Name;
+	}
+
+	// console.log(createCategory("Vegan"));
+	// console.log(createCategory("Vegiterian"));
+	// console.log(createCategory("Halal"));
+	// console.log(createCategory("Kosher"));
+		
+
 	//********************************************************/
 
 	//******************** PURCHASE ***********************/
@@ -456,6 +518,9 @@ module.exports = (dbName = "Database") => {
 	 */
 	function reserveItem(ListingID, BuyerID, Quantity) {
 		//Get listing
+		if(Quantity <= 0){
+			return "Invalid Quantity";
+		}
 		if (Database.inTable("Listing", "ListingID", ListingID) === true) {
 			//Check if listing is still active
 			const Listing = Database.getRecord(
@@ -464,10 +529,10 @@ module.exports = (dbName = "Database") => {
 				ListingID
 			);
 			console.log(Listing);
-			if (Listing.status === 1) {
+			if (Listing[0].Status === 1) {
 				return "Listing is no longer active";
 			}
-			if (Quantity > Listing.Quantity) {
+			if (Quantity > Listing[0].Quantity) {
 				return "Not enough items in stock";
 			}
 
@@ -488,11 +553,9 @@ module.exports = (dbName = "Database") => {
 				
 			);
 
-			//Update Quantity in listing
-			console.log(Listing[0].Quantity)
-			console.log(Quantity)
+			
 			let NewQuantity = Listing[0].Quantity - Quantity;
-			console.log(NewQuantity);
+			
 
 			Database.updateRecord(
 				"Listing",
@@ -503,15 +566,8 @@ module.exports = (dbName = "Database") => {
 			);
 
 			//If Quantity = 0, delete listing
-			if (NewQuantity === 0) {
-				Database.updateRecord(
-					"Listing",
-					"Status",
-					1,
-					"ListingID",
-					ListingID
-				);
-			}
+			updateListingQuantity(ListingID, NewQuantity);
+			updateListingStatus(ListingID);
 
 			sendReservedEmail(purchase_id);
 			sendReviewEmail(purchase_id);
@@ -520,7 +576,7 @@ module.exports = (dbName = "Database") => {
 		return "Listing does not exist";
 	}
 
-	//  console.log(reserveItem("56babe8e-c90d-475a-904a-92252cb39c46","4078deab-da6c-4bc6-89f6-7c59f9bc6fb3", 1));
+	//  console.log(reserveItem("56babe8e-c90d-475a-904a-92252cb39c46","4078deab-da6c-4bc6-89f6-7c59f9bc6fb3", 0));
 
 	/**
 	 *  Gets all purchases from a specific buyer
@@ -750,7 +806,7 @@ module.exports = (dbName = "Database") => {
 		return emailSender.sendEmail("welcome.ejs", email, "Welcome to Grab-It & Govan", {});
 	}
 
-	//   console.log(sendWelcomeEmail("alexmstone03@gmail.com"));
+	//    console.log(sendWelcomeEmail("Bt390@exeter.ac.uk"));
 
 	function sendVerificationEmail(email) {
 		//TODO
@@ -857,6 +913,12 @@ module.exports = (dbName = "Database") => {
 		makeBusiness,
 		addUserToBusiness,
 		getBusinessDetails,
-        getUserBusinessIDs
+        getUserBusinessIDs,
+		updateListingQuantity,
+		updateBusinessDetails,
+		getBusinessDetails,
+		getCategories,
+		getCategoryName,
+		getItemCategories,
 	};
 };
