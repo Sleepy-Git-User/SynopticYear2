@@ -7,7 +7,7 @@ import "./AdvicePage.css";
 export default function AdvicePage() {
     return (
         <div id="pageContainer">
-            <div class="banner">
+            <div class="bannerAdvice">
                 <h1>Advice</h1>
                 
             </div>

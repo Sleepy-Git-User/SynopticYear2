@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { setUserId, getUserId } from "./auth";
 
+import "./Navbar.css";
+
 
 export default function Navbar() {
 
