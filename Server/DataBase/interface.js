@@ -546,7 +546,6 @@ module.exports = (dbName = "Database") => {
 				"ListingID",
 				ListingID
 			);
-			console.log(Listing);
 			if (Listing[0].Status === 1) {
 				return { success: false, data: "Listing is no longer active" };
 			}
@@ -617,8 +616,6 @@ module.exports = (dbName = "Database") => {
 		});
 		return data;
 	}
-
-	console.log(getBoughtItems("4078deab-da6c-4bc6-89f6-7c59f9bc6fb3"));
 
 	/**
 	 *  Gets all the items sold by a business
@@ -745,6 +742,45 @@ module.exports = (dbName = "Database") => {
 				"/" +
 				date.getMonth() +
 				"/" +
+				date.getFullYear();
+		});
+		console.log(data);
+		return data;
+	}
+	function getItemReviews(ListingID) {
+		let monthNames = [
+			"Janurary",
+			"Feburary",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"Novermber",
+			"December",
+		];
+		//Get the reviews of the purchases of the item
+		let stmt = Database.database.prepare(
+			"SELECT * FROM Review join Purchase on Purchase.PurchaseID = Review.PurchaseID join Listing on Purchase.ListingID = Listing.ListingID WHERE Listing.ListingID = ?"
+		);
+
+		let data = stmt.all(ListingID);
+		console.log(data);
+		data.forEach((review) => {
+			review.ReviewerName = Database.getRecord(
+				"User",
+				"UserID",
+				review.ReviewerID
+			)[0].Fname;
+			let date = new Date(review.Date);
+			review.Date =
+				date.getDate() +
+				" " +
+				monthNames[date.getMonth()] +
+				" " +
 				date.getFullYear();
 		});
 		console.log(data);
@@ -1045,5 +1081,6 @@ module.exports = (dbName = "Database") => {
 		getCategories,
 		getCategoryName,
 		getItemCategories,
+		getItemReviews,
 	};
 };

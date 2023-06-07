@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./businessReviews.css";
+import "./itemReview.css";
 import emptystr from "/emptystr.svg";
 import fullstr from "/fullstr.svg";
+import BusinessReviews from "../businessReviews/businessReviews";
 
-export default function BusinessReviews(BusinessID) {
+export default function ItemReviews(ListingID) {
     const [loading, setLoading] = useState(true); // add this state
     const [Review, setReview] = useState([{
         ID: null,
         ReviewerName: null,
         Rating: null,
         Title: null,
+        Desc: null,
         Date: null,
     }]);
 
@@ -35,7 +37,7 @@ export default function BusinessReviews(BusinessID) {
     const getReviews = async (ID) => {
         setLoading(true);
 
-        await axios.post("/api/getBusinessReviews", ID).then((res) => {
+        await axios.post("/api/getItemReviews", ID).then((res) => {
             console.log(res.data.data);
             setReview(res.data.data);
         });
@@ -44,8 +46,8 @@ export default function BusinessReviews(BusinessID) {
 
     useEffect(() => {
         setLoading(true);
-        getReviews(BusinessID);
-    }, [BusinessID]);
+        getReviews({ ListingID: "56babe8e-c90d-475a-904a-92252cb39c46" });
+    }, [ListingID]);
 
     return (
         <h2 id="loading">
@@ -72,14 +74,21 @@ export default function BusinessReviews(BusinessID) {
                                 <div className="reviewDate">
                                     <h3>Review on {review.Date}</h3>
                                 </div>
-
+                                <div className="reviewDesc">
+                                    <p>{review.Desc}</p>
+                                </div>
 
 
                             </div>
                         ))}
                     </div>
+                    <BusinessReviews BusinessID={"2f3f4bd9-4236-42d8-ac39-93500601ea82"} />
                 </div>
             )}
+
+
+
+
         </h2>
     );
 };
