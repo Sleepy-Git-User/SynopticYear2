@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from 'axios';
 
-function CreateUser({saveId}) {
-    
+function CreateUser({ saveId }) {
+
     //Form data for creating a user (including address)
     const [form, setForm] = useState({
         Email: "",
@@ -61,30 +61,30 @@ function CreateUser({saveId}) {
     //Returns the create user form
     return (
         <form onSubmit={handleSubmit}>
-                <h1>Create Account</h1>
-                <br />
+            <h1>Create Account</h1>
+            <br />
 
             <label htmlFor="email">Email:</label>
-                <input
-                    type="text"
-                    id="email"
-                    name="Email"
-                    value={form.Email}
-                    onChange={handleChange}
-                    required
-                />
+            <input
+                type="text"
+                id="email"
+                name="Email"
+                value={form.Email}
+                onChange={handleChange}
+                required
+            />
 
             <br />
 
             <label htmlFor="phone">Phone Number:</label>
-                <input
-                    type="text"
-                    id="phone"
-                    name="PhoneNumber"
-                    value={form.PhoneNumber}
-                    onChange={handleChange}
-                    required
-                />
+            <input
+                type="text"
+                id="phone"
+                name="PhoneNumber"
+                value={form.PhoneNumber}
+                onChange={handleChange}
+                required
+            />
 
             <br />
 
