@@ -19,6 +19,9 @@ module.exports = (dbName = "Database") => {
 		console.log(error);
 	}
 
+	function jazz() {
+		console.log("jazz");
+	}
 	//********************************************************/
 
 	//******************** Users ***********************/
@@ -1091,5 +1094,7 @@ module.exports = (dbName = "Database") => {
 		getCategoryName,
 		getItemCategories,
 		getItemReviews,
+		getUserBusinessIDs,
+		jazz,
 	};
 };
