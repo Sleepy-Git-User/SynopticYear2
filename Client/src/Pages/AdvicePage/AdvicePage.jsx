@@ -11,17 +11,17 @@ export default function AdvicePage() {
                 <h1>Advice</h1>
                 
             </div>
-            <div class="mainInfo">
-                <div class="infoBox">
+            <div class="gridContainerAdvice">
+                <div class="infoBox1">
                     <h2>Budget Meals</h2>
                 </div>
-                <div class="infoBox">
+                <div class="infoBox2">
                     <h2>Schemes and Charities</h2>
                 </div>
-                <div class="infoBox">
+                <div class="infoBox3">
                     <h2>Deals</h2>
                 </div>
-                <div class="infoBox">
+                <div class="infoBox4">
                     <h2>Community Events</h2>
                 </div>
             </div>

@@ -3,3 +3,38 @@
     padding:50px;
     text-align: center;
   }
+
+  .gridContainerAdvice{
+    display: grid;
+    grid: 300px / auto auto;
+  }
+
+  .infoBox1, .infoBox2, .infoBox3, .infoBox4{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    grid-column: 1;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 25px;
+  }
+
+  .infoBox1{
+    grid-column: 1;
+    border: 5px solid #89a997;
+  }
+
+  .infoBox2{
+    grid-column: 2;
+    border: 5px solid #D99C9C;
+  }
+
+  .infoBox3{
+    grid-column: 1;
+    border: 5px solid #BA9FBD;
+  }
+
+  .infoBox4{
+    grid-column: 2;
+    border: 5px solid #F9A246;X
+  }
