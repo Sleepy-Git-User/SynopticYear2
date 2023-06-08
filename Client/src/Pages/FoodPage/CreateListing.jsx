@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function CreateListing({}) {
+function CreateListing({ }) {
     //Form data for creating a business (including address)
     const [form, setForm] = useState({
         Name: "",
@@ -58,6 +58,7 @@ function CreateListing({}) {
 
     //Handles updates to all of the data in the form
     const handleChange = (event) => {
+        console.log("HERE")
         setForm({
             ...form,
             [event.target.name]: event.target.value,
@@ -65,11 +66,17 @@ function CreateListing({}) {
     };
 
     const handleCategoryChange = (event) => {
+        console.log("HERE")
         const { value, checked } = event.target;
+        console.log(value, checked);
 
         if (checked) {
             // Add the category
-            setForm(Category.push(value));
+            setForm(prevState => ({
+                ...prevState,
+                Category: [...prevState.Category, value]
+            }));
+
         } else {
             // Remove the category
             setForm((prevForm) => ({

@@ -8,7 +8,6 @@ module.exports = (components) => {
 	const { express, interface } = components;
 	const router = express.Router();
 
-
 	router.get("/getAllUserDetails", (req, res) => {
 		res.json({
 			success: true,
@@ -152,8 +151,8 @@ module.exports = (components) => {
 
 	router.post("/getListings", (req, res) => {
 		console.log(req.body);
-		console.log(interface.getListings());
-		res.json(interface.getListings());
+
+		res.json(interface.getListings(req.body));
 	});
 
 	router.post("/reserveItem", (req, res) => {
