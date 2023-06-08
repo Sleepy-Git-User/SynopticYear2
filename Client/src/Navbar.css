@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
 * {
     padding: 0;
     margin: 0;
@@ -5,16 +7,18 @@
     text-decoration: none;
     list-style: none;
     text-align: center;
+    font-family: 'Lato', sans-serif; 
 }
 
 header {
-    height: 70px;
+    height: 90px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 0 20px;
     background: #508196;
     box-shadow: 0 0 10px #1b2b31;
+    justify-content: space-between; 
+    flex-direction: row;
 }
 header .header-left {
     display: flex;
@@ -29,30 +33,47 @@ header .header-left nav {
 header .header-left nav ul {
     display: flex;
 } 
+
 .logo{
-    color: #F1EBEC;
+    width: 30px;
+    height: 81px;  
+    margin-bottom: 20px; 
+    border-radius: 25px;  
+    margin-top: 5px;
 } 
+
+.profile{
+    width: 100px; 
+    height: 100px; 
+
+}
+
 
 #logout{
     color: #F9A246; 
 } 
 
+nav ul li {
+    display: inline-block;
+  }
+
 nav ul li a {
-    display: flex;
+    display: block;
     color: #ccdde4;
-    font-size: 18px;
+    font-size: 25px;
     padding: 5px 50px;
     transition: 0.2s;
     text-decoration: none; 
-    justify-content: space-between; 
     align-items: center;
-    list-style: none; 
+    list-style: none;  
+    
+
     
 }
 nav ul li a:hover,
 nav ul li a.active {
     color: #9eaeb4;
-}
+} 
 
 header .header-right {
     display: flex;
@@ -69,11 +90,8 @@ header .header-right .hamburger div {
     margin: 6px 0;
     background: #ccdde4;
 }
-.logo{
-    width: 100%; 
-    height: 100%;
-    padding: 15px; 
-}
+
+
 @media only screen and (max-width: 1000px) {
     header {
         padding: 0 20px;

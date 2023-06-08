@@ -2,7 +2,7 @@
 //If we have time, make it not static
 
 
-import "./AdvicePage.css";
+import "./Advice.css";
 
 export default function AdvicePage() {
     return (

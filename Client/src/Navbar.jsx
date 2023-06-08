@@ -27,31 +27,37 @@ export default function Navbar() {
 
     return (
         <>
-            <header>
-                <div class="header-left">
+            <header> 
+                <div class="header-left"> 
+                <div class="logo">
+                    <Link to="/"> <img className="logo" src="./Logo.jpg"/> </Link>
+                </div>
+                </div>
                     <nav>
                         <ul>
-                            <li>
-                                <Link to="/">INSERT LOGO</Link>
-                            </li>
                             <li>
                                 <Link to="/Food">Food</Link>
                             </li>
                             <li>
                                 <Link to="/Advice">Advice</Link>
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link id="logout" onClick={handleLogout}>
                                     Logout
                                 </Link>
-                            </li>
-                            <li>
-                                <Link to="/Account">INSERT PROFILE LOGO</Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </nav>
-                </div>
+                    
+                <div class="header-right"> 
                 <div class="header-right">
+                <li>
+                    <Link id="logout" onClick={handleLogout}>
+                                    Logout
+                                </Link>
+                            </li>
+                        <Link to="/Account"> <img class="profile" src="./profile5.png"/> </Link>
+                </div>
                     <div class="hamburger">
                         <div></div>
                         <div></div>
