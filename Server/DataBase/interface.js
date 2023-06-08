@@ -421,25 +421,34 @@ module.exports = (dbName = "Database") => {
 	 * Gets all listings that are active
 	 * @returns All listings that are active
 	 */
-	function getListings() {
+	function getListings(filter) {
+		let array = [];
 		let names = {
 			VG: "Vegan",
 			VE: "Vegetarian",
 			H: "Halal",
 			K: "Kosher",
 		};
-		//Read the filter and convert to names
-		//Get filters
-		//Get category names
-		//For categories we get all Item_category records with the category names
-		//Return all listings with the listing ids from the item_category records
-		//SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name = "Vegan" OR Name = "Vegetarian"))
+
+		for (let key in filter) {
+			if (filter[key] === true) {
+				array.push(names[key]);
+			}
+		}
+
+		sql_listing_select = Database.database.prepare(
+			`SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name IN (?) ))`
+		);
+		console.log(sql_listing_select.all(array));
+		let data = sql_listing_select.all(array);
 		updateListingStatus();
 		return {
 			success: true,
-			data: Database.getRecord("Listing", "Status", 0),
+			data: data,
 		};
 	}
+
+	// console.log(getListings());
 
 	/**
 	 * Gets a specific listing
