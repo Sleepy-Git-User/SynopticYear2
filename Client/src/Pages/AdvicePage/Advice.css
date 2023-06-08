@@ -36,5 +36,90 @@
 
   .infoBox4{
     grid-column: 2;
-    border: 5px solid #F9A246;X
+    border: 5px solid #F9A246;
   }
+
+  .HealthBox1, .HealthBox2{
+    background-color: #89a997;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    grid-column: 1;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    height: 80px;
+  }
+
+  .HealthBox1 p, .HealthBox2 p{
+    text-align: left; 
+    margin-top: 15px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-left: 40px;
+}
+
+.CharityBox1, .CharityBox2{
+    background-color: #D99C9C;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    grid-column: 1;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    height: 80px;
+}
+
+.CharityBox1 p, .CharityBox2 p{
+  text-align: left; 
+  margin-top: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-left: 40px;
+}
+
+
+.DealsBox1, .DealsBox2{
+  background-color: #BA9FBD;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  grid-column: 1;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  height: 80px;
+}
+
+.DealsBox1 p, .DealsBox2 p{
+  text-align: left; 
+  margin-top: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-left: 40px;
+}
+
+
+.EventsBox1, .EventsBox2{
+  background-color: #F9A246;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  grid-column: 1;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  height: 80px;
+}
+
+.EventsBox1 p, .EventsBox2 p{
+  text-align: left; 
+  margin-top: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-left: 40px;
+}
+
+
+
