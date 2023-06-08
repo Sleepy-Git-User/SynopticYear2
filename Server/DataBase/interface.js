@@ -620,7 +620,7 @@ module.exports = (dbName = "Database") => {
 		return { success: false, data: "Listing does not exist" };
 	}
 
-	//  console.log(reserveItem("56babe8e-c90d-475a-904a-92252cb39c46","4078deab-da6c-4bc6-89f6-7c59f9bc6fb3", 0));
+	  console.log(reserveItem("56babe8e-c90d-475a-904a-92252cb39c46","4078deab-da6c-4bc6-89f6-7c59f9bc6fb3", 0));
 
 	/**
 	 *  Gets all purchases from a specific buyer
@@ -956,7 +956,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	//    console.log(sendWelcomeEmail("Bt390@exeter.ac.uk"));
+	    // console.log(sendWelcomeEmail("omgitsblackbeard@gmail.com"));
 
 	function sendVerificationEmail(email) {
 		//TODO
@@ -972,7 +972,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	//  console.log(sendVerificationEmail("alexmstone03@gmail.com"));
+	//   console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
 
 	function sendReservedEmail(purchaseID) {
 		//TODO
@@ -1033,7 +1033,7 @@ module.exports = (dbName = "Database") => {
 			data
 		);
 	}
-	//   console.log(sendReservedEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
+	//    console.log(sendReservedEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
 
 	function sendReviewEmail(purchaseID) {
 		//TODO
@@ -1053,7 +1053,7 @@ module.exports = (dbName = "Database") => {
 			Seller: business[0].BName,
 			Date: purchase[0].Date,
 			img: listing[0].img,
-			url: "https://localhost:5173/review?purchaseID=" + purchaseID,
+			url: "http://localhost:5173/review?purchaseID=" + purchaseID,
 		};
 
 		return emailSender.sendEmail(
@@ -1064,7 +1064,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	//  console.log(sendReviewEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
+	//   console.log(sendReviewEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
 
 	return {
 		Database,
