@@ -2,11 +2,11 @@
     background-color: #508196;
     padding:50px;
     text-align: center;
-  } 
+} 
 
 #pageContainer {
     height: 550px;
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 .gridContainerLogin {
     display: grid;
@@ -23,7 +23,8 @@
     grid-column: 2 / span 1;
     display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: center;  
+    margin-top: 50px;
 }
 
 .login-btn{
@@ -48,6 +49,7 @@
     background-color: #C45A5A;
     font-size: 20px;
     margin-bottom: 10px;
+    margin-top: 50px;
 }
 
 .changeBtn:hover {
@@ -58,11 +60,6 @@
     display:inline-block;
 }
 
-.login-form label{
-    display: inline-block;
-    width: 200px; 
-    margin-right: 30px; 
-}
 
 .login-form h1{
     margin-bottom: 50px;
@@ -70,19 +67,22 @@
 
 
 .login-form input {
-    font-size: 25px;
+    font-size: 20px;
+    width: 300px; 
     background-color: #F1EBEC;
     border-radius: 8px;
     border-color: #4E464E;
     border: 1px solid;
     margin-top: 25px;
     margin-left: 36px;
+    text-align: left;
 }
 .login-form label {
     display: inline-block;
     width: 200px;
     font-size: 28px;
     text-align: left;
+    margin-right: 30px; 
 }
 .forgotten{
     margin-left: 400px;

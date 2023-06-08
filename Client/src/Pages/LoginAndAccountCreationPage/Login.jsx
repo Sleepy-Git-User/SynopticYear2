@@ -27,9 +27,10 @@ export default function Login({ saveId }) {
            <div class="bannerLogIn">
                 <h1>Grab It & Govan</h1>
            </div>
+           <button className="changeBtn" onClick={toggleForm}>Change Form</button>
 
             {form}
-            <button className="changeBtn" onClick={toggleForm}>Change Form</button>
+            
         </div>
     );
 }

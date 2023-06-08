@@ -61,7 +61,12 @@ function CreateUser({saveId}) {
 
     //Returns the create user form
     return (
-        <form onSubmit={handleSubmit}>  
+        <div>
+            <div id="pageContainer"> 
+            <div class="gridContainerAccount">  
+            <div class="AccountBox">
+        <form className="account-form" onSubmit={handleSubmit}>   
+
                 <h1>Create Account</h1>
                 <br />
 
@@ -196,10 +201,14 @@ function CreateUser({saveId}) {
 
             <p>{error}</p>
 
-            <button type="submit">
+            <button className="create-btn"type="submit">
                 Create Account
             </button>
-        </form>
+        </form> 
+        </div>
+        </div>
+        </div>
+        </div>
     );
 }
 

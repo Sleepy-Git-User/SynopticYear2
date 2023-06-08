@@ -35,6 +35,7 @@ function Main() {
     if (storedId !== null) {
       saveId(storedId);
     }
+    document.title = "Grab It & Govan";
   }, []);
 
   if (userIdUpdate !== null) {
