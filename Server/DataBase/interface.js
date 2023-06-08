@@ -8,13 +8,14 @@ const nodemailer = require("nodemailer");
 const ejs = require("ejs");
 const { default: Identicon } = require("identicon.js");
 const { log } = require("console");
+require('dotenv').config();
 
 
 const transporter = nodemailer.createTransport({
 	service: "gmail",
 	auth: {
-		user: "se.healthtracker101@gmail.com",
-		pass: "btssdtghvfwpyiyo",
+		user: process.env.EMAIL_USERNAME,
+		pass: process.env.EMAIL_PASSWORD,
 	},
 });
 
