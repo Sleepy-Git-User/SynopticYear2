@@ -7,28 +7,25 @@ import BusinessReviews from "../businessReviews/businessReviews";
 
 export default function ItemReviews(ListingID) {
     const [loading, setLoading] = useState(true); // add this state
-    const [Review, setReview] = useState([{
-        ID: null,
-        ReviewerName: null,
-        Rating: null,
-        Title: null,
-        Desc: null,
-        Date: null,
-    }]);
+    const [Review, setReview] = useState([
+        {
+            ID: null,
+            ReviewerName: null,
+            Rating: null,
+            Title: null,
+            Desc: null,
+            Date: null,
+        },
+    ]);
 
     const stars = (rating, fullstr, emptystr) => {
         let stars = [];
         for (let i = 0; i < rating; i++) {
-            stars.push(
-                <img src={fullstr} alt="star" width="15" height="15" />
-
-            );
+            stars.push(<img src={fullstr} alt="star" width="15" height="15" />);
         }
         for (let i = rating; i < 5; i++) {
             stars.push(
-
                 <img src={emptystr} alt="star" width="15" height="15" />
-
             );
         }
         return stars;
@@ -46,7 +43,7 @@ export default function ItemReviews(ListingID) {
 
     useEffect(() => {
         setLoading(true);
-        getReviews({ ListingID: "56babe8e-c90d-475a-904a-92252cb39c46" });
+        getReviews({ ListingID });
     }, [ListingID]);
 
     return (
@@ -59,17 +56,28 @@ export default function ItemReviews(ListingID) {
                         {Review.map((review) => (
                             <div className="review" key={review.ID}>
                                 <div className="reviewName">
-                                    <img src={null} alt="Image" width="25" height="25" />
+                                    <img
+                                        src={null}
+                                        alt="Image"
+                                        width="25"
+                                        height="25"
+                                    />
                                     <h3>{review.ReviewerName}</h3>
                                 </div>
                                 <div className="reviewHeader">
                                     <div className="reviewRating">
-                                        <h3> {stars(review.Rating, fullstr, emptystr)}</h3>
+                                        <h3>
+                                            {" "}
+                                            {stars(
+                                                review.Rating,
+                                                fullstr,
+                                                emptystr
+                                            )}
+                                        </h3>
                                     </div>
                                     <div className="reviewTitle">
                                         <h3>{review.Title}</h3>
                                     </div>
-
                                 </div>
                                 <div className="reviewDate">
                                     <h3>Review on {review.Date}</h3>
@@ -77,18 +85,14 @@ export default function ItemReviews(ListingID) {
                                 <div className="reviewDesc">
                                     <p>{review.Desc}</p>
                                 </div>
-
-
                             </div>
                         ))}
                     </div>
-                    <BusinessReviews BusinessID={"2f3f4bd9-4236-42d8-ac39-93500601ea82"} />
+                    <BusinessReviews
+                        BusinessID={"2f3f4bd9-4236-42d8-ac39-93500601ea82"}
+                    />
                 </div>
             )}
-
-
-
-
         </h2>
     );
-};
+}
