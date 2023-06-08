@@ -2,8 +2,6 @@
  * Router Setup for API Requests
  * @returns Express Router
  */
-
-const { interfaces } = require("mocha");
 const auth = require("../Auth/Auth.js");
 
 module.exports = (components) => {
