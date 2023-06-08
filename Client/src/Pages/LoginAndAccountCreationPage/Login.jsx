@@ -3,7 +3,8 @@ import { setUserId, getUserId } from "../../auth";
 import CreateUser from "./CreateUser";
 
 import LoginForm from "./LoginForm";
-import CreateListing from "../FoodPage/CreateListing";
+import CreateListing from "../FoodPage/CreateListing"; 
+import "./Login.css";
 //import ReviewTemplate from "../ReviewTemplate/ReviewTemplate.jsx";
 
 
@@ -22,12 +23,13 @@ export default function Login({ saveId }) {
         }
     }
     return (
-        <div id="pageContainer">
+        <div id="pageContainer"> 
+           <div class="bannerLogIn">
+                <h1>Grab It & Govan</h1>
+           </div>
 
             {form}
-            <br />
-            <br />
-            <button onClick={toggleForm}>Change Form</button>
+            <button className="changeBtn" onClick={toggleForm}>Change Form</button>
         </div>
     );
 }
