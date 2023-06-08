@@ -24,9 +24,7 @@ header .header-left {
     display: flex;
     align-items: center;
 }
-header .header-left .logo {
-    width: 140px; 
-}
+
 header .header-left nav {
     margin-left: 120px;
 }
@@ -35,7 +33,7 @@ header .header-left nav ul {
 } 
 
 .logo{
-    width: 50%;
+    width: 100px;
     height: 81px;  
     margin-bottom: 20px; 
     border-radius: 25px;  
