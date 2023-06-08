@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import "./createAccount.css";
 
-function CreateUser({ saveId }) {
-
+function CreateUser({saveId}) {
+    
     //Form data for creating a user (including address)
     const [form, setForm] = useState({
         Email: "",
@@ -60,31 +61,36 @@ function CreateUser({ saveId }) {
 
     //Returns the create user form
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Create Account</h1>
-            <br />
+        <div>
+            <div id="pageContainer"> 
+            <div class="gridContainerAccount">  
+            <div class="AccountBox">
+        <form className="account-form" onSubmit={handleSubmit}>   
+
+                <h1>Create Account</h1>
+                <br />
 
             <label htmlFor="email">Email:</label>
-            <input
-                type="text"
-                id="email"
-                name="Email"
-                value={form.Email}
-                onChange={handleChange}
-                required
-            />
+                <input
+                    type="text"
+                    id="email"
+                    name="Email"
+                    value={form.Email}
+                    onChange={handleChange}
+                    required
+                />
 
             <br />
 
             <label htmlFor="phone">Phone Number:</label>
-            <input
-                type="text"
-                id="phone"
-                name="PhoneNumber"
-                value={form.PhoneNumber}
-                onChange={handleChange}
-                required
-            />
+                <input
+                    type="text"
+                    id="phone"
+                    name="PhoneNumber"
+                    value={form.PhoneNumber}
+                    onChange={handleChange}
+                    required
+                />
 
             <br />
 
@@ -195,10 +201,14 @@ function CreateUser({ saveId }) {
 
             <p>{error}</p>
 
-            <button type="submit">
+            <button className="create-btn"type="submit">
                 Create Account
             </button>
-        </form>
+        </form> 
+        </div>
+        </div>
+        </div>
+        </div>
     );
 }
 

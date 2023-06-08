@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react";
 import CreateBusiness from "./CreateBusiness.jsx"
 import BusinessDetails from "./BusinessDetails.jsx";
 import axios from 'axios';
-//Colour blind option
+//Colour blind option 
+import "./Account.css";
 
 
 
@@ -70,13 +71,12 @@ export default function AccountPage() {
     return (
         <div id="pageContainer">
 
-            <div class="banner">
+            <div class="bannerAccount">
                 <h1>Account</h1>
                 
             </div>
 
             <div class="mainInfo">
-                <p> Text goes in here aaaaaaaaaaaaaaaaaaaaaa </p>
                 <img></img>
             </div>
 
