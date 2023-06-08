@@ -7,15 +7,6 @@ const crypto = require("../utili/password.js");
 const { log } = require("console");
 const fs = require("fs");
 const emailSender = require("../utili/email.js");
-require("dotenv").config();
-
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
-    },
-});
 
 module.exports = (dbName = "Database") => {
     //Creates the Database class
@@ -378,7 +369,19 @@ module.exports = (dbName = "Database") => {
         }
     }
 
-    //   console.log(createListing("Tar", "Tar", 10, "Tar", 10, ["Vegan"] , "2f3f4bd9-4236-42d8-ac39-93500601ea82", "2021-04-20", "2021-04-21"));
+    // console.log(
+    //     createListing(
+    //         "Tarr",
+    //         "Tarr",
+    //         10,
+    //         "Tarr",
+    //         10,
+    //         ["Halal"],
+    //         "2f3f4bd9-4236-42d8-ac39-93500601ea82",
+    //         "2021-04-20",
+    //         "2021-04-21"
+    //     )
+    // );
 
     /**
      * Updates one column in the listing table
