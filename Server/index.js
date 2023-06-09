@@ -3,7 +3,10 @@ const path = require("path");
 // Express Imports
 const express = require("express");
 const cors = require("cors");
+const interface = require("./DataBase/interface.js")();
 const app = express();
+const auth = require("./Auth/Auth.js");
+
 
 // CORS rubbish
 app.use(
@@ -28,11 +31,12 @@ app.use((req, res, next) => {
 	console.log("Request made to", req.path, "took", `${time}ms`);
 });
 
+
 // Server Config
 const port = process.env.PORT || 3000;
 
 // Routers
-const APIRoute = require("./routes/api")({ express });
+const APIRoute = require("./routes/api")({ express,interface });
 
 // Routes
 app.use("/api", APIRoute);

@@ -16,6 +16,7 @@ export default function AccountPage() {
 
     const [businessState, setBusinessState] = useState(<CreateBusiness />);
     const [userDetails, setUserDetails] = useState();
+    const [boughtItems, setBoughtItems] = useState();
 
     const getUserDetails = () => {
         axios
@@ -47,6 +48,38 @@ export default function AccountPage() {
             console.error("Error:", error);
           });
       };
+
+    
+      const getBoughtItems = () => {
+        axios
+          .post("/api/getBoughtItems", {
+            UserID: sessionStorage.getItem("userId"),
+          }, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info)
+             {
+                console.log("AGR");
+                console.log(info);
+              /*setBoughtItems(
+                <div>
+                  Name: {info.data[0].Fname} {info.data[0].Lname} <br />
+                  Email: {info.data[0].Email}<br />
+                  Phone: {info.data[0].PhoneNumber}
+                </div>
+              );*/
+            } else {
+              setBoughtItems("Error getting purchases.");
+            }
+          })
+          .catch((error) => {
+            setBoughtItems("Error getting purchases.");
+          });
+      };
     
 
     useEffect(() => {
@@ -62,12 +95,8 @@ export default function AccountPage() {
 
         //Get User details
         getUserDetails();
-        //If business does not exist, render form to add one
-        
 
-        //Else, render business details
-            //Fetch their reviews
-            //
+        getBoughtItems();
 
       }, [])
 
@@ -98,6 +127,8 @@ export default function AccountPage() {
             <div className="purchaseHistory">
                 <h2>Purchase History</h2>
                 {/*Get purchase history details and map in here*/}
+
+                {boughtItems}
             </div>
 
 
