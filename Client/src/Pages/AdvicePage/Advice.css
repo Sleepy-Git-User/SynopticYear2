@@ -1,0 +1,125 @@
+
+.bannerAdvice {
+    background-color: #BA9FBD;
+    padding:50px;
+    text-align: center;
+  }
+
+  .gridContainerAdvice{
+    display: grid;
+    grid: 300px / auto auto;
+  }
+
+  .infoBox1, .infoBox2, .infoBox3, .infoBox4{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 25px;
+  }
+
+  .infoBox1{
+    grid-column: 1;
+    border: 5px solid #89a997;
+  }
+
+  .infoBox2{
+    grid-column: 2;
+    border: 5px solid #D99C9C;
+  }
+
+  .infoBox3{
+    grid-column: 1;
+    border: 5px solid #BA9FBD;
+  }
+
+  .infoBox4{
+    grid-column: 2;
+    border: 5px solid #F9A246;
+  }
+
+  .HealthBox1, .HealthBox2{
+    background-color: #89a997;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    grid-column: 1;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    height: 80px;
+  }
+
+  .HealthBox1 p, .HealthBox2 p{
+    text-align: left; 
+    margin-top: 15px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-left: 40px;
+}
+
+.CharityBox1, .CharityBox2{
+    background-color: #D99C9C;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    grid-column: 1;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    height: 80px;
+}
+
+.CharityBox1 p, .CharityBox2 p{
+  text-align: left; 
+  margin-top: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-left: 40px;
+}
+
+
+.DealsBox1, .DealsBox2{
+  background-color: #BA9FBD;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  grid-column: 1;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  height: 80px;
+}
+
+.DealsBox1 p, .DealsBox2 p{
+  text-align: left; 
+  margin-top: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-left: 40px;
+}
+
+
+.EventsBox1, .EventsBox2{
+  background-color: #F9A246;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  grid-column: 1;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  height: 80px;
+}
+
+.EventsBox1 p, .EventsBox2 p{
+  text-align: left; 
+  margin-top: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-left: 40px;
+}
+
+
+

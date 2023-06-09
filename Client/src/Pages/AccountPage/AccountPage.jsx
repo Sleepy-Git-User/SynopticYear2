@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react";
 import CreateBusiness from "./CreateBusiness.jsx"
 import BusinessDetails from "./BusinessDetails.jsx";
 import axios from 'axios';
-//Colour blind option
+//Colour blind option 
+import "./Account.css";
 
 
 
@@ -30,10 +31,13 @@ export default function AccountPage() {
           .then((info) => {
             if (info.success) {
               setUserDetails(
-                <div>
+                <div className="userInfo"> 
+                <h2>User Details</h2>
+                <div className="info">
                   Name: {info.data[0].Fname} {info.data[0].Lname} <br />
                   Email: {info.data[0].Email}<br />
                   Phone: {info.data[0].PhoneNumber}
+                </div>
                 </div>
               );
             } else {
@@ -99,31 +103,28 @@ export default function AccountPage() {
     return (
         <div id="pageContainer">
 
-            <div class="banner">
-                <h1>Account</h1>
+            <div class="bannerAccount">
+                <h1>Hello, User</h1>
                 
-            </div>
+            </div> 
+            <div className="gridContainerAccountPage">
+            
+            
+                {/* <h2>User Details</h2> */}
+                {/*Get User Details and put in here */}
+                {userDetails}
+            
 
-            <div class="mainInfo">
-                <p> Text goes in here aaaaaaaaaaaaaaaaaaaaaa </p>
+            {/* <div class="mainInfo">
                 <img></img>
-            </div>
+            </div> */}
 
-            <div>
+            <div className="business">
                 {businessState}
             </div>
 
 
-
-            <div>
-                <h2>User Details</h2>
-                {/*Get User Details and put in here */}
-                {userDetails}
-            </div>
-
-
-
-            <div>
+            <div className="purchaseHistory">
                 <h2>Purchase History</h2>
                 {/*Get purchase history details and map in here*/}
 
@@ -131,9 +132,11 @@ export default function AccountPage() {
             </div>
 
 
-            <div>
+            <div className="reviews">
                 <h2>Your Reviews</h2>
                 {/* Should ONLY appear if a user has a business */}
+            </div> 
+
             </div>
 
 
