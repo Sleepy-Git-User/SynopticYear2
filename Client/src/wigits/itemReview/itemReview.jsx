@@ -15,6 +15,7 @@ export default function ItemReviews(ListingID) {
             Title: null,
             Desc: null,
             Date: null,
+            img: null,
         },
     ]);
 
@@ -43,7 +44,7 @@ export default function ItemReviews(ListingID) {
 
     useEffect(() => {
         setLoading(true);
-        getReviews({ ListingID });
+        getReviews({ ListingID: "dbc8fb07-0fd5-4581-8191-90b7edd26659" });
     }, [ListingID]);
 
     return (
@@ -57,10 +58,10 @@ export default function ItemReviews(ListingID) {
                             <div className="review" key={review.ID}>
                                 <div className="reviewName">
                                     <img
-                                        src={null}
+                                        src={review.img}
                                         alt="Image"
-                                        width="25"
-                                        height="25"
+                                        width="50"
+                                        height="50"
                                     />
                                     <h3>{review.ReviewerName}</h3>
                                 </div>

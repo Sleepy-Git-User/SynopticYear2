@@ -47,6 +47,7 @@ export default function ReviewTemplate() {
 
 	const getPurchase = async (ID) => {
 		await axios.get("/api/getPurchase/" + ID).then((res) => {
+			console.log("DATA: " + res.data);
 			setPurchase(res.data.data[0]);
 		});
 		setForm({
@@ -164,6 +165,6 @@ export default function ReviewTemplate() {
 				)}
 			</h2>
 		</div>
-	); 
+	);
 }
 

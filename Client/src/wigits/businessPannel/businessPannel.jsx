@@ -10,9 +10,9 @@ import fullstr from "/fullstr.svg";
 export default function BusinessPannel(purchaseID) {
     const [loading, setLoading] = useState(true); // add this state
     const [business, setBusiness] = useState({
-        ID: null,
-        Name: null,
-        IMG: null,
+        BusinessID: null,
+        Nname: null,
+        img: null,
         Rating: null,
         RatingCount: null,
     });

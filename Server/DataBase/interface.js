@@ -7,6 +7,14 @@ const crypto = require("../utili/password.js");
 const { log } = require("console");
 const fs = require("fs");
 const emailSender = require("../utili/email.js");
+const { BlobServiceClient } = require('@azure/storage-blob');
+require('dotenv').config();
+
+const azureStorageConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const containerName = 'images';
+const blobServiceClient = BlobServiceClient.fromConnectionString(azureStorageConnectionString);
+const containerClient = blobServiceClient.getContainerClient(containerName);
+		
 
 module.exports = (dbName = "Database") => {
 	//Creates the Database class
@@ -82,7 +90,7 @@ module.exports = (dbName = "Database") => {
 	 * @param {*} Postcode
 	 * @returns Returns Success true or false. Then data which will contain the new UserID
 	 */
-	function makeUser(
+	async function makeUser(
 		Email,
 		PhoneNumber,
 		Fname,
@@ -92,9 +100,12 @@ module.exports = (dbName = "Database") => {
 		Line1,
 		Line2,
 		City,
-		Postcode
+		Postcode,
+		ProfilePic
 	) {
+		
 		const user_id = Database.generateUUID("User", "UserID"); //Creates users UUID.
+		
 		const address_id = Database.generateUUID("Address", "AddressID"); //Creates address UUID.
 		if (Database.inTable("User", "Email", Email) === true) {
 			//Checks if the Email is already in the table and returns fales if its taken.
@@ -103,8 +114,8 @@ module.exports = (dbName = "Database") => {
 			//SQL to insert data in to the User table.
 			const insert_user_sql = Database.database.prepare(`
             INSERT INTO User
-            (UserID, Email, PhoneNumber, Fname, Lname, DoB, AddressID)
-            VALUES (?,?,?,?,?,?,?)`);
+            (UserID, Email, PhoneNumber, Fname, Lname, DoB, img, AddressID)
+            VALUES (?,?,?,?,?,?,?,?)`);
 
 			//Creates the salt for the new user, and hashes it with the users inputted password.
 			let salt = crypto.makeSalt();
@@ -131,10 +142,19 @@ module.exports = (dbName = "Database") => {
 				Fname,
 				Lname,
 				DoB,
+				"https://synopticproject.blob.core.windows.net/images/"+user_id+".png",
 				address_id
 			);
 			insert_Password.run(user_id, hashedPassword, salt);
-
+			const blobClient = containerClient.getBlockBlobClient(user_id+".png");
+			
+			try{
+				const uploadResponse = await blobClient.upload(ProfilePic.buffer, ProfilePic.size);
+				console.log(`Upload succesful. ${uploadResponse.requestId}`);
+			} catch (error) {
+				console.error(error);
+				throw error;
+			}
 			sendWelcomeEmail(Email);
 			sendVerificationEmail(Email);
 			//Returns true after creating the new user.
@@ -198,7 +218,7 @@ module.exports = (dbName = "Database") => {
 	 * @param {*} UserID UserID for User who made the business.
 	 * @returns Success true or false depending on errors. Data has business id if success or an error message.
 	 */
-	function makeBusiness(
+	async function makeBusiness(
 		Bname,
 		Email,
 		PhoneNumber,
@@ -206,7 +226,8 @@ module.exports = (dbName = "Database") => {
 		Line2,
 		City,
 		PostCode,
-		UserID
+		UserID,
+		ProfilePic
 	) {
 		const business_id = Database.generateUUID("Business", "BusinessID"); //Creates users UUID.
 		const address_id = Database.generateUUID("Address", "AddressID"); //Creates address UUID.
@@ -225,8 +246,8 @@ module.exports = (dbName = "Database") => {
 			//SQL to insert data in to the User table.
 			const insert_business_sql = Database.database.prepare(`
             INSERT INTO Business
-            (BusinessID, Bname, Email, PhoneNumber, AddressID, InvCode)
-            VALUES (?,?,?,?,?,?)`);
+            (BusinessID, Bname, Email, PhoneNumber, img, AddressID, InvCode)
+            VALUES (?,?,?,?,?,?,?)`);
 
 			//SQL to insert data in to the User table.
 			const insert_address_sql = Database.database.prepare(`
@@ -241,9 +262,19 @@ module.exports = (dbName = "Database") => {
 				Bname,
 				Email,
 				PhoneNumber,
+				"https://synopticproject.blob.core.windows.net/images/"+business_id+"bpp.png",
 				address_id,
 				InvCode
 			);
+			const blobClient = containerClient.getBlockBlobClient(business_id+"bpp.png");
+			
+			try{
+				const uploadResponse = await blobClient.upload(ProfilePic.buffer, ProfilePic.size);
+				console.log(`Upload succesful. ${uploadResponse.requestId}`);
+			} catch (error) {
+				console.error(error);
+				throw error;
+			}
 
 			const User_Business_sql = Database.database.prepare(`
             INSERT INTO User_Business
@@ -251,7 +282,7 @@ module.exports = (dbName = "Database") => {
             VALUES (?,?)`);
 
 			User_Business_sql.run(UserID, business_id);
-
+			console.log("Business Created");
 			return { success: true, data: business_id };
 		}
 	}
@@ -324,7 +355,7 @@ module.exports = (dbName = "Database") => {
 	 * @param {*} EndDate The end date of the listing
 	 * @returns True if successful
 	 */
-	function createListing(
+	async function createListing(
 		Name,
 		Desc,
 		Price,
@@ -342,7 +373,7 @@ module.exports = (dbName = "Database") => {
 		if (Price < 0) {
 			return { success: false, data: "Invalid Price" };
 		}
-		if (EndDate < ListingDate) {
+		if (new Date(EndDate) < ListingDate) {
 			return { success: false, data: "Invalid End Date" };
 		}
 		const insert_listing_sql = Database.database.prepare(`
@@ -354,12 +385,20 @@ module.exports = (dbName = "Database") => {
 			Name,
 			Desc,
 			Price,
-			img,
+			"https://synopticproject.blob.core.windows.net/images/"+listing_id+"lispp.png",
 			Quantity,
 			SellerID,
 			ListingDate,
 			EndDate
 		);
+		const blobClient = containerClient.getBlockBlobClient(listing_id+"lispp.png");
+		try{
+			const uploadResponse = await blobClient.upload(img.buffer, img.size);
+			console.log(`Upload succesful. ${uploadResponse.requestId}`);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
 		for (let i = 0; i < Category.length; i++) {
 			let category = Database.getRecord("Category", "Name", Category[i]);
 			let category_id = category[0].CategoryID;
@@ -369,6 +408,7 @@ module.exports = (dbName = "Database") => {
 			VALUES (?,?)`);
 			insert_category_sql.run(listing_id, category_id);
 		}
+		return { success: true, data: listing_id };
 	}
 
 	// console.log(
@@ -620,7 +660,7 @@ module.exports = (dbName = "Database") => {
 		return { success: false, data: "Listing does not exist" };
 	}
 
-	  console.log(reserveItem("56babe8e-c90d-475a-904a-92252cb39c46","4078deab-da6c-4bc6-89f6-7c59f9bc6fb3", 0));
+	    //  console.log(reserveItem("5a0112c7-2fad-435b-8a8c-9a48c350e06b","28179d4b-32ac-48d8-b1ef-d82987678c2c", 1));
 
 	/**
 	 *  Gets all purchases from a specific buyer
@@ -693,6 +733,7 @@ module.exports = (dbName = "Database") => {
 			data[0].ListingID
 		);
 		data[0].BusinessID = listing[0].SellerID;
+		console.log("GetPurchase: "+data);
 		return data;
 	}
 
@@ -799,11 +840,12 @@ module.exports = (dbName = "Database") => {
 		let data = stmt.all(ListingID);
 		console.log(data);
 		data.forEach((review) => {
-			review.ReviewerName = Database.getRecord(
+			let user = Database.getRecord(
 				"User",
 				"UserID",
-				review.ReviewerID
-			)[0].Fname;
+				review.ReviewerID)[0];
+			review.ReviewerName = user.Fname;
+			review.img = user.img;
 			let date = new Date(review.Date);
 			review.Date =
 				date.getDate() +
@@ -896,7 +938,7 @@ module.exports = (dbName = "Database") => {
 			"PurchaseID",
 			PurchaseID
 		);
-		console.log(Purchase);
+		console.log("Purchase="+PurchaseID);
 		const Listing = Database.getRecord(
 			"Listing",
 			"ListingID",
@@ -914,7 +956,7 @@ module.exports = (dbName = "Database") => {
 		const ratingCount = countBusinessReviews(BusinessID);
 		return {
 			ID: BusinessID,
-			Name: business[0].Name,
+			Name: business[0].Bname,
 			IMG: business[0].img,
 			Rating: rating,
 			RatingCount: ratingCount,
@@ -956,7 +998,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	    // console.log(sendWelcomeEmail("omgitsblackbeard@gmail.com"));
+	    //   console.log(sendWelcomeEmail("omgitsblackbeard@gmail.com"));
 
 	function sendVerificationEmail(email) {
 		//TODO
@@ -972,7 +1014,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	//   console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
+	//    console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
 
 	function sendReservedEmail(purchaseID) {
 		//TODO
@@ -1006,11 +1048,12 @@ module.exports = (dbName = "Database") => {
 		let email = user[0].Email;
 		let temp = new Date(purchase[0].Date);
 		let date =
-			temp.getFullYear() +
-			", " +
+			temp.getDate()+
+			" " +
 			monthNames[temp.getMonth()] +
 			" " +
-			temp.getDate();
+			temp.getFullYear();
+			
 		let data = {
 			ID: purchase[0].PurchaseID,
 			Date: date,
@@ -1033,11 +1076,24 @@ module.exports = (dbName = "Database") => {
 			data
 		);
 	}
-	//    console.log(sendReservedEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
+	    //  console.log(sendReservedEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
 
 	function sendReviewEmail(purchaseID) {
 		//TODO
-
+		let monthNames = [
+			"Janurary",
+			"Feburary",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"Novermber",
+			"December",
+		];
 		let purchase = getPurchase(purchaseID);
 		let listing = getListing(purchase[0].ListingID);
 		let business = Database.getRecord(
@@ -1047,15 +1103,16 @@ module.exports = (dbName = "Database") => {
 		);
 		let user = Database.getRecord("User", "UserID", purchase[0].BuyerID);
 		let email = user[0].Email;
-
+		let temp = new Date(purchase[0].Date);
+		let date = temp.getDate() + " " + monthNames[temp.getMonth()] + " " + temp.getFullYear();
 		let data = {
 			Name: listing[0].Name,
 			Seller: business[0].BName,
-			Date: purchase[0].Date,
+			Date: date,
 			img: listing[0].img,
 			url: "http://localhost:5173/review?purchaseID=" + purchaseID,
 		};
-
+		
 		return emailSender.sendEmail(
 			"review.ejs",
 			email,
@@ -1064,7 +1121,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	//   console.log(sendReviewEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
+	//    console.log(sendReviewEmail("e2039d16-835f-482f-882a-7936235fbaee"));
 
 	return {
 		Database,

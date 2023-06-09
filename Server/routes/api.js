@@ -3,6 +3,8 @@
  * @returns Express Router
  */
 const auth = require("../Auth/Auth.js");
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage(), limits: {fileSize: 50 * 1024 * 1024}  });
 
 module.exports = (components) => {
 	const { express, interface } = components;
@@ -17,9 +19,11 @@ module.exports = (components) => {
 		});
 	});
 
-	router.post("/makeUser", (req, res) => {
-		res.json(
-			interface.makeUser(
+	router.post("/makeUser", upload.single('file'), async (req, res) => {
+		
+		
+		try{
+			res.json({success: true, data: await interface.makeUser(
 				req.body.Email,
 				req.body.PhoneNumber,
 				req.body.Fname,
@@ -29,9 +33,14 @@ module.exports = (components) => {
 				req.body.Line1,
 				req.body.Line2,
 				req.body.City,
-				req.body.Postcode
-			)
-		);
+				req.body.Postcode,
+				req.file,
+			)})
+			
+			} catch (error) {
+				console.error(error);
+				return res.json({ success: false, data: "Server error" });
+			}
 	});
 
 	router.post("/loginChecker", (req, res) => {
@@ -52,7 +61,7 @@ module.exports = (components) => {
 		}
 	});
 
-	router.post("/makeBusiness", (req, res) => {
+	router.post("/makeBusiness", upload.single("file"), async (req, res) => {
 		const {
 			Bname,
 			Email,
@@ -63,9 +72,8 @@ module.exports = (components) => {
 			Postcode,
 			UserID,
 		} = req.body;
-		console.log(req.body);
-		res.json(
-			interface.makeBusiness(
+		
+		let data = await interface.makeBusiness(
 				Bname,
 				Email,
 				PhoneNumber,
@@ -73,9 +81,12 @@ module.exports = (components) => {
 				Line2,
 				City,
 				Postcode,
-				UserID
+				UserID,
+				req.file
 			)
-		);
+		console.log(data);
+		res.json(data);
+
 	});
 
 	router.post("/getBusinessDetails", (req, res) => {
@@ -132,14 +143,14 @@ module.exports = (components) => {
 		res.json({ success: true });
 	});
 
-	router.post("/createListing", (req, res) => {
+	router.post("/createListing", upload.single("file"), async (req, res) => {
 		console.log(req.body);
 		res.json(
-			interface.createListing(
+			await interface.createListing(
 				req.body.Name,
 				req.body.Desc,
 				req.body.Price,
-				req.body.img,
+				req.file,
 				req.body.Quantity,
 				req.body.Category,
 				req.body.SellerID,
@@ -183,7 +194,7 @@ module.exports = (components) => {
 
 	router.post("/getBoughtItems", (req, res) => {
 		console.log(req.body);
-		res.json(interface.getBoughtItems(req.body.UserID));
+		res.json({success: true, data: interface.getBoughtItems(req.body.UserID)});
 	});
 
 	return router;

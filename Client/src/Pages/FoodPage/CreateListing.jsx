@@ -15,6 +15,7 @@ function CreateListing({ }) {
         EndDate: "",
     });
     const [categories, setCategories] = useState([]);
+    const [file, setFile] = useState(null);
 
     const fetchCategories = () => {
         axios
@@ -34,13 +35,19 @@ function CreateListing({ }) {
 
     //Handles submission of a new account - will need a
     // createUser method for this!
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(form);
+        const formData = new FormData();
+        Object.keys(form).forEach(key => {
+            formData.append(key, form[key]);
+        });
+        formData.append("file", file, {
+            type: file.type
+        });
         axios
-            .post("/api/createListing", form, {
+            .post("/api/createListing", formData, {
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "multipart/form-data",
                 },
             })
             .then((response) => response.data)
@@ -59,10 +66,18 @@ function CreateListing({ }) {
     //Handles updates to all of the data in the form
     const handleChange = (event) => {
         console.log("HERE")
-        setForm({
-            ...form,
-            [event.target.name]: event.target.value,
-        });
+        if (event.target.name === "EndDate") {
+            let date = new Date(event.target.value);
+            setForm({
+                ...form,
+                [event.target.name]: date,
+            });
+        } else {
+            setForm({
+                ...form,
+                [event.target.name]: event.target.value,
+            });
+        }
     };
 
     const handleCategoryChange = (event) => {
@@ -163,6 +178,15 @@ function CreateListing({ }) {
                 value={form.EndDate}
                 onChange={handleChange}
             />
+
+            <div>
+                <label htmlFor="image">Profile Image:</label>
+                <input
+                    type="file"
+                    id="image"
+                    onChange={(e) => setFile(e.target.files[0])}
+                />
+            </div>
 
             <br />
             <br />

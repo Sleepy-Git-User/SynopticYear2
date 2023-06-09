@@ -131,6 +131,7 @@ export default function FoodPageUserView() {
           {/*Each one should have a form to specify quantity and a button to submit, on which a function call is done to reserve the item*/}
           {listings.map((listing) => (
             <form key={listing.ListingID}>
+              <img src={listing.img} alt="Listing Image" width="75" height="75" />
               <div>{listing.Name}</div>
               <div>{listing.Description}</div>
               <div>Price: £{listing.Price}</div>

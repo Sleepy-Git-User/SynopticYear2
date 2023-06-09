@@ -18,25 +18,44 @@ function CreateUser({ saveId }) {
         Postcode: ""
     });
 
-    const [error, setError] = useState("");
+    const [file, setFile] = useState(null);
 
+    const [error, setError] = useState("");
 
     //Handles submission of a new account - will need a
     // makeUser method for this!
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(form);
-        axios.post("/api/makeUser", form).then((res) => {
-            var info = res.data;
-            if (info.success) {
-                setError("");
-                saveId(info.data);
-                console.log("Success!");
-
-            } else {
-                setError(info.data);
-            }
+        const formData = new FormData();
+        Object.keys(form).forEach(key => {
+            formData.append(key, form[key]);
         });
+        formData.append("file", file, {
+            type: file.type
+        });
+
+
+        console.log(formData);
+
+        const response = await axios.post("/api/makeUser", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        })
+            .then((response) => response.data)
+            .then((data) => {
+                if (data) {
+                    alert("Account Created!");
+                    saveId(data);
+                } else {
+                    alert("Invalid account creation details.");
+                }
+            }
+            )
+            .catch((error) => {
+                console.error("Error:", error);
+            }
+            );
     };
 
 
@@ -179,6 +198,14 @@ function CreateUser({ saveId }) {
                 onChange={handleChange}
                 required
             />
+            <div>
+                <label htmlFor="image">Profile Image:</label>
+                <input
+                    type="file"
+                    id="image"
+                    onChange={(e) => setFile(e.target.files[0])}
+                />
+            </div>
 
 
 
