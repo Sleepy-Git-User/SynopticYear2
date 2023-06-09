@@ -48,13 +48,13 @@ export default function AccountPage() {
     }, [])
 
     return (
-        <div >
+        <div className="businessDetails">
         <h3>Business Details</h3>   
-        <p>{businessName}</p>
-        <p>{businessEmail}</p>
-        <p>{businessPhoneNumber}</p>
-
-
+        <div className="businessInfo"> 
+        Name: {businessName}<br />
+        Email: {businessEmail}<br />
+        Phone: {businessPhoneNumber}<br />
+        </div>
         </div>
     );
 }

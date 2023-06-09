@@ -3,3 +3,26 @@
     padding:50px;
     text-align: center;
   }
+
+  .userViewBtn{
+    background-color: #89A997;
+    margin-right: 30px;
+  }
+
+  .BusinessViewBtn{
+    background-color: #BA9FBD;
+    margin-left: 30px;
+  }
+
+  .group-buttons{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0 auto;
+}
+
+.userViewGrid{
+  display: grid;
+  grid: 800px / auto auto;
+}
+
+.filtersBox, .filtersBox 
