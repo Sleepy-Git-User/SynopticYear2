@@ -68,8 +68,11 @@ function CreateBusiness({ }) {
 
 
     //Returns the create business form
-    return (
-        <form onSubmit={handleSubmit}>
+    return ( 
+        <div> 
+        <div id="pageContainer"> 
+        <div class="businessBox">
+        <form className="createBusinessForm" onSubmit={handleSubmit}>
             <h2>Create Business</h2>
 
             <label htmlFor="bname">Business Name:</label>
@@ -171,10 +174,13 @@ function CreateBusiness({ }) {
 
             <p>{error}</p>
 
-            <button type="submit">
+            <button className="createBusinessBtn" type="submit">
                 Create Business
             </button>
         </form>
+        </div>
+        </div>
+        </div>
     );
 }
 

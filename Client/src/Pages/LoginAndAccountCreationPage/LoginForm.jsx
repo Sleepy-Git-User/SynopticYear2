@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { setUserId, getUserId } from "../../auth";
 import axios from "axios";
+import "./Login.css"; 
 
 export default function LoginForm({ saveId }) {
     const [form, setForm] = useState({
@@ -44,8 +45,10 @@ export default function LoginForm({ saveId }) {
 
     return (
         <div>
-
-            <form className="login-form" onSubmit={handleSubmit}>
+            <div id="pageContainer"> 
+            <div class="gridContainerLogin">  
+            <div class="loginBox">
+            <form class="login-form" onSubmit={handleSubmit}>
                 <h1>Log In</h1>
                 <label htmlFor="email">Email:</label>
                 <input
@@ -68,12 +71,19 @@ export default function LoginForm({ saveId }) {
                 />
 
                 <br />
-                <p>{error}</p>
-                <button className="login-btn" type="submit">
+                <p className="error">{error}</p>
+                <button class="login-btn" type="submit">
                     Log In
-                </button>
+                </button> 
 
-            </form>
+            
+                {/* <a className="forgotten"> Forgot password?</a> */}
+                <p className="forgotten"> Forgot password? </p>
+
+            </form>   
+            </div>
+            </div>
+            </div>
         </div>
     );
 }

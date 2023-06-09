@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from 'axios';
+import "./createAccount.css";
 
-
-function CreateUser({ saveId }) {
-
+function CreateUser({saveId}) {
+    
     //Form data for creating a user (including address)
     const [form, setForm] = useState({
         Email: "",
@@ -18,45 +18,34 @@ function CreateUser({ saveId }) {
         Postcode: ""
     });
 
-    const [file, setFile] = useState(null);
-
     const [error, setError] = useState("");
+
 
     //Handles submission of a new account - will need a
     // makeUser method for this!
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        const formData = new FormData();
-        Object.keys(form).forEach(key => {
-            formData.append(key, form[key]);
-        });
-        formData.append("file", file, {
-            type: file.type
-        });
-
-
-        console.log(formData);
-
-        const response = await axios.post("/api/makeUser", formData, {
+        console.log(form);
+        axios
+          .post("/api/makeUser", form, {
             headers: {
-                "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => response.data)
+          .then((info) => {
+            if (info.success) {
+              setError("");
+              saveId(info.data);
+              console.log("Success!");
+            } else {
+              setError(info.data);
             }
-        })
-            .then((response) => response.data)
-            .then((data) => {
-                if (data) {
-                    alert("Account Created!");
-                    saveId(data);
-                } else {
-                    alert("Invalid account creation details.");
-                }
-            }
-            )
-            .catch((error) => {
-                console.error("Error:", error);
-            }
-            );
-    };
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
 
 
 
@@ -72,31 +61,36 @@ function CreateUser({ saveId }) {
 
     //Returns the create user form
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Create Account</h1>
-            <br />
+        <div>
+            <div id="pageContainer"> 
+            <div class="gridContainerAccount">  
+            <div class="AccountBox">
+        <form className="account-form" onSubmit={handleSubmit}>   
+
+                <h1>Create Account</h1>
+                <br />
 
             <label htmlFor="email">Email:</label>
-            <input
-                type="text"
-                id="email"
-                name="Email"
-                value={form.Email}
-                onChange={handleChange}
-                required
-            />
+                <input
+                    type="text"
+                    id="email"
+                    name="Email"
+                    value={form.Email}
+                    onChange={handleChange}
+                    required
+                />
 
             <br />
 
             <label htmlFor="phone">Phone Number:</label>
-            <input
-                type="text"
-                id="phone"
-                name="PhoneNumber"
-                value={form.PhoneNumber}
-                onChange={handleChange}
-                required
-            />
+                <input
+                    type="text"
+                    id="phone"
+                    name="PhoneNumber"
+                    value={form.PhoneNumber}
+                    onChange={handleChange}
+                    required
+                />
 
             <br />
 
@@ -198,14 +192,6 @@ function CreateUser({ saveId }) {
                 onChange={handleChange}
                 required
             />
-            <div>
-                <label htmlFor="image">Profile Image:</label>
-                <input
-                    type="file"
-                    id="image"
-                    onChange={(e) => setFile(e.target.files[0])}
-                />
-            </div>
 
 
 
@@ -215,10 +201,14 @@ function CreateUser({ saveId }) {
 
             <p>{error}</p>
 
-            <button type="submit">
+            <button className="create-btn"type="submit">
                 Create Account
             </button>
-        </form>
+        </form> 
+        </div>
+        </div>
+        </div>
+        </div>
     );
 }
 

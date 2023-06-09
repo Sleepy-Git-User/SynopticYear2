@@ -11,6 +11,7 @@ import { setUserId, getUserId } from "./auth";
 import Login from "./Pages/LoginAndAccountCreationPage/Login.jsx";
 import Navbar from "./Navbar.jsx";
 import Home from "./Pages/HomePage/Home.jsx";
+import Footer from "./Footer.jsx";
 
 import AdvicePage from "./Pages/AdvicePage/AdvicePage.jsx";
 import AccountPage from "./Pages/AccountPage/AccountPage.jsx";
@@ -37,6 +38,7 @@ function Main() {
     if (storedId !== null) {
       saveId(storedId);
     }
+    document.title = "Grab It & Govan";
   }, []);
 
   if (userIdUpdate !== null) {
@@ -67,6 +69,7 @@ function Main() {
         </Routes>
 
         {/* Add Footer component here */}
+      <Footer />
       </BrowserRouter>
     );
   } else {
