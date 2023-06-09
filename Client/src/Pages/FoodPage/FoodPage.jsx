@@ -19,6 +19,7 @@ export default function FoodPage() {
       </div>
       </div>
       {tab}
+      <button className="reportBtn">Report</button>
     </div>
   );
 }

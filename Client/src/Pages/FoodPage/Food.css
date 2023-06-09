@@ -5,13 +5,21 @@
   }
 
   .userViewBtn{
-    background-color: #89A997;
+    background-color: #BA9FBD;
     margin-right: 30px;
   }
 
   .BusinessViewBtn{
-    background-color: #BA9FBD;
+    background-color: #D99C9C;
     margin-left: 30px;
+  }
+
+  .userViewBtn:hover{
+    border: 1px solid #f9defc;
+  }
+
+  .BusinessViewBtn:hover{
+    border: 1px solid #e1a1a1;
   }
 
   .group-buttons{
@@ -25,4 +33,93 @@
   grid: 800px / auto auto;
 }
 
-.filtersBox, .filtersBox 
+.filtersBox, .listingsBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 25px;
+}
+.filtersBox{
+  grid-column: 1;
+  border: 5px solid #D99C9C;
+}
+
+.listingsBox{
+  grid-column: 2;
+  border: 5px solid #BA9FBD;
+}
+
+.reportBtn{
+  background-color: #C45A5A;
+  color: #EDE0E2;
+  border: 2px solid #8d2c2c; 
+  font-size: 28px;
+  margin-top: 30px;
+}
+
+.reportBtn:hover{
+  border: 2px solid #f76c6c; 
+}
+
+.businessViewGrid{
+  display: grid;
+  grid: 500px / auto auto;
+}
+
+.addListingsBox, .yourListingsBox, .businessFiltersBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 25px;
+}
+
+.addListingsBox{
+  grid-column: 1;
+  border: 5px solid #D99C9C; 
+}
+
+.yourListingsBox{
+  grid-column: 2;
+  grid-row: span 2;
+  border: 5px solid #BA9FBD;
+}
+
+.businessFiltersBox{
+  grid-column: 1;
+  border: 5px solid #F9A246; 
+}
+
+.listingBoxForm{
+  display: inline-block;
+}
+
+.listingBoxForm input {
+  font-size: 20px;
+  width: 300px; 
+  background-color: #F1EBEC;
+  border-radius: 8px;
+  border: 3px solid #D99C9C;
+  margin-top: 25px;
+  margin-left: 36px;
+  text-align: left;
+}
+.listingBoxForm label {
+  display: inline-block;
+  width: 200px;
+  font-size: 20px;
+  text-align: left;
+  margin-right: 30px; 
+}
+.createListingBtn{
+  background-color: #D99C9C;
+}
+
+.createListingBtn:hover{
+  border: 2px solid #f0acac;
+}
+
+

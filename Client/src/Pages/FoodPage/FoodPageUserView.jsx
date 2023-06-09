@@ -86,8 +86,6 @@ export default function FoodPageUserView() {
                             max={listing.Quantity}
                         />
                         <button onClick={() => reserveItem({ListingID: listing.ListingID, BuyerID: sessionStorage.getItem("userId"), Quantity: QuantityValue.toString() })}>Reserve</button>
-
-
                         </form>
                     ))}
                 </div>
