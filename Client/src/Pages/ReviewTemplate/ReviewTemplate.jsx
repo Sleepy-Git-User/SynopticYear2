@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import axios from "axios";
 import "./ReviewTemplate.css";
-import BusinessPannel from "../../wigits/businessPannel";
-import ItemPannel from "../../wigits/itemPannel";
+import BusinessPannel from "../../wigits/businessPannel/businessPannel";
+import ItemPannel from "../../wigits/itemPannel/itemPannel";
 import emptystr from "/emptystr.svg";
 import fullstr from "/fullstr.svg";
 //I want this to be the page that leads from a email link
@@ -47,6 +47,7 @@ export default function ReviewTemplate() {
 
 	const getPurchase = async (ID) => {
 		await axios.get("/api/getPurchase/" + ID).then((res) => {
+			console.log("DATA: " + res.data);
 			setPurchase(res.data.data[0]);
 		});
 		setForm({
@@ -117,7 +118,7 @@ export default function ReviewTemplate() {
 
 						<BusinessPannel purchaseID={purchase.PurchaseID} />
 						<ItemPannel purchaseID={purchase.PurchaseID} />
-						<div className="review">
+						<div className="reviewTemplate">
 							<h1 id="formTitle">Write a Review:</h1>
 							<div id="rating">
 								<label htmlFor="rating">Rating:</label>
@@ -164,6 +165,6 @@ export default function ReviewTemplate() {
 				)}
 			</h2>
 		</div>
-	); 
+	);
 }
 

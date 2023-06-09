@@ -1,0 +1,11 @@
+GET http://localhost:3000/api/getAllUserDetails
+
+###
+
+POST http://localhost:3000/api/loginChecker
+Content-Type: application/json
+
+{
+    "Email":"asdasdas",
+    "Password":"asd"
+}

@@ -2,11 +2,12 @@
  * Router Setup for API Requests
  * @returns Express Router
  */
-
-const interface = require("../DataBase/interface.js")();
+const auth = require("../Auth/Auth.js");
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage(), limits: {fileSize: 50 * 1024 * 1024}  });
 
 module.exports = (components) => {
-	const { database, express } = components;
+	const { express, interface } = components;
 	const router = express.Router();
 
 	router.get("/getAllUserDetails", (req, res) => {
@@ -18,9 +19,11 @@ module.exports = (components) => {
 		});
 	});
 
-	router.post("/makeUser", (req, res) => {
-		res.json(
-			interface.makeUser(
+	router.post("/makeUser", upload.single('file'), async (req, res) => {
+		
+		
+		try{
+			res.json({success: true, data: await interface.makeUser(
 				req.body.Email,
 				req.body.PhoneNumber,
 				req.body.Fname,
@@ -30,9 +33,14 @@ module.exports = (components) => {
 				req.body.Line1,
 				req.body.Line2,
 				req.body.City,
-				req.body.Postcode
-			)
-		);
+				req.body.Postcode,
+				req.file,
+			)})
+			
+			} catch (error) {
+				console.error(error);
+				return res.json({ success: false, data: "Server error" });
+			}
 	});
 
 	router.post("/loginChecker", (req, res) => {
@@ -53,13 +61,33 @@ module.exports = (components) => {
 		}
 	});
 
+	router.post("/makeBusiness", upload.single("file"), async (req, res) => {
+		const {
+			Bname,
+			Email,
+			PhoneNumber,
+			Line1,
+			Line2,
+			City,
+			Postcode,
+			UserID,
+		} = req.body;
+		
+		let data = await interface.makeBusiness(
+				Bname,
+				Email,
+				PhoneNumber,
+				Line1,
+				Line2,
+				City,
+				Postcode,
+				UserID,
+				req.file
+			)
+		console.log(data);
+		res.json(data);
 
-	router.post("/makeBusiness", (req, res) => {
-		const { Bname, Email, PhoneNumber, Line1, Line2, City, Postcode, UserID } = req.body;
-		console.log(req.body);
-		res.json(interface.makeBusiness(Bname, Email, PhoneNumber, Line1, Line2, City, Postcode, UserID));
 	});
-
 
 	router.post("/getBusinessDetails", (req, res) => {
 		const { BusinessID } = req.body;
@@ -88,6 +116,21 @@ module.exports = (components) => {
 		});
 	});
 
+	router.post("/getBusinessReviews", (req, res) => {
+		console.log(req.body);
+		res.json({
+			success: true,
+			data: interface.getBusinessReviews(req.body.BusinessID),
+		});
+	});
+	router.post("/getItemReviews", (req, res) => {
+		console.log(req.body);
+		res.json({
+			success: true,
+			data: interface.getItemReviews(req.body.ListingID),
+		});
+	});
+
 	router.post("/submitReview", (req, res) => {
 		interface.createReview(
 			req.body.BuyerID,
@@ -100,63 +143,61 @@ module.exports = (components) => {
 		res.json({ success: true });
 	});
 
-
-	router.post("/createListing", (req, res) => {
+	router.post("/createListing", upload.single("file"), async (req, res) => {
 		console.log(req.body);
-		res.json(interface.createListing(
-			req.body.Name,
-			req.body.Desc,
-			req.body.Price,
-			req.body.img,
-			req.body.Quantity,
-			req.body.Category,
-			req.body.SellerID,
-			req.body.ListingDate,
-			req.body.EndDate)
-
-		)
+		try{
+			res.json(await interface.createListing(
+				req.body.Name,
+				req.body.Desc,
+				req.body.Price,
+				req.file,
+				req.body.Quantity,
+				req.body.Category,
+				req.body.SellerID,
+				req.body.ListingDate,
+				req.body.EndDate
+			)
+	);} catch (error) {
+			console.error(error);
+			return res.json({ success: false, data: "Server error" });
+		}
 	});
-
 
 	router.post("/getListings", (req, res) => {
 		console.log(req.body);
-		console.log(interface.getListings());
-		res.json(interface.getListings());
 
+		res.json(interface.getListings(req.body));
 	});
-
 
 	router.post("/reserveItem", (req, res) => {
 		console.log(req.body);
-		res.json(interface.reserveItem(req.body.ListingID, req.body.BuyerID, req.body.Quantity));
-
+		res.json(
+			interface.reserveItem(
+				req.body.ListingID,
+				req.body.BuyerID,
+				req.body.Quantity
+			)
+		);
 	});
-
 
 	router.post("/getUserDetails", (req, res) => {
 		console.log(req.body);
 		res.json(interface.getUserDetails(req.body.UserID));
-
 	});
-
 
 	router.get("/categories", (req, res) => {
 		console.log(req.body);
 		res.json(interface.getCategories());
-
 	});
-
 
 	router.post("/getBusinessListings", (req, res) => {
 		console.log(req.body);
 		res.json(interface.getBusinessListings(req.body.BusinessID));
-
 	});
 
 	router.post("/getBoughtItems", (req, res) => {
 		console.log(req.body);
-		res.json(interface.getBoughtItems(req.body.UserID));
-
+		res.json({success: true, data: interface.getBoughtItems(req.body.UserID)});
 	});
 
 	return router;
