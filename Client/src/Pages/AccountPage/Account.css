@@ -4,3 +4,103 @@
     text-align: center;
   }
 
+.gridContainerAccountPage{
+  display: grid;
+  grid: 350px / auto; 
+}
+
+.userInfo, .business, .purchaseHistory, .reviews {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    grid-column: 1;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 25px;
+}
+.userInfo{
+  grid-column: 1;
+  border: 5px solid  #BA9FBD;
+}
+
+.business{
+  grid-column: 1;
+  border: 5px solid #D99C9C;
+}
+
+.purchaseHistory{
+  grid-column: 1;
+  border: 5px solid #89a997;
+  font-size: 26px;
+}
+
+.reviews{
+  grid-column: 1;
+  border: 5px solid #F9A246;
+  font-size: 26px;
+}
+
+/*this styles h2  */
+.userInfo{
+  font-size: 28px;
+  align-items: center; 
+  padding-top: 30px;
+} 
+.userInfo h2{
+padding-bottom: 30px;
+}
+
+.info{
+  padding-bottom: 60px;
+  text-align: left;
+  font-size: 28px;
+  padding-left: 100px;
+}
+
+
+.businessBox {
+  margin: 10px;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  margin-top: 50px;
+}
+
+.createBusinessForm{
+  display: inline-block;
+}
+
+.createBusinessForm h2{
+  font-size: 40px;
+  margin-bottom: 20px; 
+}
+
+.createBusinessForm input {
+  font-size: 20px;
+  width: 300px; 
+  background-color: #F1EBEC;
+  border-radius: 8px;
+  border: 3px solid #D99C9C;
+  margin-top: 25px;
+  margin-left: 36px;
+  text-align: left;
+}
+.createBusinessForm label {
+  display: inline-block;
+  width: 200px;
+  font-size: 20px;
+  text-align: left;
+  margin-right: 30px; 
+}
+
+.createBusinessBtn{ 
+  background-color: #C45A5A;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-top: 50px;
+}
+
+.createBusinessBtn:hover{
+  border-color: #eb9494; 
+}
