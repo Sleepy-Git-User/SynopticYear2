@@ -191,5 +191,6 @@ export default function FoodPageUserView() {
 
 
     </div>
+    </div>
   );
 }
