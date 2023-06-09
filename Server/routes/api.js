@@ -145,8 +145,8 @@ module.exports = (components) => {
 
 	router.post("/createListing", upload.single("file"), async (req, res) => {
 		console.log(req.body);
-		res.json(
-			await interface.createListing(
+		try{
+			res.json(await interface.createListing(
 				req.body.Name,
 				req.body.Desc,
 				req.body.Price,
@@ -157,7 +157,10 @@ module.exports = (components) => {
 				req.body.ListingDate,
 				req.body.EndDate
 			)
-		);
+	);} catch (error) {
+			console.error(error);
+			return res.json({ success: false, data: "Server error" });
+		}
 	});
 
 	router.post("/getListings", (req, res) => {

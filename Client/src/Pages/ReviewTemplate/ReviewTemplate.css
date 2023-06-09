@@ -33,7 +33,8 @@
 	position: relative;
 }
 
-.review {
+
+.reviewTemplate {
 	display: flex;
 	flex-direction: column;
 	min-width: 0;
@@ -96,6 +97,7 @@
 .strBtn {
 	transform: none;
 	border: none;
+	background-color: transparent;
 }
 
 button:focus,

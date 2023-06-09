@@ -65,20 +65,12 @@ function CreateListing({ }) {
 
     //Handles updates to all of the data in the form
     const handleChange = (event) => {
-        console.log("HERE")
-        if (event.target.name === "EndDate") {
-            let date = new Date(event.target.value);
-            setForm({
-                ...form,
-                [event.target.name]: date,
-            });
-        } else {
-            setForm({
-                ...form,
-                [event.target.name]: event.target.value,
-            });
-        }
+        setForm({
+            ...form,
+            [event.target.name]: event.target.value,
+        });
     };
+
 
     const handleCategoryChange = (event) => {
         console.log("HERE")

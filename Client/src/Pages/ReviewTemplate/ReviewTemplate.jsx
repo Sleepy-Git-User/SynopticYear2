@@ -118,7 +118,7 @@ export default function ReviewTemplate() {
 
 						<BusinessPannel purchaseID={purchase.PurchaseID} />
 						<ItemPannel purchaseID={purchase.PurchaseID} />
-						<div className="review">
+						<div className="reviewTemplate">
 							<h1 id="formTitle">Write a Review:</h1>
 							<div id="rating">
 								<label htmlFor="rating">Rating:</label>

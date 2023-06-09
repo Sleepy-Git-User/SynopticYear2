@@ -399,7 +399,10 @@ module.exports = (dbName = "Database") => {
 			console.error(error);
 			throw error;
 		}
+		Category = Category.split(",");
 		for (let i = 0; i < Category.length; i++) {
+
+		
 			let category = Database.getRecord("Category", "Name", Category[i]);
 			let category_id = category[0].CategoryID;
 			const insert_category_sql = Database.database.prepare(`
