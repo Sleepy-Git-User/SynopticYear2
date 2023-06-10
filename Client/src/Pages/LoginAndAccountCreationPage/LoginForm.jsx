@@ -19,6 +19,7 @@ export default function LoginForm({ saveId }) {
                 if (response.data.success) {
                     setError("");
                     saveId(response.data.data[0].UserID);
+                    sessionStorage.setItem("businessId", response.data.data2[0]);
                 } else {
                     setError(response.data.data);
                 }
