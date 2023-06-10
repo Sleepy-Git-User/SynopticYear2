@@ -16,7 +16,7 @@ export default function AccountPage() {
 
     const [businessState, setBusinessState] = useState(<CreateBusiness />);
     const [userDetails, setUserDetails] = useState();
-    const [boughtItems, setBoughtItems] = useState();
+    const [boughtItems, setBoughtItems] = useState([]);
 
     const getUserDetails = () => {
         axios
@@ -63,15 +63,9 @@ export default function AccountPage() {
           .then((info) => {
             if (info)
              {
-                console.log("AGR");
+                console.log("AHHHHHHHHHHHHHHH");
                 console.log(info);
-              /*setBoughtItems(
-                <div>
-                  Name: {info.data[0].Fname} {info.data[0].Lname} <br />
-                  Email: {info.data[0].Email}<br />
-                  Phone: {info.data[0].PhoneNumber}
-                </div>
-              );*/
+              setBoughtItems(info.data)
             } else {
               setBoughtItems("Error getting purchases.");
             }
@@ -128,7 +122,19 @@ export default function AccountPage() {
                 <h2>Purchase History</h2>
                 {/*Get purchase history details and map in here*/}
 
-                {boughtItems}
+                {boughtItems.map((boughtItem) => (
+                  <div>
+                    <br />
+                    <img src={boughtItem.Listing.img} alt="Listing Image" width="75" height="75" />
+                    <p>Name: {boughtItem.Listing.Name}</p>
+                    <p>Description: {boughtItem.Listing.Desc}</p>
+                    <p>Price: £{boughtItem.Listing.Price}</p>
+                    <p>Quantity: {boughtItem.Purchase.Quantity}</p>
+                    <p>Code: {boughtItem.Purchase.Code}</p>
+                    <br />
+                  </div>
+
+               ))}
             </div>
 
 
