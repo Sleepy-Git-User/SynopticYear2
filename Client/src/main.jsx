@@ -17,7 +17,7 @@ import AdvicePage from "./Pages/AdvicePage/AdvicePage.jsx";
 import AccountPage from "./Pages/AccountPage/AccountPage.jsx";
 import FoodPage from "./Pages/FoodPage/FoodPage.jsx";
 import ReviewTemplate from './Pages/ReviewTemplate/ReviewTemplate.jsx';
-import ItemReviews from './wigits/itemReview/itemReview.jsx';
+import VerifyEmail from './Pages/VerifyEmail/verifyEmail.jsx';
 
 
 
@@ -30,8 +30,9 @@ function Main() {
 
   const saveId = (id) => {
     setUserIdUpdate(id);
+    console.log("id: " + id)
     sessionStorage.setItem('userId', id);
-    console.log(id);
+    console.log("sessionStorage: " + sessionStorage.getItem('userId'))
   };
 
   useEffect(() => {
@@ -52,7 +53,7 @@ function Main() {
           <Route path="/Account" element={<AccountPage />} />
           <Route path="/Food" element={<FoodPage />} />
           <Route path="/Review" element={<ReviewTemplate />} />
-          <Route path="/itemReview" element={<ItemReviews />} />
+          <Route path="/verify" element={<VerifyEmail />} />
 
 
 
@@ -69,7 +70,7 @@ function Main() {
         </Routes>
 
         {/* Add Footer component here */}
-      <Footer />
+        <Footer />
       </BrowserRouter>
     );
   } else {

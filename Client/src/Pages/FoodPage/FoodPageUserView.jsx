@@ -37,6 +37,8 @@ export default function FoodPageUserView() {
 
 
   const reserveItem = (passedIn) => {
+    e.preventDefault();
+    console.log("HERE");
     axios
       .post("/api/reserveItem", passedIn, {
         headers: {

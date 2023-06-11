@@ -200,5 +200,14 @@ module.exports = (components) => {
 		res.json({success: true, data: interface.getBoughtItems(req.body.UserID)});
 	});
 
+	router.post("/verifyEmail", (req, res) => {
+		cancelAnimationFrame
+		res.json(interface.verifyEmail(req.body.UserID));
+	});
+
+	router.post("/getProfilePic", (req, res) => {
+		res.json(interface.getProfilePic(req.body.UserID));
+	});
+
 	return router;
 };
