@@ -68,7 +68,8 @@ module.exports = (dbName = "Database") => {
 				hashedPassword[0].Password
 			) {
 				//Hashes the inputted password and comparess it to the stored password.
-				return { success: true, data: getUserID };
+				console.log(getUserID);
+				return { success: true, data: getUserID, data2: getUserBusinessIDs(getUserID[0].UserID) };
 			} else {
 				return { success: false, data: "Email or Password incorrect" };
 			}
