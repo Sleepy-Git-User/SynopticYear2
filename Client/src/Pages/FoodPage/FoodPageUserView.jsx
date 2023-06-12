@@ -10,7 +10,7 @@ export default function FoodPageUserView() {
 
   const [filter, setFilter] = useState({
     Vegan: false,
-    Vegiterian: false,
+    Vegetarian: false,
     Halal: false,
     Kosher: false,
   });
@@ -114,7 +114,20 @@ export default function FoodPageUserView() {
                 
                 <div className='filtersBox'>
                     <h3>Filters</h3>
-                    {/*Need George to help with filters really? */}
+                
+                    {categories.map((category) => (
+            <div key={category.CategoryID}>
+              <input
+                type="checkbox"
+                id={category.CategoryID}
+                name="Category"
+                value={category.Name}
+                checked={category[category.Name]}
+                onChange={handleCategoryChange}
+              />
+              <label htmlFor={category.CategoryID}>{category.Name}</label>
+            </div>
+          ))}
                 </div>
                 <div className='listingsBox'>
                     <h3>Listings</h3>
@@ -143,23 +156,9 @@ export default function FoodPageUserView() {
                 </div>
 
 
-          {categories.map((category) => (
-            <div key={category.CategoryID}>
-              <input
-                type="checkbox"
-                id={category.CategoryID}
-                name="Category"
-                value={category.Name}
-                checked={category[category.Name]}
-                onChange={handleCategoryChange}
-              />
-              <label htmlFor={category.CategoryID}>{category.Name}</label>
-            </div>
-          ))}
-
         </div>
         <div>
-          <h3>Listings</h3>
+
           {/*Call a function to get all listings on a useEffect, and call it again when a filter is changed.*/}
           {/*Each one should have a form to specify quantity and a button to submit, on which a function call is done to reserve the item*/}
           {listings.map((listing) => (
