@@ -34,6 +34,8 @@ export default function AccountPage() {
                 <div className="userInfo"> 
                 <h2>User Details</h2>
                 <div className="info">
+                <img src={info.data[0].img} alt="Profile Image" width="75" height="75" />
+                  <br />
                   Name: {info.data[0].Fname} {info.data[0].Lname} <br />
                   Email: {info.data[0].Email}<br />
                   Phone: {info.data[0].PhoneNumber}
@@ -81,7 +83,7 @@ export default function AccountPage() {
         console.log("BUSINESSID");
         console.log(businessID);
 
-        if (businessID === 'null'){
+        if (businessID === 'null' || businessID === null){
             setBusinessState(<CreateBusiness />);
         } else {
             setBusinessState(<BusinessDetails />)
