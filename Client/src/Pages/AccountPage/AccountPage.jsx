@@ -16,6 +16,7 @@ export default function AccountPage() {
 
     const [businessState, setBusinessState] = useState(<CreateBusiness />);
     const [userDetails, setUserDetails] = useState();
+    const [name, setName] = useState("User");
     const [boughtItems, setBoughtItems] = useState([]);
 
     const getUserDetails = () => {
@@ -30,6 +31,7 @@ export default function AccountPage() {
           .then((response) => response.data)
           .then((info) => {
             if (info.success) {
+              setName(info.data[0].Fname);
               setUserDetails(
                 <div className="userInfo"> 
                 <h2>User Details</h2>
@@ -100,7 +102,7 @@ export default function AccountPage() {
         <div id="pageContainer">
 
             <div class="bannerAccount">
-                <h1>Hello, User</h1>
+                <h1>Hello, {name}</h1>
                 
             </div> 
             <div className="gridContainerAccountPage">
