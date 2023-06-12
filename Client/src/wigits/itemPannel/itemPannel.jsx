@@ -66,7 +66,7 @@ export default function ItemPannel(PurchaseID) {
                             <div id="itemLogo">
                                 <img
                                     alt="Item Image"
-                                    src="https://synopticproject.blob.core.windows.net/images/account.png"
+                                    src={listing.img}
                                     width="100"
                                     height="100"
                                 />
