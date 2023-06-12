@@ -6,7 +6,7 @@
 
 .gridContainerAccountPage{
   display: grid;
-  grid: 350px / auto; 
+  grid: 900px / auto; 
 }
 
 .userInfo, .business, .purchaseHistory, .reviews {
@@ -92,13 +92,14 @@ padding-bottom: 30px;
 
 .createBusinessForm input {
   font-size: 20px;
-  width: 300px; 
+  width: 400px; 
   background-color: #F1EBEC;
   border-radius: 8px;
   border: 3px solid #D99C9C;
   margin-top: 25px;
   margin-left: 36px;
   text-align: left;
+  height: 40px;
 }
 .createBusinessForm label {
   display: inline-block;
@@ -112,9 +113,9 @@ padding-bottom: 30px;
   background-color: #C45A5A;
   font-size: 20px;
   margin-bottom: 10px;
-  margin-top: 50px;
 }
 
 .createBusinessBtn:hover{
   border-color: #eb9494; 
-}
+} 
+
