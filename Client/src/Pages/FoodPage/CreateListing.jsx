@@ -97,7 +97,11 @@ function CreateListing({ }) {
 
     //Returns the create listing form
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
+        <div className="addListingsBox"> 
+        <h3>Add Listing</h3> 
+        <form className="listingBoxForm"onSubmit={handleSubmit}>
+
             <label htmlFor="name">Name:</label>
             <input
                 type="text"
@@ -184,8 +188,12 @@ function CreateListing({ }) {
             <br />
             <br />
 
-            <button type="submit">Create Listing</button>
-        </form>
+            <button className="createListingBtn" type="submit">
+                Create Listing
+            </button>
+        </form> 
+        </div>
+        </div>
     );
 }
 
