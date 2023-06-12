@@ -3,3 +3,33 @@
     padding:50px;
     text-align: center;
   }
+
+  .content h3 {
+    text-align: left;
+    padding-top: 20px;
+  }
+
+.people { 
+  margin-right: 10px;
+  margin-top: -400px;
+  height: 330px;
+  width: 367px;
+}
+
+.people2 {
+  margin-right: 10px;
+  margin-top: 200px;
+  margin-bottom: -1000px;
+  height: 330px;
+  width: 386px;
+}
+
+.homeInfo .image-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.homeInfo{
+  display: flex;
+  align-items: center;
+}

@@ -88,6 +88,23 @@ export default function FoodPageBusinessView() {
                 {/* Check to see if a business id is stored in session storage, otherwise show an error message */}
 
                 <div className="businessViewGrid">
+                <div className="businessFiltersBox">
+                    <h3>Filters</h3>
+                    {/*Will need Georges help with filters*/}
+                    {categories.map((category) => (
+                    <div className="filter2" key={category.CategoryID}>
+                        <input
+                        type="checkbox"
+                        id={category.CategoryID}
+                        name="Category"
+                        value={category.Name}
+                        checked={form.Category.includes(category.Name)}
+                        onChange={handleCategoryChange}
+                        />
+                        <label htmlFor={category.CategoryID}>{category.Name}</label>
+                    </div>
+                    ))}
+                </div>
                 
                     {/* <h3>Add Listing</h3> */}
                     <CreateListing />
@@ -105,25 +122,7 @@ export default function FoodPageBusinessView() {
                         </div>
                     ))}
                 </div>
-                <div className="businessFiltersBox">
-                    <h3>Filters</h3>
-                    {/*Will need Georges help with filters*/}
-
-
-                    {categories.map((category) => (
-                    <div key={category.CategoryID}>
-                        <input
-                        type="checkbox"
-                        id={category.CategoryID}
-                        name="Category"
-                        value={category.Name}
-                        checked={form.Category.includes(category.Name)}
-                        onChange={handleCategoryChange}
-                        />
-                        <label htmlFor={category.CategoryID}>{category.Name}</label>
-                    </div>
-                    ))}
-                </div>
+                
                 </div></div>}
 
                 {!businessUser && <p> You are not registered as a business user. Please register as one on the account page to access this.</p>}

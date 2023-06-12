@@ -51,6 +51,10 @@
     height: 80px;
   }
 
+  .HealthBox1:hover, .HealthBox2:hover{
+    background-color: #6e8e7c;
+  }
+
   .HealthBox1 p, .HealthBox2 p{
     text-align: left; 
     margin-top: 15px;
@@ -69,6 +73,10 @@
     padding: 10px;
     border-radius: 8px;
     height: 80px;
+}
+
+.CharityBox1:hover, .CharityBox2:hover{
+  background-color: #a27575;
 }
 
 .CharityBox1 p, .CharityBox2 p{
@@ -92,6 +100,10 @@
   height: 80px;
 }
 
+.DealsBox1:hover, .DealsBox2:hover{
+  background-color: #7b687d;
+}
+
 .DealsBox1 p, .DealsBox2 p{
   text-align: left; 
   margin-top: 15px;
@@ -113,6 +125,10 @@
   height: 80px;
 }
 
+.EventsBox1:hover, .EventsBox2:hover{
+  background-color: #dd9344;
+}
+
 .EventsBox1 p, .EventsBox2 p{
   text-align: left; 
   margin-top: 15px;
@@ -123,13 +139,46 @@
 
 #popup {
   position: fixed;
+  overflow-y: auto;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: #F1EBEC;
   z-index: 9999; /* Ensure the overlay is positioned above other elements */
 }
 
+#popup h2 {
+  font-size: 28px;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  text-align: left;
+  padding-left: 30px;
+}
 
+#popup h3{
+  text-align: left;
+}
+
+.MF{
+  padding-top: 30px;
+}
+
+.content {
+  text-align: left;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+}
+
+.close-btn {
+  display: flex; 
+  float: right;
+  background: none;
+  border: none;
+  position:absolute;
+  top:0;
+  right:0;
+  padding-top: 30px;
+}
 

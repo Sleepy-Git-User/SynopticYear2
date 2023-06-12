@@ -30,7 +30,7 @@
 
 .userViewGrid{
   display: grid;
-  grid: 800px / auto auto;
+  grid: 500px / auto auto;
 }
 
 .filtersBox, .listingsBox{
@@ -40,6 +40,7 @@
   margin: 10px;
   padding: 10px;
   border-radius: 25px;
+  height: 500px;
 }
 .filtersBox{
   grid-column: 1;
@@ -48,6 +49,7 @@
 
 .listingsBox{
   grid-column: 2;
+  overflow: auto;
   border: 5px solid #BA9FBD;
 }
 
@@ -56,7 +58,7 @@
   color: #EDE0E2;
   border: 2px solid #8d2c2c; 
   font-size: 28px;
-  margin-top: 30px;
+  margin-top: 50px;
 }
 
 .reportBtn:hover{
@@ -65,32 +67,43 @@
 
 .businessViewGrid{
   display: grid;
-  grid: 500px / auto auto;
+  grid: auto / auto auto;
 }
 
 .addListingsBox, .yourListingsBox, .businessFiltersBox{
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   margin: 10px;
   padding: 10px;
   border-radius: 25px;
 }
 
 .addListingsBox{
+  flex-direction: column;
+  justify-content: space-between;
   grid-column: 1;
   border: 5px solid #D99C9C; 
 }
 
 .yourListingsBox{
+  flex-direction: column;
+  justify-content: space-between;
   grid-column: 2;
-  grid-row: span 2;
   border: 5px solid #BA9FBD;
 }
 
 .businessFiltersBox{
-  grid-column: 1;
+  display: flex;
+  grid-column: 1 /span 2;
   border: 5px solid #F9A246; 
+  height: fit-content;
+}
+
+.filter2{
+  display: flex;
+  padding-top: 40px;
+  padding-bottom: 30px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .listingBoxForm{
