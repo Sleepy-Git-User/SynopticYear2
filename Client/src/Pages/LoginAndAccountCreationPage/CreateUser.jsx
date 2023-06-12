@@ -34,8 +34,10 @@ function CreateUser({saveId}) {
           })
           .then((response) => response.data)
           .then((info) => {
+            console.log(info);
             if (info.success) {
               setError("");
+              console.log(info.data);
               saveId(info.data);
               console.log("Success!");
             } else {

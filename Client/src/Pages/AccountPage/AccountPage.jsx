@@ -63,15 +63,14 @@ export default function AccountPage() {
           .then((info) => {
             if (info)
              {
-                console.log("AHHHHHHHHHHHHHHH");
-                console.log(info);
-              setBoughtItems(info.data)
+                setBoughtItems(info.data)
+                console.log(boughtItems);
             } else {
-              setBoughtItems("Error getting purchases.");
+              setBoughtItems([]);
             }
           })
           .catch((error) => {
-            setBoughtItems("Error getting purchases.");
+            setBoughtItems([]);
           });
       };
     
@@ -79,9 +78,10 @@ export default function AccountPage() {
     useEffect(() => {
         // Try and get business ID for a user
         const businessID = sessionStorage.getItem('businessId');
-       
+        console.log("BUSINESSID");
+        console.log(businessID);
 
-        if (businessID === null){
+        if (businessID === 'null'){
             setBusinessState(<CreateBusiness />);
         } else {
             setBusinessState(<BusinessDetails />)
@@ -109,33 +109,31 @@ export default function AccountPage() {
                 {userDetails}
             
 
-            {/* <div class="mainInfo">
-                <img></img>
-            </div> */}
-
             <div className="business">
                 {businessState}
             </div>
 
 
-            <div className="purchaseHistory">
-                <h2>Purchase History</h2>
-                {/*Get purchase history details and map in here*/}
-
-                {boughtItems.map((boughtItem) => (
-                  <div>
-                    <br />
-                    <img src={boughtItem.Listing.img} alt="Listing Image" width="75" height="75" />
-                    <p>Name: {boughtItem.Listing.Name}</p>
-                    <p>Description: {boughtItem.Listing.Desc}</p>
-                    <p>Price: £{boughtItem.Listing.Price}</p>
-                    <p>Quantity: {boughtItem.Purchase.Quantity}</p>
-                    <p>Code: {boughtItem.Purchase.Code}</p>
-                    <br />
-                  </div>
-
-               ))}
-            </div>
+          <div className="purchaseHistory">
+          <h2>Purchase History</h2>
+          {/*Map all items in a purchase history here! */}
+          {boughtItems !== null ? (
+            boughtItems.map((boughtItem) => (
+              <div key={boughtItem.Purchase.Code}>
+                <br />
+                <img src={boughtItem.Listing.img} alt="Listing Image" width="75" height="75" />
+                <p>Name: {boughtItem.Listing.Name}</p>
+                <p>Description: {boughtItem.Listing.Desc}</p>
+                <p>Price: £{boughtItem.Listing.Price}</p>
+                <p>Quantity: {boughtItem.Purchase.Quantity}</p>
+                <p>Code: {boughtItem.Purchase.Code}</p>
+                <br />
+              </div>
+            ))
+          ) : (
+            <p>No purchases found.</p>
+          )}
+        </div>
 
 
             <div className="reviews">

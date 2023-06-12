@@ -197,6 +197,8 @@ module.exports = (components) => {
 
 	router.post("/getBoughtItems", (req, res) => {
 		console.log(req.body);
+		console.log("HELLO");
+		console.log(interface.getBoughtItems(req.body.UserID));
 		res.json({success: true, data: interface.getBoughtItems(req.body.UserID)});
 	});
 
