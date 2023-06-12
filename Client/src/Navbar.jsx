@@ -7,15 +7,14 @@ import "./Navbar.css";
 
 export default function Navbar() {
 
-    {/*Old code for hamburger menu 
-    useEffect(() => {
-        const hamburger = document.querySelector(".hamburger");
-        const nav = document.querySelector("nav");
+    // useEffect(() => {
+    //     const hamburger = document.querySelector(".hamburger");
+    //     const nav = document.querySelector("nav");
 
-        hamburger.addEventListener("click", function () {
-            nav.classList.toggle("active");
-        });
-    }, []); */}
+    //     hamburger.addEventListener("click", function () {
+    //         nav.classList.toggle("active");
+    //     });
+    // }, []); 
 
     //Action to logout a user
     const handleLogout = () => {
@@ -58,11 +57,11 @@ export default function Navbar() {
                             </li>
                         <Link to="/Account"> <img class="profile" src="./profile5.png"/> </Link>
                 </div>
-                    <div class="hamburger">
+                    {/* <div class="hamburger" onClick={useEffect}>
                         <div></div>
                         <div></div>
                         <div></div>
-                    </div>
+                    </div> */}
                 </div>
             </header>
 

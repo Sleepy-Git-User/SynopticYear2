@@ -83,16 +83,16 @@ export default function FoodPageBusinessView() {
         <div>
             
               
-            <div class="mainInfo">
-            {businessUser && <div><h2>Business</h2>
+            <div id="pageContainer">
+            {businessUser && <div>
                 {/* Check to see if a business id is stored in session storage, otherwise show an error message */}
 
-                <div>
-                <div>
-                    <h3>Add Listing</h3>
+                <div className="businessViewGrid">
+                
+                    {/* <h3>Add Listing</h3> */}
                     <CreateListing />
-                </div>
-                <div>
+                
+                <div className="yourListingsBox">
                     <h3>Your Listings</h3>
                     {/*Function call to get a businesses listings and put each as an item in here*/}
                     {listings.map((listing) => (
@@ -105,7 +105,7 @@ export default function FoodPageBusinessView() {
                         </div>
                     ))}
                 </div>
-                <div>
+                <div className="businessFiltersBox">
                     <h3>Filters</h3>
                     {/*Will need Georges help with filters*/}
 

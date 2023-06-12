@@ -63,10 +63,7 @@ nav ul li a {
     transition: 0.2s;
     text-decoration: none; 
     align-items: center;
-    list-style: none;  
-    
-
-    
+    list-style: none;     
 }
 nav ul li a:hover,
 nav ul li a.active {
@@ -89,34 +86,86 @@ header .header-right .hamburger div {
     background: #ccdde4;
 }
 
-
-@media only screen and (max-width: 1000px) {
-    header {
-        padding: 0 20px;
-    }
-    header .header-right .hamburger {
-        display: block;
-    }
+/* New styles for responsive navigation */
+@media only screen and (max-width: 768px) {
     header .header-left nav {
-        margin: 0;
-        position: absolute;
-        top: -100%;
-        left: 0;
-        width: 100%;
-        height: fit-content;
-        background-color: #508196;
-        padding: 30px;
-        transition: 0.3s;
-        text-align: center;
-        z-index: 100;
+        margin-left: 0;
     }
-    header .header-left nav.active {
-        top: 70px;
+    nav ul {
+        flex-direction: row;
     }
-    header .header-left nav ul {
+    nav ul li a {
+        padding: 23px 0;
+        font-size: 20px;
+        padding: 5px 50px;
+    }
+
+    .logo {
         display: block;
-    } 
-    .logo{
+    }
+
+    nav ul li {
+        display: inline-block;
+    }
+
+
+    .profile{
+        width: 50px; 
+        height: 50px; 
+    }
+}
+
+@media (max-width: 480px){
+    header .header-left nav {
+        margin-left: 0;
+    }
+    nav ul {
+        flex-direction: row;
+    }
+    nav ul li a {
+        font-size: 10px;
+        /* padding: 5px 50px; */
+    }
+
+    .logo {
         display: none;
     }
+
+    nav ul li {
+        display: inline-block;
+    }
+
+
+    .profile{
+        width: 50px; 
+        height: 50px; 
+    }
+
+}
+
+@media (max-width: 360px){
+    header .header-left nav {
+        margin-left: 0;
+    }
+    nav ul {
+        flex-direction: row;
+    }
+    nav ul li a {
+        font-size: 10px;
+        flex-direction: row;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    nav ul li {
+        display: inline-block;
+    }
+
+    .profile{
+        width: 50px; 
+        height: 50px; 
+    }
+
 }
