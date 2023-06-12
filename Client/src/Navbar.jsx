@@ -9,15 +9,15 @@ export default function Navbar() {
 
     const [profilePic, setProfilePic] = useState("");
 
-    {/*Old code for hamburger menu 
-    useEffect(() => {
-        const hamburger = document.querySelector(".hamburger");
-        const nav = document.querySelector("nav");
+    // {Old code for hamburger menu 
+    // useEffect(() => {
+    //     const hamburger = document.querySelector(".hamburger");
+    //     const nav = document.querySelector("nav");
 
-        hamburger.addEventListener("click", function () {
-            nav.classList.toggle("active");
-        });
-    }, []); */}
+    //     hamburger.addEventListener("click", function () {
+    //         nav.classList.toggle("active");
+    //     });
+    // }, []); }
 
     //Action to logout a user
     const handleLogout = () => {
@@ -29,7 +29,7 @@ export default function Navbar() {
 
     async function getProfilePic() {
         let id = sessionStorage.getItem("userId");
-
+        console.log(id);
         if (id !== null) {
             await axios.post("/api/getProfilePic", { UserID: id })
                 .then((response) => response.data)

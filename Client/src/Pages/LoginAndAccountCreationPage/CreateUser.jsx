@@ -37,7 +37,9 @@ export default function CreateUser({ saveId }) {
             .then((data) => {
                 if (data) {
                     alert("Account Created!");
-                    saveId(data);
+                    console.log(data);
+                    saveId(data.data.data);
+
                 } else {
                     alert("Invalid account creation details.");
                 }

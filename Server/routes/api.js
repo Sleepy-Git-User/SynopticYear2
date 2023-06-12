@@ -201,11 +201,11 @@ module.exports = (components) => {
 	});
 
 	router.post("/verifyEmail", (req, res) => {
-		cancelAnimationFrame
 		res.json(interface.verifyEmail(req.body.UserID));
 	});
 
 	router.post("/getProfilePic", (req, res) => {
+		console.log("Profile Pic"+req.body.UserID);
 		res.json(interface.getProfilePic(req.body.UserID));
 	});
 

@@ -18,6 +18,7 @@ import AccountPage from "./Pages/AccountPage/AccountPage.jsx";
 import FoodPage from "./Pages/FoodPage/FoodPage.jsx";
 import ReviewTemplate from './Pages/ReviewTemplate/ReviewTemplate.jsx';
 import VerifyEmail from './Pages/VerifyEmail/verifyEmail.jsx';
+import ItemReviews from './wigits/itemReview/itemReview.jsx';
 
 
 
@@ -54,6 +55,7 @@ function Main() {
           <Route path="/Food" element={<FoodPage />} />
           <Route path="/Review" element={<ReviewTemplate />} />
           <Route path="/verify" element={<VerifyEmail />} />
+          <Route path="/itemReview" element={<ItemReviews />} />
 
 
 

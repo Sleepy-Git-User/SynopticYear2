@@ -10,6 +10,7 @@ export default function VerifyEmail() {
         const urlParams = new URLSearchParams(window.location.search);
         let ID = urlParams.get("userID");
         let userID = { UserID: ID }
+        console.log(userID);
         if (ID !== null) {
             axios.post("/api/verifyEmail/", userID)
                 .then((response) => response.data)

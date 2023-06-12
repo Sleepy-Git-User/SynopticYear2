@@ -51,6 +51,7 @@ module.exports = (dbName = "Database") => {
 				"Email",
 				Email
 			); //Gets the UserID by using the email.
+		
 			const grabSalt = Database.getField(
 				"Password",
 				"Salt",
@@ -68,8 +69,14 @@ module.exports = (dbName = "Database") => {
 				hashedPassword[0].Password
 			) {
 				//Hashes the inputted password and comparess it to the stored password.
-				console.log(getUserID);
-				return { success: true, data: getUserID, data2: getUserBusinessIDs(getUserID[0].UserID) };
+				console.log("HERE"+getUserID);
+				try{
+					let data2 = getUserBusinessIDs(getUserID[0].UserID);
+					return { success: true, data: getUserID,  data2: data2 };
+				}catch(error){
+					return { success: true, data: getUserID, data2:null };
+				}
+				
 			} else {
 				return { success: false, data: "Email or Password incorrect" };
 			}
@@ -498,12 +505,12 @@ module.exports = (dbName = "Database") => {
 		if (array.length === 0) {
 			return {
 				success: true,
-				data: Database.getAllRecords("Listing", "Status", 0),
+				data: Database.getRecord("Listing", "Status", 0),
 			};
 		} else {
 			let placeholders = array.map(() => "?").join(",");
 			let sql_listing_select = Database.database.prepare(
-				`SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name IN (${placeholders}) ))`
+				`SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name IN (${placeholders}) ))WHERE Status = 0`
 			);
 
 			let data = sql_listing_select.all(...array);
@@ -611,6 +618,7 @@ module.exports = (dbName = "Database") => {
 	 */
 	function reserveItem(ListingID, BuyerID, Quantity) {
 		//Get listing
+		updateListingStatus();
 		if (Quantity <= 0) {
 			return { success: false, data: "Invalid Quantity" };
 		}

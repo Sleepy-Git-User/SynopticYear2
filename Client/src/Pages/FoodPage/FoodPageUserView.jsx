@@ -37,7 +37,7 @@ export default function FoodPageUserView() {
 
 
   const reserveItem = (passedIn) => {
-    e.preventDefault();
+
     console.log("HERE");
     axios
       .post("/api/reserveItem", passedIn, {
@@ -47,6 +47,7 @@ export default function FoodPageUserView() {
       })
       .then((response) => response.data)
       .then((info) => {
+        console.log(info);
         if (info.success) {
           alert("Reservation Successful!");
         } else {
