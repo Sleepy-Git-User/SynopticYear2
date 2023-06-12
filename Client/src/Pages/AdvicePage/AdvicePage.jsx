@@ -86,5 +86,5 @@ export default function AdvicePage() {
         </div>
       </div>
     </div>
-  );
+  ); 
 }
