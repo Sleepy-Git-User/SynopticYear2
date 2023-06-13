@@ -10,9 +10,9 @@ const emailSender = require("../utili/email.js");
 const { BlobServiceClient } = require('@azure/storage-blob');
 require('dotenv').config();
 const auth = require("../Auth/Auth.js");
-
 const azureStorageConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const containerName = 'images';
+console.log(azureStorageConnectionString);
 const blobServiceClient = BlobServiceClient.fromConnectionString(azureStorageConnectionString);
 const containerClient = blobServiceClient.getContainerClient(containerName);
 		
@@ -155,14 +155,15 @@ module.exports = (dbName = "Database") => {
 				address_id
 			);
 			insert_Password.run(user_id, hashedPassword, salt);
-			const blobClient = containerClient.getBlockBlobClient(user_id+".png");
+			
 			
 			try{
+                const blobClient = containerClient.getBlockBlobClient(user_id+".png");
 				const uploadResponse = await blobClient.upload(ProfilePic.buffer, ProfilePic.size);
 				console.log(`Upload succesful. ${uploadResponse.requestId}`);
 			} catch (error) {
 				console.error(error);
-				throw error;
+				//throw error;
 			}
 			sendWelcomeEmail(Email);
 			sendVerificationEmail(Email);
@@ -219,7 +220,7 @@ module.exports = (dbName = "Database") => {
 
 	/**
 	 *
-	 * @param {*} Bname Business Name
+	 * @param {*} Name Business Name
 	 * @param {*} Email Main email for business
 	 * @param {*} PhoneNumber Main Phonenumber for business
 	 * @param {*} Line1 Business address
@@ -230,7 +231,7 @@ module.exports = (dbName = "Database") => {
 	 * @returns Success true or false depending on errors. Data has business id if success or an error message.
 	 */
 	async function makeBusiness(
-		Bname,
+		Name,
 		Email,
 		PhoneNumber,
 		Line1,
@@ -257,7 +258,7 @@ module.exports = (dbName = "Database") => {
 			//SQL to insert data in to the User table.
 			const insert_business_sql = Database.database.prepare(`
             INSERT INTO Business
-            (BusinessID, Bname, Email, PhoneNumber, img, AddressID, InvCode)
+            (BusinessID, Name, Email, PhoneNumber, img, AddressID, InvCode)
             VALUES (?,?,?,?,?,?,?)`);
 
 			//SQL to insert data in to the User table.
@@ -270,21 +271,22 @@ module.exports = (dbName = "Database") => {
 			insert_address_sql.run(address_id, Line1, Line2, City, PostCode);
 			insert_business_sql.run(
 				business_id,
-				Bname,
+				Name,
 				Email,
 				PhoneNumber,
 				"https://synopticproject.blob.core.windows.net/images/"+business_id+"bpp.png",
 				address_id,
 				InvCode
 			);
-			const blobClient = containerClient.getBlockBlobClient(business_id+"bpp.png");
+			
 			
 			try{
+                const blobClient = containerClient.getBlockBlobClient(business_id+"bpp.png");
 				const uploadResponse = await blobClient.upload(ProfilePic.buffer, ProfilePic.size);
 				console.log(`Upload succesful. ${uploadResponse.requestId}`);
 			} catch (error) {
 				console.error(error);
-				throw error;
+				//throw error;
 			}
 
 			const User_Business_sql = Database.database.prepare(`
@@ -1189,5 +1191,6 @@ module.exports = (dbName = "Database") => {
 		jazz,
 		verifyEmail,
 		getProfilePic,
+        createCategory,
 	};
 };
