@@ -85,6 +85,7 @@ export default function Navbar() {
                             <a href="#">Dyslexia</a>
                         </div> 
                         </div>  
+                        
 
                         <li>
                             <Link id="logout" onClick={handleLogout}>
@@ -94,6 +95,9 @@ export default function Navbar() {
 
                         <li>
                         <Link to="/Account"> <img class="profile" src={profilePic} width="75" height="75" /> </Link>
+                        <div class="overlay">
+                        <Link to="/Account"> Account </Link>
+                        </div>
                         </li>
             
                         {/* <li>

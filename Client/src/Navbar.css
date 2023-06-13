@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
+
+
 * {
     margin: 0;
     padding:0;
@@ -89,12 +91,19 @@ header .header-right {
     margin-right: 20px; 
 }
 
-.dropbtn {
+.dropbtn { 
+    display: block;
     background-color: #508196;
     color: #ccdde4;
     padding: 10px;
     border: none;
     cursor: pointer;
+    font-size: 24px;
+    margin-left: 30px;
+} 
+
+.dropbtn:hover{
+    color: #9eaeb4;
 }
 
 .dropdown-content {
@@ -150,6 +159,10 @@ header .header-right {
     background-color: white;
 }
 
+.overlay{
+    display: none;
+}
+
 
 @media only screen and (max-width: 1200px) {
    .hamburger{
@@ -189,4 +202,23 @@ header .header-right {
     .profile{
         display: none;
     }
+
+    .overlay{
+        display: inline;
+    }
+    .header{
+        height: 90px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        background: #508196;
+        box-shadow: 0 0 10px #1b2b31;
+        justify-content: space-between;
+        flex-direction: row;
+        position: fixed;
+        top: 0px;
+        width: 100%;
+    }
+
+
 } 
