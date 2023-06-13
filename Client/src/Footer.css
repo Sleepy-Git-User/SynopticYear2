@@ -2,11 +2,11 @@
     background-color: #508196;
     width: 100%;
     bottom: 0;
-    position: fixed;
+    position: relative;
+    height: calc(fit-content - 400px);
 }
 .footer {
     padding: 40px 0; 
-    margin-top: 10%;  
 } 
 
 
@@ -73,8 +73,8 @@
 
 
 
-
 @media (max-width: 768px) {
+
     .footer .logo{
       /* Styles for medium-sized screens */
      display: none;
