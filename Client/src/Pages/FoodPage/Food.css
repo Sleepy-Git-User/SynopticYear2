@@ -30,7 +30,7 @@
 
 .userViewGrid{
   display: grid;
-  grid: 500px / auto auto;
+  grid: 500px / 1fr 1fr;;
 }
 
 .filtersBox, .listingsBox{
@@ -67,7 +67,7 @@
 
 .businessViewGrid{
   display: grid;
-  grid: auto / auto auto;
+  grid: auto / 1fr 1fr;;
 }
 
 .addListingsBox, .yourListingsBox, .businessFiltersBox{

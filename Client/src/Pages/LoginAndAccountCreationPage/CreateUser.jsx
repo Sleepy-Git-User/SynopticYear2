@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./CreateAccount.css";
 export default function CreateUser({ saveId }) {
     //Form data for creating a user (including address)
     const [form, setForm] = useState({
@@ -59,7 +60,11 @@ export default function CreateUser({ saveId }) {
     };
     //Returns the create user form
     return (
-        <form onSubmit={handleSubmit}>
+        <div>
+        <div id="pageContainer"> 
+        <div class="gridContainerAccount">  
+        <div class="AccountBox">
+        <form className="account-form" onSubmit={handleSubmit}>
             <h1>Create Account</h1>
             <br />
             <label htmlFor="email">Email:</label>
@@ -175,9 +180,13 @@ export default function CreateUser({ saveId }) {
             <br />
             <br />
             <p>{error}</p>
-            <button type="submit">
+            <button className="create-btn" type="submit">
                 Create Account
             </button>
         </form>
+        </div>
+        </div>
+        </div>
+        </div>
     );
 }

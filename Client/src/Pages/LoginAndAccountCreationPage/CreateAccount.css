@@ -4,7 +4,7 @@
 
 .gridContainerAccount {
     display: grid;
-    grid: 800px / auto auto auto; 
+    grid: auto / auto auto auto; 
 }
 
 .AccountBox {
@@ -21,7 +21,8 @@
 
 .create-btn{
     font-size: 20px;
-    margin-bottom: 60px;
+    margin-bottom: 60px; 
+    
 
 }  
 .error{

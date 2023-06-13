@@ -7,7 +7,7 @@
 
   .gridContainerAdvice{
     display: grid;
-    grid: 300px / auto auto;
+    grid: 300px / 1fr 1fr;;
   }
 
   .infoBox1, .infoBox2, .infoBox3, .infoBox4{

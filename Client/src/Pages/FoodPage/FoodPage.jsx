@@ -12,14 +12,11 @@ export default function FoodPage() {
         <h1>Food</h1>
       </div>
       <br/>
-      <div className="mainInfo"> 
-      <div className ="group-buttons">
+      <div className="mainInfo">
         <button className="userViewBtn" onClick={() => setTab(<FoodPageUserView />)}>User View</button>
         <button className="BusinessViewBtn" onClick={() => setTab(<FoodPageBusinessView />)}>Business View</button>
       </div>
-      </div>
       {tab}
-      <button className="reportBtn">Report</button>
     </div>
   );
 }
