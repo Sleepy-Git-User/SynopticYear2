@@ -12,7 +12,7 @@ export default function FoodPageUserView() {
     Vegan: false,
     Vegitarian: false,
     Halal: false,
-    Kosher: false,
+    Kosher: false
   });
 
   const getListings = () => {
