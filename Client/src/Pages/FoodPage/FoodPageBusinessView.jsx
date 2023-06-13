@@ -113,7 +113,7 @@ export default function FoodPageBusinessView() {
                     <h3>Your Listings</h3>
                     {/*Function call to get a businesses listings and put each as an item in here*/}
                     {listings.map((listing) => (
-                        <div>
+                        <div className="listingsOnly">
                             <div>{listing.Name}</div>
                             <div>{listing.Description}</div>
                             <div>Price: £{listing.Price}</div>

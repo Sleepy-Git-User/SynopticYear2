@@ -116,10 +116,10 @@ export default function FoodPageUserView() {
             <div className='userViewGrid'>
 
               <div className='filtersBox'>
-                <h3>Filters</h3>
+                {/* <h3>Filters</h3> */}
 
                 {categories.map((category) => (
-                  <div className="theF" key={category.CategoryID}>
+                  <div className="theFilters" key={category.CategoryID}>
                     <input 
                       type="checkbox"
                       id={category.CategoryID}
@@ -138,7 +138,8 @@ export default function FoodPageUserView() {
                 {/*Each one should have a form to specify quantity and a button to submit, on which a function call is done to reserve the item*/}
                             {/*Call a function to get all listings on a useEffect, and call it again when a filter is changed.*/}
             {/*Each one should have a form to specify quantity and a button to submit, on which a function call is done to reserve the item*/}
-            {listings.map((listing) => (
+            {listings.map((listing) => ( 
+              <div className="listingsOnly">
               <form key={listing.ListingID}>
                 <img src={listing.img} alt="Listing Image" width="75" height="75" />
                 <div>{listing.Name}</div>
@@ -155,10 +156,11 @@ export default function FoodPageUserView() {
                   onChange={(e) => setQuantityValue(e.target.value)}
                   max={listing.Quantity}
                 />
-                <button onClick={() => reserveItem({ ListingID: listing.ListingID, BuyerID: sessionStorage.getItem("userId"), Quantity: QuantityValue.toString() })}>Reserve</button>
+                <button className='reserveBtn' onClick={() => reserveItem({ ListingID: listing.ListingID, BuyerID: sessionStorage.getItem("userId"), Quantity: QuantityValue.toString() })}>Reserve</button>
 
-
+              
               </form>
+              </div>
             ))}
               </div>
             </div>

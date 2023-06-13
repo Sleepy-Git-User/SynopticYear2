@@ -123,9 +123,9 @@ export default function AccountPage() {
           {/*Map all items in a purchase history here! */}
           {boughtItems !== null ? (
             boughtItems.map((boughtItem) => (
-              <div key={boughtItem.Purchase.Code}>
+              <div className="purchases" key={boughtItem.Purchase.Code}>
                 <br />
-                <img src={boughtItem.Listing.img} alt="Listing Image" width="75" height="75" />
+                <img className="itemImg" src={boughtItem.Listing.img} alt="Listing Image" width="100" height="100" />
                 <p>Name: {boughtItem.Listing.Name}</p>
                 <p>Description: {boughtItem.Listing.Desc}</p>
                 <p>Price: £{boughtItem.Listing.Price}</p>

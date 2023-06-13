@@ -96,7 +96,7 @@
     }
 }
   
-@media (max-width: 480px) {
+x {
     .footer .logo{
       /* Styles for small screens */
       display: none;

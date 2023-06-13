@@ -190,9 +190,6 @@ input[type="checkbox"] {
   border-radius: 4px;
   outline: none;
   transition: border-color 0.3s; 
-
-
-
 }
 
 /* Create a custom design for the checkbox */
@@ -201,3 +198,107 @@ input[type="checkbox"]:checked {
   background-color: #D99C9C; 
 }
 
+.listingsOnly{
+  background-color: #BA9FBD;
+  margin: 10px;
+  padding:10px;
+  border-radius: 25px;
+  border: 2px solid #4e464e; 
+}
+
+.reserveBtn{
+  background-color: #F9A246;
+  margin-left: 40px; 
+  border: 2px solid  #a0682c;
+} 
+.reserveBtn:hover{
+  border:2px solid #f8b66f;
+}
+
+input{
+  display: inline-block;
+  text-align: left;
+  margin-right: 30px;  
+  border-radius: 8px;
+  border: 2px solid#4e464e; 
+  background-color: #ede0e2; 
+  margin-left: 20px;
+}
+
+
+@media (max-width: 1200px){
+  .userViewGrid{
+    display: grid;
+    grid: 600px / 1fr;
+  }
+  .filtersBox, .listingsBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 25px;
+    grid-column: 1;
+  }
+
+  .filtersBox label{
+    font-size: 50px;
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 40px;
+    height: 40px;
+    border: 5px solid #D99C9C;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s; 
+  }
+  .mainInfo h2{
+    font-size: 56px;
+  }
+  .listingsBox h3{
+    font-size: 50px;
+  }
+  .listingsOnly{
+    font-size: 36px;
+  }
+
+  /* the business view */
+  .businessViewGrid{
+    display: grid;
+    grid: auto / 1fr;
+  }
+  .addListingsBox, .yourListingsBox, .businessFiltersBox{
+    grid-column: 1;
+  }
+  .filter2 label{
+    font-size: 28px;
+  }
+  .addListingsBox h3, .yourListingsBox h3{
+    font-size: 40px;
+  }
+  .listingBoxForm label{
+    font-size: 36px;
+  }
+  .listingBoxForm input{
+    font-size: 36px;
+  }
+  .createListingBtn{
+    font-size: 28px;
+  }
+  .userViewBtn, .BusinessViewBtn{
+    font-size: 36px;
+  }
+  .reportBtn{
+    font-size: 36px;
+  }
+
+
+
+
+
+
+}

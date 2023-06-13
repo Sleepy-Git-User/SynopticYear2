@@ -152,3 +152,25 @@ padding-bottom: 30px;
   border-color: #eb9494; 
 } 
 
+.purchases{
+  background-color: #89a997;
+  margin: 10px;
+  padding:10px;
+  border-radius: 25px;
+  border: 2px solid #4e464e; 
+  text-align: left; 
+  
+
+}
+.purchases p{
+  display: flex;
+  text-align: left;
+  margin-left: 200px; 
+}
+
+.itemImg{
+  display: flex-wrap;
+  float: left;
+  margin-left: 30px;
+  margin-top: 50px;
+}
