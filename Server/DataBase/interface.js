@@ -335,7 +335,7 @@ module.exports = (dbName = "Database") => {
 		ListingDate,
 		EndDate
 	) {
-		const listing_id = Database.generateUUID("Listing", "ListingID"); //Creates users UUID.
+		const listing_id = Database.generateUUID("Listing", "ListingID"); 
 		if (Quantity < 0) {
 			return { success: false, data: "Invalid Quantity" };
 		}
