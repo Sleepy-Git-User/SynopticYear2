@@ -111,6 +111,6 @@ CREATE TABLE IF NOT EXISTS Item_Category
     CategoryID INT NOT NULL,
     ListingID INT NOT NULL,
     PRIMARY KEY(CategoryID, ListingID)
-    FOREIGN KEY(CategoryID) REFERENCES Category(CategoryID)
-    FOREIGN KEY(ListingID) REFERENCES Listing(ListingID)
+    FOREIGN KEY(CategoryID) REFERENCES Category(CategoryID) ON DELETE CASCADE
+    FOREIGN KEY(ListingID) REFERENCES Listing(ListingID) ON DELETE CASCADE
 )

@@ -64,7 +64,7 @@
 
 .listingsBox{
   grid-column: 2;
-  overflow: auto;
+  overflow-y: scroll;
   border: 5px solid #BA9FBD;
 }
 

@@ -40,24 +40,37 @@ export default function ReviewTemplate() {
 		setPurchaseID(ID);
 
 		if (ID) {
-			await getPurchase(ID);
+			if (await getPurchase(ID)) {
+				setLoading(false);
+			}
 		}
-		setLoading(false);
 	};
 
 	const getPurchase = async (ID) => {
-		await axios.get("/api/getPurchase/" + ID).then((res) => {
-			console.log("DATA: " + res.data);
-			setPurchase(res.data.data[0]);
-		});
-		setForm({
-			...form,
-			PurchaseID: purchase.PurchaseID,
-			ListingID: purchase.ListingID,
-			BusinessID: purchase.BusinessID,
-			BuyerID: purchase.BuyerID,
-		});
+		try {
+			const res = await axios.get("/api/getPurchase/" + ID);
+			if (res.data.success) {
+				console.log("DATA: " + res.data.data[0].PurchaseID);
+				setPurchase(res.data.data[0]);
+
+				// Now that purchase has been updated, set the form
+				setForm({
+					...form,
+					PurchaseID: res.data.data[0].PurchaseID,
+					ListingID: res.data.data[0].ListingID,
+					BusinessID: res.data.data[0].BusinessID,
+					BuyerID: res.data.data[0].BuyerID,
+				});
+				return true;
+			}
+			else {
+				alert("Purchase not found");
+			}
+		} catch (error) {
+			console.error("Error fetching purchase:", error);
+		}
 	};
+
 
 	const stars = (rating, fullstr, emptystr, handleClick) => {
 		let stars = [];
@@ -98,13 +111,18 @@ export default function ReviewTemplate() {
 		e.preventDefault();
 		console.log(form);
 		axios.post("/api/submitReview", form).then((res) => {
-			console.log(res.status);
+			if (res.data.success) {
+				alert("Review Submitted");
+				window.location.href = "/";
+			} else {
+				alert("Review Failed to Submit");
+			}
 		});
-
 	};
 
 	useEffect(() => {
 		getPurchaseID();
+		console.log("Form= " + form);
 	}, [purchaseID]);
 
 	return (

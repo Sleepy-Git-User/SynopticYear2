@@ -12,13 +12,16 @@ export default function Login({ saveId }) {
 
     const [form, setForm] = useState(<LoginForm saveId={saveId} />);
     const [number, setNumber] = useState(0);
+    const [buttonText, setButtonText] = useState("Need an account?")
 
     const toggleForm = () => {
         if (number === 0) {
             setForm(<CreateUser saveId={saveId} />);
+            setButtonText("Log In instead?");
             setNumber(1);
         } else {
             setForm(<LoginForm saveId={saveId} />);
+            setButtonText("Need an account?");
             setNumber(0);
         }
     }
@@ -27,7 +30,7 @@ export default function Login({ saveId }) {
            <div class="bannerLogIn">
                 <h1>Grab It & Govan</h1>
            </div>
-           <button className="changeBtn" onClick={toggleForm}>Change Form</button>
+           <button className="changeBtn" onClick={toggleForm}>{buttonText}</button>
 
             {form}
             
