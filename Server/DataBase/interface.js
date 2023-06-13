@@ -598,7 +598,7 @@ module.exports = (dbName = "Database") => {
 		if (Database.inTable("Category", "Name", CategoryName))
 			return "Category already exists";
 		const category_id = Database.generateUUID("Category", "CategoryID"); //Creates users UUID.
-		const insert_category_sql = Database.database.prepare(`\
+		const insert_category_sql = Database.database.prepare(`
 		INSERT INTO Category
 		(CategoryID, Name)
 		VALUES (?,?)`);
