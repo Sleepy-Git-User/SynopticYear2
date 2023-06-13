@@ -89,7 +89,7 @@ export default function FoodPageBusinessView() {
 
                 <div className="businessViewGrid">
                 <div className="businessFiltersBox">
-                    <h3>Filters</h3>
+                    {/* <h3>Filters</h3> */}
                     {/*Will need Georges help with filters*/}
                     {categories.map((category) => (
                     <div className="filter2" key={category.CategoryID}>

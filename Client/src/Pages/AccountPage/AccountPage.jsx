@@ -36,7 +36,7 @@ export default function AccountPage() {
                 <div className="userInfo"> 
                 <h2>User Details</h2>
                 <div className="info">
-                <img className="userImg" src={info.data[0].img} alt="Profile Image" width="75" height="75" />
+                <img className="userImg" src={info.data[0].img} alt="Profile Image" width="100" height="100" />
                   <br />
                   Name: {info.data[0].Fname} {info.data[0].Lname} <br />
                   Email: {info.data[0].Email}<br />

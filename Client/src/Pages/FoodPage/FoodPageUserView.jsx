@@ -119,8 +119,8 @@ export default function FoodPageUserView() {
                 <h3>Filters</h3>
 
                 {categories.map((category) => (
-                  <div key={category.CategoryID}>
-                    <input
+                  <div className="theF" key={category.CategoryID}>
+                    <input 
                       type="checkbox"
                       id={category.CategoryID}
                       name="Category"

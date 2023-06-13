@@ -80,7 +80,8 @@ header .header-right .hamburger div {
     background: #ccdde4;
 } 
 .profile{
-    border-radius: 25px;
+    border-radius: 50px;
+    margin-left: 30px;
 }
 
 /* New styles for responsive navigation */

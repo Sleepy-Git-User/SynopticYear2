@@ -3,6 +3,10 @@
     padding:50px;
     text-align: center;
   }
+.mainInfo h2{
+  font-size: 36px;
+
+}
 
   .userViewBtn{
     background-color: #BA9FBD;
@@ -30,7 +34,7 @@
 
 .userViewGrid{
   display: grid;
-  grid: 500px / 1fr 1fr;;
+  grid: 600px / 1fr 1fr;;
 }
 
 .filtersBox, .listingsBox{
@@ -40,17 +44,32 @@
   margin: 10px;
   padding: 10px;
   border-radius: 25px;
-  height: 500px;
 }
 .filtersBox{
   grid-column: 1;
   border: 5px solid #D99C9C;
+  align-items: center;
+}
+
+.filtersBox label{ 
+  font-size: 20px;
+  margin-left: 30px;
+  align-items: center;
+
+} 
+
+.filtersBox h3{
+  font-size: 28px;
 }
 
 .listingsBox{
   grid-column: 2;
   overflow: auto;
   border: 5px solid #BA9FBD;
+}
+
+.listingsBox h3{
+  font-size: 28px;
 }
 
 .reportBtn{
@@ -86,7 +105,6 @@
 
 .yourListingsBox{
   flex-direction: column;
-  justify-content: space-between;
   grid-column: 2;
   border: 5px solid #BA9FBD;
 }
@@ -96,6 +114,12 @@
   grid-column: 1 /span 2;
   border: 5px solid #F9A246; 
   height: fit-content;
+  justify-content: center;
+} 
+.businessFiltersBox h3{
+  display: flex;
+  justify-content: center;
+
 }
 
 .filter2{
@@ -104,6 +128,20 @@
   padding-bottom: 30px;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
+}
+.filter2 label{
+  margin-right: 30px;
+  align-items: center;
+}
+
+.filter2 input[type="checkbox"]{
+  border: 2px solid #F9A246;
+}
+
+.filter2 input[type="checkbox"]:checked {
+  border-color: #bc7a34;
+  background-color: #F9A246;
 }
 
 .listingBoxForm{
@@ -126,6 +164,7 @@
   font-size: 20px;
   text-align: left;
   margin-right: 30px; 
+  margin-left: 30px;
 }
 .createListingBtn{
   background-color: #D99C9C;
@@ -135,4 +174,30 @@
   border: 2px solid #f0acac;
 }
 
+.theFilters{
+  display: flex; 
+  justify-content: left;
+}
+
+  /* Hide the default checkbox */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #D99C9C;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s; 
+
+
+
+}
+
+/* Create a custom design for the checkbox */
+input[type="checkbox"]:checked {
+  border-color: #a76a6a;
+  background-color: #D99C9C; 
+}
 
