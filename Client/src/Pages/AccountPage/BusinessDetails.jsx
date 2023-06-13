@@ -31,7 +31,7 @@ export default function AccountPage() {
           console.log(info);
           setBusinessEmail(info[0].Email);
           setBusinessPhoneNumber(info[0].PhoneNumber);
-          setBusinessName(info[0].Bname);
+          setBusinessName(info[0].Name);
           setBusinessImg(info[0].img);
         } else {
           setBusinessInfo("Error getting business details.");
