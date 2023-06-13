@@ -3,13 +3,21 @@ import { Outlet, Link } from "react-router-dom";
 import { setUserId, getUserId } from "./auth";
 import axios from "axios";
 import "./Navbar.css";
-import { faHamburger } from "@fortawesome/free-solid-svg-icons";
 
 
 export default function Navbar() {
 
-    const [profilePic, setProfilePic] = useState(""); 
+    const [profilePic, setProfilePic] = useState("");
 
+    // {Old code for hamburger menu 
+    // useEffect(() => {
+    //     const hamburger = document.querySelector(".hamburger");
+    //     const nav = document.querySelector("nav");
+
+    //     hamburger.addEventListener("click", function () {
+    //         nav.classList.toggle("active");
+    //     });
+    // }, []); }
 
     //Action to logout a user
     const handleLogout = () => {
@@ -42,22 +50,7 @@ export default function Navbar() {
         getProfilePic();
     }, []);
 
-   function hamburgerFunction() {
-        const hamburger =  document.querySelector('.hamburger');
-        const navMenu = document.querySelector(".nav-menu");
 
-        hamburger.addEventListener("click", () => {
-            hamburger.classList.toggle("active"); 
-            navMenu.classList.toggle("active"); 
-
-        })
-
-        document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
-            hamburger.classList.remove("active");
-            navMenu.classList.remove("active");
-        })
-
-    )}
 
     return (
         <>
@@ -67,33 +60,13 @@ export default function Navbar() {
                         <Link to="/"> <img className="logo" src="./Logo.jpg" /> </Link>
                     </div>
                 </div>
-                <nav className="navbar">
-                    <ul className="nav-menu">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/Food">Food</Link>
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to="/Food">Food</Link>
                         </li>
                         <li>
                             <Link to="/Advice">Advice</Link>
-                        </li>
-
-                        <div class="dropdown">
-                        <button class="dropbtn">Accessibility</button>
-                        <div class="dropdown-content">
-                            <a href="#">Languages</a>
-                            <a href="#">Colour Blind</a>
-                            <a href="#">Larger Font</a>
-                            <a href="#">Dyslexia</a>
-                        </div> 
-                        </div>  
-
-                        <li>
-                            <Link id="logout" onClick={handleLogout}>
-                                Logout
-                            </Link> 
-                        </li>
-
-                        <li>
-                        <Link to="/Account"> <img class="profile" src={profilePic} width="75" height="75" /> </Link>
                         </li>
             
                         {/* <li>
@@ -101,12 +74,10 @@ export default function Navbar() {
                                     Logout
                                 </Link>
                             </li> */}
-            
-    
                     </ul>
                 </nav>
 
-                {/* <div class="header-right">
+                <div class="header-right">
                     <div class="header-right"> 
                     <div class="dropdown">
                         <button class="dropbtn">Accessibility</button>
@@ -123,17 +94,12 @@ export default function Navbar() {
                             </Link> 
                         </li>
                         <Link to="/Account"> <img class="profile" src={profilePic} width="75" height="75" /> </Link>
-                    </div> */}
-                    {/* <div onClick={hamburgerFunction} className="hamburger"> 
-                        <span className="bar"></span>
-                        <span className="bar"></span>
-                        <span className="bar"></span>
-                    </div> */}
-                
-                <div onClick={hamburgerFunction} className="hamburger"> 
-                        <span className="bar"></span>
-                        <span className="bar"></span>
-                        <span className="bar"></span>
+                    </div>
+                    <div class="hamburger">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
             </header>
 
