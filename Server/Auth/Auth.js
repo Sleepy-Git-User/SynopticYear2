@@ -14,6 +14,6 @@ function readToken(givenToken){
 }
 
 // Makes then Reads Token.
-//console.log(readToken(makeToken("f987b616-7008-4257-af6e-cb2239a52def")));
-
+// console.log("HERE"+ readToken(makeToken("f987b616-7008-4257-af6e-cb2239a52def")));
+// console.log(makeToken("f987b616-7008-4257-af6e-cb2239a52def"))
 module.exports={makeToken,readToken};

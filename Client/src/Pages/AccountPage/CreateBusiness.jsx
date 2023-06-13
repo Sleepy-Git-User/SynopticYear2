@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import axios from 'axios';
 
 function CreateBusiness({ }) {
-    
-    const userID = sessionStorage.getItem('userId');
 
+    const userID = sessionStorage.getItem('userId');
+    const [file, setFile] = useState(null);
     //Form data for creating a business (including address)
     const [form, setForm] = useState({
         Bname: "",
@@ -23,30 +23,37 @@ function CreateBusiness({ }) {
 
     //Handles submission of a new account - will need a
     // createUser method for this!
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        const formData = new FormData();
+        Object.keys(form).forEach(key => {
+            formData.append(key, form[key]);
+        });
+        formData.append("file", file, {
+            type: file.type
+        });
         console.log(form);
-        axios
-          .post("/api/makeBusiness", form, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-          .then((response) => response.data)
-          .then((info) => {
-            if (info.success) {
-              setError("");
-              alert("Business Created!");
-              sessionStorage.setItem("businessId", info.data);
-              window.location.reload();
-            } else {
-              setError(info.data);
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      };
+        await axios
+            .post("/api/makeBusiness", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((response) => response.data)
+            .then((data) => {
+                if (data.success) {
+                    setError("");
+                    alert("Business Created!");
+                    sessionStorage.setItem("businessId", data.data);
+                    window.location.reload();
+                } else {
+                    setError(data.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    };
 
 
 
@@ -61,8 +68,11 @@ function CreateBusiness({ }) {
 
 
     //Returns the create business form
-    return (
-        <form onSubmit={handleSubmit}>
+    return ( 
+        <div> 
+        <div id="pageContainer"> 
+        <div class="businessBox">
+        <form className="createBusinessForm" onSubmit={handleSubmit}>
             <h2>Create Business</h2>
 
             <label htmlFor="bname">Business Name:</label>
@@ -78,24 +88,24 @@ function CreateBusiness({ }) {
             <br />
 
             <label htmlFor="email">Email:</label>
-                <input
-                    type="text"
-                    id="email"
-                    name="Email"
-                    value={form.Email}
-                    onChange={handleChange}
-                />
+            <input
+                type="text"
+                id="email"
+                name="Email"
+                value={form.Email}
+                onChange={handleChange}
+            />
 
             <br />
 
             <label htmlFor="phone">Phone Number:</label>
-                <input
-                    type="text"
-                    id="phone"
-                    name="PhoneNumber"
-                    value={form.PhoneNumber}
-                    onChange={handleChange}
-                />
+            <input
+                type="text"
+                id="phone"
+                name="PhoneNumber"
+                value={form.PhoneNumber}
+                onChange={handleChange}
+            />
 
             <br />
 
@@ -147,6 +157,14 @@ function CreateBusiness({ }) {
                 value={form.Postcode}
                 onChange={handleChange}
             />
+            <div>
+                <label htmlFor="image">Profile Image:</label>
+                <input
+                    type="file"
+                    id="image"
+                    onChange={(e) => setFile(e.target.files[0])}
+                />
+            </div>
 
 
 
@@ -156,10 +174,13 @@ function CreateBusiness({ }) {
 
             <p>{error}</p>
 
-            <button type="submit">
+            <button className="createBusinessBtn" type="submit">
                 Create Business
             </button>
         </form>
+        </div>
+        </div>
+        </div>
     );
 }
 

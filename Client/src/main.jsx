@@ -11,11 +11,14 @@ import { setUserId, getUserId } from "./auth";
 import Login from "./Pages/LoginAndAccountCreationPage/Login.jsx";
 import Navbar from "./Navbar.jsx";
 import Home from "./Pages/HomePage/Home.jsx";
+import Footer from "./Footer.jsx";
 
 import AdvicePage from "./Pages/AdvicePage/AdvicePage.jsx";
 import AccountPage from "./Pages/AccountPage/AccountPage.jsx";
 import FoodPage from "./Pages/FoodPage/FoodPage.jsx";
 import ReviewTemplate from './Pages/ReviewTemplate/ReviewTemplate.jsx';
+import VerifyEmail from './Pages/VerifyEmail/verifyEmail.jsx';
+import ItemReviews from './wigits/itemReview/itemReview.jsx';
 
 
 
@@ -28,14 +31,16 @@ function Main() {
 
   const saveId = (id) => {
     setUserIdUpdate(id);
+    console.log("id: " + id)
     sessionStorage.setItem('userId', id);
-    console.log(id);
+    console.log("sessionStorage: " + sessionStorage.getItem('userId'))
   };
 
   useEffect(() => {
     if (storedId !== null) {
       saveId(storedId);
     }
+    document.title = "Grab It & Govan";
   }, []);
 
   if (userIdUpdate !== null) {
@@ -49,6 +54,9 @@ function Main() {
           <Route path="/Account" element={<AccountPage />} />
           <Route path="/Food" element={<FoodPage />} />
           <Route path="/Review" element={<ReviewTemplate />} />
+          <Route path="/verify" element={<VerifyEmail />} />
+          <Route path="/itemReview" element={<ItemReviews />} />
+
 
 
           <Route
@@ -64,6 +72,7 @@ function Main() {
         </Routes>
 
         {/* Add Footer component here */}
+        <Footer />
       </BrowserRouter>
     );
   } else {

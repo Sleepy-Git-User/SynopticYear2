@@ -1,0 +1,81 @@
+/* #pageContainer {
+    height: 1000px;
+    /* margin-top: 30px; */
+
+.gridContainerAccount {
+    display: grid;
+    grid: 800px / auto auto auto; 
+}
+
+.AccountBox {
+    margin: 10px;
+    background: #D99C9C; 
+    border: 3px solid #4E464E;
+    border-radius: 25px;
+    grid-column: 2 / span 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    margin-top: 50px;
+}
+
+.create-btn{
+    font-size: 20px;
+    margin-bottom: 60px;
+
+}  
+.error{
+    color: #b43232;
+    font-size: 20px;
+    padding-top: 10px;
+    margin-left: 300px;
+    
+}
+
+
+.create-btn:hover {
+    border-color: #fcc891;
+}
+
+.changeBtn{
+    background-color: #C45A5A;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.changeBtn:hover {
+    border-color: #eb9494; 
+}
+
+.account-form{
+    display:inline-block;
+}
+
+.account-form h1{
+    margin-top: 60px;
+    font-size: 36px;
+}
+
+.account-form input {
+    font-size: 18px;
+    width: 300px; 
+    background-color: #F1EBEC;
+    border-radius: 8px;
+    border-color: #4E464E;
+    border: 1px solid;
+    margin-top: 25px;
+    margin-left: 10px;
+    text-align: left;
+}
+.account-form label {
+    display: inline-block;
+    width: 200px;
+    font-size: 18px;
+    text-align: left;
+}
+.forgotten{
+    margin-left: 400px;
+}
+.forgotten:hover{
+    color: #797379;
+}

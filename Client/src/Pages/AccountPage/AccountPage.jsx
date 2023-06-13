@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react";
 import CreateBusiness from "./CreateBusiness.jsx"
 import BusinessDetails from "./BusinessDetails.jsx";
 import axios from 'axios';
-//Colour blind option
+//Colour blind option 
+import "./Account.css";
 
 
 
@@ -15,7 +16,8 @@ export default function AccountPage() {
 
     const [businessState, setBusinessState] = useState(<CreateBusiness />);
     const [userDetails, setUserDetails] = useState();
-    const [boughtItems, setBoughtItems] = useState();
+    const [name, setName] = useState("User");
+    const [boughtItems, setBoughtItems] = useState([]);
 
     const getUserDetails = () => {
         axios
@@ -29,11 +31,17 @@ export default function AccountPage() {
           .then((response) => response.data)
           .then((info) => {
             if (info.success) {
+              setName(info.data[0].Fname);
               setUserDetails(
-                <div>
+                <div className="userInfo"> 
+                <h2>User Details</h2>
+                <div className="info">
+                <img src={info.data[0].img} alt="Profile Image" width="75" height="75" />
+                  <br />
                   Name: {info.data[0].Fname} {info.data[0].Lname} <br />
                   Email: {info.data[0].Email}<br />
                   Phone: {info.data[0].PhoneNumber}
+                </div>
                 </div>
               );
             } else {
@@ -59,21 +67,14 @@ export default function AccountPage() {
           .then((info) => {
             if (info)
              {
-                console.log("AGR");
-                console.log(info);
-              /*setBoughtItems(
-                <div>
-                  Name: {info.data[0].Fname} {info.data[0].Lname} <br />
-                  Email: {info.data[0].Email}<br />
-                  Phone: {info.data[0].PhoneNumber}
-                </div>
-              );*/
+                setBoughtItems(info.data)
+                console.log(boughtItems);
             } else {
-              setBoughtItems("Error getting purchases.");
+              setBoughtItems([]);
             }
           })
           .catch((error) => {
-            setBoughtItems("Error getting purchases.");
+            setBoughtItems([]);
           });
       };
     
@@ -81,9 +82,10 @@ export default function AccountPage() {
     useEffect(() => {
         // Try and get business ID for a user
         const businessID = sessionStorage.getItem('businessId');
-       
+        console.log("BUSINESSID");
+        console.log(businessID);
 
-        if (businessID === null){
+        if (businessID === 'null' || businessID === null){
             setBusinessState(<CreateBusiness />);
         } else {
             setBusinessState(<BusinessDetails />)
@@ -99,41 +101,50 @@ export default function AccountPage() {
     return (
         <div id="pageContainer">
 
-            <div class="banner">
-                <h1>Account</h1>
+            <div class="bannerAccount">
+                <h1>Hello, {name}</h1>
                 
-            </div>
+            </div> 
+            <div className="gridContainerAccountPage">
+            
+            
+                {/* <h2>User Details</h2> */}
+                {/*Get User Details and put in here */}
+                {userDetails}
+            
 
-            <div class="mainInfo">
-                <p> Text goes in here aaaaaaaaaaaaaaaaaaaaaa </p>
-                <img></img>
-            </div>
-
-            <div>
+            <div className="business">
                 {businessState}
             </div>
 
 
+          <div className="purchaseHistory">
+          <h2>Purchase History</h2>
+          {/*Map all items in a purchase history here! */}
+          {boughtItems !== null ? (
+            boughtItems.map((boughtItem) => (
+              <div key={boughtItem.Purchase.Code}>
+                <br />
+                <img src={boughtItem.Listing.img} alt="Listing Image" width="75" height="75" />
+                <p>Name: {boughtItem.Listing.Name}</p>
+                <p>Description: {boughtItem.Listing.Desc}</p>
+                <p>Price: £{boughtItem.Listing.Price}</p>
+                <p>Quantity: {boughtItem.Purchase.Quantity}</p>
+                <p>Code: {boughtItem.Purchase.Code}</p>
+                <br />
+              </div>
+            ))
+          ) : (
+            <p>No purchases found.</p>
+          )}
+        </div>
 
-            <div>
-                <h2>User Details</h2>
-                {/*Get User Details and put in here */}
-                {userDetails}
-            </div>
 
-
-
-            <div>
-                <h2>Purchase History</h2>
-                {/*Get purchase history details and map in here*/}
-
-                {boughtItems}
-            </div>
-
-
-            <div>
+            <div className="reviews">
                 <h2>Your Reviews</h2>
                 {/* Should ONLY appear if a user has a business */}
+            </div> 
+
             </div>
 
 

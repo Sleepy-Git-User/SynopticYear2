@@ -19,6 +19,9 @@
 	flex-direction: row;
 	align-items: center;
 }
+.reviewName img{
+	border-radius: 50%;
+}
 
 .reviewName h3 {
 	margin: 0;
