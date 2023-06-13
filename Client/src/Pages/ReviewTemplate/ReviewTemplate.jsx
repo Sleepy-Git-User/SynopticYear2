@@ -40,24 +40,37 @@ export default function ReviewTemplate() {
 		setPurchaseID(ID);
 
 		if (ID) {
-			await getPurchase(ID);
+			if (await getPurchase(ID)) {
+				setLoading(false);
+			}
 		}
-		setLoading(false);
 	};
 
 	const getPurchase = async (ID) => {
-		await axios.get("/api/getPurchase/" + ID).then((res) => {
-			console.log("DATA: " + res.data.data[0]);
-			setPurchase(res.data.data[0]);
-		});
-		setForm({
-			...form,
-			PurchaseID: purchase.PurchaseID,
-			ListingID: purchase.ListingID,
-			BusinessID: purchase.BusinessID,
-			BuyerID: purchase.BuyerID,
-		});
+		try {
+			const res = await axios.get("/api/getPurchase/" + ID);
+			if (res.data.success) {
+				console.log("DATA: " + res.data.data[0].PurchaseID);
+				setPurchase(res.data.data[0]);
+
+				// Now that purchase has been updated, set the form
+				setForm({
+					...form,
+					PurchaseID: res.data.data[0].PurchaseID,
+					ListingID: res.data.data[0].ListingID,
+					BusinessID: res.data.data[0].BusinessID,
+					BuyerID: res.data.data[0].BuyerID,
+				});
+				return true;
+			}
+			else {
+				alert("Purchase not found");
+			}
+		} catch (error) {
+			console.error("Error fetching purchase:", error);
+		}
 	};
+
 
 	const stars = (rating, fullstr, emptystr, handleClick) => {
 		let stars = [];
@@ -109,6 +122,7 @@ export default function ReviewTemplate() {
 
 	useEffect(() => {
 		getPurchaseID();
+		console.log("Form= " + form);
 	}, [purchaseID]);
 
 	return (

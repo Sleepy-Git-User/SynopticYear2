@@ -782,6 +782,7 @@ module.exports = (dbName = "Database") => {
 	 */
 	function getPurchase(PurchaseID) {
 		try {
+			console.log(PurchaseID);
 			let data = {
 				PurchaseID: null,
 				ListingID: null,

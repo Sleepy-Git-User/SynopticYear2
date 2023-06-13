@@ -98,10 +98,15 @@ module.exports = (components) => {
 	});
 
 	router.get("/getPurchase/:purchaseID", (req, res) => {
-		res.json({
-			success: true,
-			data: interface.getPurchase(req.params.purchaseID),
-		});
+		try {
+			res.json({
+				success: true,
+				data: interface.getPurchase(req.params.purchaseID),
+			});
+		} catch (error) {
+			console.error(error);
+			return res.json({ success: false, data: "Server error" });
+		}
 	});
 
 	router.get("/getBusinessPannel/:purchaseID", (req, res) => {
