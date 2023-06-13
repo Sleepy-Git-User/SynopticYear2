@@ -1,6 +1,28 @@
 const expect = require("chai").expect;
-const interface = require("../interface.js")("TestDatabase");
+const interface = require("../DataBase/interface.js")("TestDatabase");
 
+interface.makeUser(
+    "omgitsblackbeard@gmail.com",
+    09876543211,
+    "George",
+    "Wilson",
+    20 / 02 / 2003,
+    "123",
+    "123",
+    "123",
+    "123",
+    null
+);
+interface.makeBusiness(
+    "Test Business",
+    "test@gmail.com",
+    09876543211,
+    "123",
+    "123",
+    "123",
+    "123",
+    null
+);
 describe("createListing", function () {
     it("should create a listing with valid input", async function () {
         const Name = "Sample Product";
