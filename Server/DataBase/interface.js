@@ -613,15 +613,27 @@ module.exports = (dbName = "Database") => {
 	}
 
 	function getItemCategories(ListingID) {
-		const category_sql = Database.database.prepare(
-			`SELECT * FROM Item_Category WHERE ListingID = ?`
-		);
-		return category_sql.all(ListingID);
+		try {
+			const category_sql = Database.database.prepare(
+				`SELECT * FROM Item_Category WHERE ListingID = ?`
+			);
+			return category_sql.all(ListingID);
+		} catch (error) {
+			throw "Invalid ListingID";
+		}
 	}
 
 	function getCategoryName(CategoryID) {
-		let category = Database.getRecord("Category", "CategoryID", CategoryID);
-		return category[0].Name;
+		try {
+			let category = Database.getRecord(
+				"Category",
+				"CategoryID",
+				CategoryID
+			);
+			return category[0].Name;
+		} catch (error) {
+			throw "Invalid CategoryID";
+		}
 	}
 
 	// console.log(createCategory("Vegan"));
@@ -713,21 +725,29 @@ module.exports = (dbName = "Database") => {
 	 */
 	function getBoughtItems(BuyerID) {
 		let data = [];
-		let purchases = Database.getRecord("Purchase", "BuyerID", BuyerID);
+		try {
+			let purchases = Database.getRecord("Purchase", "BuyerID", BuyerID);
 
-		purchases.forEach((purchase) => {
-			data.push({ Purchase: [], Listing: [], Buyer: [] });
-			data[data.length - 1].Purchase = purchase;
-			let listing = Database.getRecord(
-				"Listing",
-				"ListingID",
-				purchase.ListingID
-			);
-			data[data.length - 1].Listing = listing[0];
-			let user = Database.getRecord("User", "UserID", purchase.BuyerID);
-			data[data.length - 1].Buyer = user[0];
-		});
-		return data;
+			purchases.forEach((purchase) => {
+				data.push({ Purchase: [], Listing: [], Buyer: [] });
+				data[data.length - 1].Purchase = purchase;
+				let listing = Database.getRecord(
+					"Listing",
+					"ListingID",
+					purchase.ListingID
+				);
+				data[data.length - 1].Listing = listing[0];
+				let user = Database.getRecord(
+					"User",
+					"UserID",
+					purchase.BuyerID
+				);
+				data[data.length - 1].Buyer = user[0];
+			});
+			return data;
+		} catch (error) {
+			throw "Invalid BuyerID";
+		}
 	}
 
 	/**
@@ -770,15 +790,19 @@ module.exports = (dbName = "Database") => {
 			Date: null,
 			BusinessID: null,
 		};
-		data = Database.getRecord("Purchase", "PurchaseID", PurchaseID);
-		let listing = Database.getRecord(
-			"Listing",
-			"ListingID",
-			data[0].ListingID
-		);
-		data[0].BusinessID = listing[0].SellerID;
-		console.log("GetPurchase: " + data);
-		return data;
+		try {
+			data = Database.getRecord("Purchase", "PurchaseID", PurchaseID);
+			let listing = Database.getRecord(
+				"Listing",
+				"ListingID",
+				data[0].ListingID
+			);
+			data[0].BusinessID = listing[0].SellerID;
+
+			return data;
+		} catch (error) {
+			throw "Invalid PurchaseID";
+		}
 	}
 
 	//********************************************************/
@@ -802,23 +826,23 @@ module.exports = (dbName = "Database") => {
 		Rating,
 		Review
 	) {
-		console.log(BusinessID);
 		let date = new Date();
 		const insert_review_sql = Database.database.prepare(
 			`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Title, Rating, Review, Date) VALUES (?,?,?,?,?,?,?)`
 		);
-		let success = insert_review_sql.run(
-			ReviewerID,
-			BusinessID,
-			PurchaseID,
-			Title,
-			Rating,
-			Review,
-			date.toISOString()
-		);
-
-		if (success.changes === 0) {
-			return "Review failed to be created";
+		try {
+			let success = insert_review_sql.run(
+				ReviewerID,
+				BusinessID,
+				PurchaseID,
+				Title,
+				Rating,
+				Review,
+				date.toISOString()
+			);
+			return { success: true, data: "Review Created" };
+		} catch (error) {
+			throw "Failed to create review";
 		}
 	}
 
@@ -839,28 +863,32 @@ module.exports = (dbName = "Database") => {
 	 * @returns All reviews from a specific business
 	 */
 	function getBusinessReviews(BusinessID) {
-		let data = Database.database
-			.prepare(
-				"SELECT * FROM Review WHERE BusinessID = ? ORDER BY Date DESC"
-			)
-			.all(BusinessID);
-		data.forEach((review) => {
-			review.ReviewerName = Database.getRecord(
-				"User",
-				"UserID",
-				review.ReviewerID
-			)[0].Fname;
-			let date = new Date(review.Date);
-			review.Date =
-				date.getDate() +
-				"/" +
-				date.getMonth() +
-				"/" +
-				date.getFullYear();
-		});
-		console.log(data);
-		return data;
+		try {
+			let data = Database.database
+				.prepare(
+					"SELECT * FROM Review WHERE BusinessID = ? ORDER BY Date DESC"
+				)
+				.all(BusinessID);
+			data.forEach((review) => {
+				review.ReviewerName = Database.getRecord(
+					"User",
+					"UserID",
+					review.ReviewerID
+				)[0].Fname;
+				let date = new Date(review.Date);
+				review.Date =
+					date.getDate() +
+					"/" +
+					date.getMonth() +
+					"/" +
+					date.getFullYear();
+			});
+			return data;
+		} catch (error) {
+			throw "Invalid BusinessID";
+		}
 	}
+
 	function getItemReviews(ListingID) {
 		let monthNames = [
 			"Janurary",
@@ -871,36 +899,38 @@ module.exports = (dbName = "Database") => {
 			"June",
 			"July",
 			"August",
-			"September",
+			"Septembreviewer",
 			"October",
 			"Novermber",
 			"December",
 		];
 		//Get the reviews of the purchases of the item
-		let stmt = Database.database.prepare(
-			"SELECT * FROM Review join Purchase on Purchase.PurchaseID = Review.PurchaseID join Listing on Purchase.ListingID = Listing.ListingID WHERE Listing.ListingID = ?"
-		);
+		try {
+			let stmt = Database.database.prepare(
+				"SELECT * FROM Review join Purchase on Purchase.PurchaseID = Review.PurchaseID join Listing on Purchase.ListingID = Listing.ListingID WHERE Listing.ListingID = ?"
+			);
 
-		let data = stmt.all(ListingID);
-		console.log(data);
-		data.forEach((review) => {
-			let user = Database.getRecord(
-				"User",
-				"UserID",
-				review.ReviewerID
-			)[0];
-			review.ReviewerName = user.Fname;
-			review.img = user.img;
-			let date = new Date(review.Date);
-			review.Date =
-				date.getDate() +
-				" " +
-				monthNames[date.getMonth()] +
-				" " +
-				date.getFullYear();
-		});
-		console.log(data);
-		return data;
+			let data = stmt.all(ListingID);
+			data.forEach((review) => {
+				let user = Database.getRecord(
+					"User",
+					"UserID",
+					review.ReviewerID
+				)[0];
+				review.ReviewerName = user.Fname;
+				review.img = user.img;
+				let date = new Date(review.Date);
+				review.Date =
+					date.getDate() +
+					" " +
+					monthNames[date.getMonth()] +
+					" " +
+					date.getFullYear();
+			});
+			return data;
+		} catch (error) {
+			throw "Invalid ListingID";
+		}
 	}
 
 	/**
@@ -909,19 +939,22 @@ module.exports = (dbName = "Database") => {
 	 * @returns  Rating of business
 	 */
 	function getBusinessRating(BusinessID) {
-		console.log(BusinessID);
 		let total = 0;
 		const stmt = Database.database.prepare(
 			"SELECT * FROM Review WHERE BusinessID = ?"
 		);
-		let sql_select_stmt = stmt.all(BusinessID);
-		sql_select_stmt.forEach((review) => {
-			total += review.Rating;
-		});
-		if (sql_select_stmt.length === 0) {
-			return "N/A";
+		try {
+			let sql_select_stmt = stmt.all(BusinessID);
+			sql_select_stmt.forEach((review) => {
+				total += review.Rating;
+			});
+			if (sql_select_stmt.length === 0) {
+				return "N/A";
+			}
+			return total / sql_select_stmt.length;
+		} catch (error) {
+			throw "Invalid BusinessID";
 		}
-		return total / sql_select_stmt.length;
 	}
 
 	/**
@@ -950,7 +983,11 @@ module.exports = (dbName = "Database") => {
 		const stmt = Database.database.prepare(
 			"SELECT * FROM Review WHERE BusinessID = ?"
 		);
-		return (sql_select_stmt = stmt.all(BusinessID).length);
+		try {
+			return (sql_select_stmt = stmt.all(BusinessID).length);
+		} catch (error) {
+			throw "Invalid BusinessID";
+		}
 	}
 
 	/**
@@ -959,7 +996,11 @@ module.exports = (dbName = "Database") => {
 	 * @returns All reviews from a specific user
 	 */
 	function getUserReviews(UserID) {
-		return Database.getRecord("Review", "ReviewerID", UserID);
+		try {
+			return Database.getRecord("Review", "ReviewerID", UserID);
+		} catch (error) {
+			return "Invalid UserID";
+		}
 	}
 
 	/**
@@ -969,7 +1010,11 @@ module.exports = (dbName = "Database") => {
 	 */
 
 	function getReviewCount(UserID) {
-		return Database.getRecord("Review", "ReviewerID", UserID).length;
+		try {
+			return Database.getRecord("Review", "ReviewerID", UserID).length;
+		} catch (error) {
+			return "Invalid UserID";
+		}
 	}
 
 	//********************************************************/
@@ -978,55 +1023,62 @@ module.exports = (dbName = "Database") => {
 
 	function getBusinessPannel(PurchaseID) {
 		//ID, Name, IMG, Rating, Rating count
-		const Purchase = Database.getRecord(
-			"Purchase",
-			"PurchaseID",
-			PurchaseID
-		);
-		console.log("Purchase=" + PurchaseID);
-		const Listing = Database.getRecord(
-			"Listing",
-			"ListingID",
-			Purchase[0].ListingID
-		);
-		console.log(Listing);
-		const BusinessID = Listing[0].SellerID;
-		const business = Database.getRecord(
-			"Business",
-			"BusinessID",
-			BusinessID
-		);
-		console.log(business);
-		const rating = getBusinessRating(BusinessID);
-		const ratingCount = countBusinessReviews(BusinessID);
-		return {
-			ID: BusinessID,
-			Name: business[0].Name,
-			IMG: business[0].img,
-			Rating: rating,
-			RatingCount: ratingCount,
-		};
+		try {
+			const Purchase = Database.getRecord(
+				"Purchase",
+				"PurchaseID",
+				PurchaseID
+			);
+			const Listing = Database.getRecord(
+				"Listing",
+				"ListingID",
+				Purchase[0].ListingID
+			);
+
+			const BusinessID = Listing[0].SellerID;
+			const business = Database.getRecord(
+				"Business",
+				"BusinessID",
+				BusinessID
+			);
+
+			const rating = getBusinessRating(BusinessID);
+			const ratingCount = countBusinessReviews(BusinessID);
+			return {
+				ID: BusinessID,
+				Name: business[0].Name,
+				IMG: business[0].img,
+				Rating: rating,
+				RatingCount: ratingCount,
+			};
+		} catch (error) {
+			throw "Invalid PurchaseID";
+		}
 	}
 
 	function getItemPannel(PurchaseID) {
 		//Purchase ID, Listing name, Listing img, Listing price, Purchase quantity, Purchase date\
-		let data = {
-			ID: null,
-			Name: null,
-			img: null,
-			Price: null,
-			Quantity: null,
-			Date: null,
-		};
-		const purchase = getPurchase(PurchaseID);
-		const listing = getListing(purchase[0].ListingID);
-		data.ID = purchase[0].PurchaseID;
-		data.Name = listing[0].Name;
-		data.img = listing[0].img;
-		data.Price = listing[0].Price * purchase[0].Quantity;
-		data.Quantity = purchase[0].Quantity;
-		data.Date = purchase[0].Date;
-		return data;
+		try {
+			let data = {
+				ID: null,
+				Name: null,
+				img: null,
+				Price: null,
+				Quantity: null,
+				Date: null,
+			};
+			const purchase = getPurchase(PurchaseID);
+			const listing = getListing(purchase[0].ListingID);
+			data.ID = purchase[0].PurchaseID;
+			data.Name = listing[0].Name;
+			data.img = listing[0].img;
+			data.Price = listing[0].Price * purchase[0].Quantity;
+			data.Quantity = purchase[0].Quantity;
+			data.Date = purchase[0].Date;
+			return data;
+		} catch (error) {
+			throw "Invalid PurchaseID";
+		}
 	}
 
 	//********************************************************/
