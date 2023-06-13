@@ -3,7 +3,6 @@ const path = require("path");
 const { Interface } = require("readline");
 const UserData = path.join(__dirname, "/userData.csv");
 const BusinessData = path.join(__dirname, "/businessData.csv");
-const CategoryData = path.join(__dirname, "/category.csv")
 const interface = require("../interface.js")();
 const database = interface.Database;
 
@@ -41,15 +40,8 @@ function importData(path) {
         splitLine[6],
         userIDs[i].UserID));
     }
-
-    if (path === CategoryData) {
-      console.log(interface.createCategory(
-        splitLine[0]
-      ));
-    }
 }
 }
 
 importData(UserData);
 importData(BusinessData);
-importData(CategoryData);

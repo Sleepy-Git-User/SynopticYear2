@@ -12,7 +12,7 @@ export default function FoodPageUserView() {
     Vegan: false,
     Vegitarian: false,
     Halal: false,
-    Kosher: false
+    Kosher: false,
   });
 
   const getListings = () => {
@@ -136,6 +136,8 @@ export default function FoodPageUserView() {
                 <h3>Listings</h3>
                 {/*Call a function to get all listings on a useEffect, and call it again when a filter is changed.*/}
                 {/*Each one should have a form to specify quantity and a button to submit, on which a function call is done to reserve the item*/}
+                            {/*Call a function to get all listings on a useEffect, and call it again when a filter is changed.*/}
+            {/*Each one should have a form to specify quantity and a button to submit, on which a function call is done to reserve the item*/}
             {listings.map((listing) => ( 
               <div className="listingsOnly">
               <form key={listing.ListingID}>

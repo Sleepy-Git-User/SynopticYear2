@@ -3,11 +3,8 @@
  * @returns Express Router
  */
 const auth = require("../Auth/Auth.js");
-const multer = require("multer");
-const upload = multer({
-	storage: multer.memoryStorage(),
-	limits: { fileSize: 50 * 1024 * 1024 },
-});
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage(), limits: {fileSize: 50 * 1024 * 1024}  });
 
 module.exports = (components) => {
 	const { express, interface } = components;
@@ -22,28 +19,28 @@ module.exports = (components) => {
 		});
 	});
 
-	router.post("/makeUser", upload.single("file"), async (req, res) => {
-		try {
-			res.json({
-				success: true,
-				data: await interface.makeUser(
-					req.body.Email,
-					req.body.PhoneNumber,
-					req.body.Fname,
-					req.body.Lname,
-					req.body.DoB,
-					req.body.Password,
-					req.body.Line1,
-					req.body.Line2,
-					req.body.City,
-					req.body.Postcode,
-					req.file
-				),
-			});
-		} catch (error) {
-			console.error(error);
-			return res.json({ success: false, data: "Server error" });
-		}
+	router.post("/makeUser", upload.single('file'), async (req, res) => {
+		
+		
+		try{
+			res.json({success: true, data: await interface.makeUser(
+				req.body.Email,
+				req.body.PhoneNumber,
+				req.body.Fname,
+				req.body.Lname,
+				req.body.DoB,
+				req.body.Password,
+				req.body.Line1,
+				req.body.Line2,
+				req.body.City,
+				req.body.Postcode,
+				req.file,
+			)})
+			
+			} catch (error) {
+				console.error(error);
+				return res.json({ success: false, data: "Server error" });
+			}
 	});
 
 	router.post("/loginChecker", (req, res) => {
@@ -66,7 +63,7 @@ module.exports = (components) => {
 
 	router.post("/makeBusiness", upload.single("file"), async (req, res) => {
 		const {
-			Name,
+			Bname,
 			Email,
 			PhoneNumber,
 			Line1,
@@ -75,20 +72,21 @@ module.exports = (components) => {
 			Postcode,
 			UserID,
 		} = req.body;
-
+		
 		let data = await interface.makeBusiness(
-			Name,
-			Email,
-			PhoneNumber,
-			Line1,
-			Line2,
-			City,
-			Postcode,
-			UserID,
-			req.file
-		);
+				Bname,
+				Email,
+				PhoneNumber,
+				Line1,
+				Line2,
+				City,
+				Postcode,
+				UserID,
+				req.file
+			)
 		console.log(data);
 		res.json(data);
+
 	});
 
 	router.post("/getBusinessDetails", (req, res) => {
@@ -98,15 +96,10 @@ module.exports = (components) => {
 	});
 
 	router.get("/getPurchase/:purchaseID", (req, res) => {
-		try {
-			res.json({
-				success: true,
-				data: interface.getPurchase(req.params.purchaseID),
-			});
-		} catch (error) {
-			console.error(error);
-			return res.json({ success: false, data: "Server error" });
-		}
+		res.json({
+			success: true,
+			data: interface.getPurchase(req.params.purchaseID),
+		});
 	});
 
 	router.get("/getBusinessPannel/:purchaseID", (req, res) => {
@@ -152,21 +145,19 @@ module.exports = (components) => {
 
 	router.post("/createListing", upload.single("file"), async (req, res) => {
 		console.log(req.body);
-		try {
-			res.json(
-				await interface.createListing(
-					req.body.Name,
-					req.body.Desc,
-					req.body.Price,
-					req.file,
-					req.body.Quantity,
-					req.body.Category,
-					req.body.SellerID,
-					req.body.ListingDate,
-					req.body.EndDate
-				)
-			);
-		} catch (error) {
+		try{
+			res.json(await interface.createListing(
+				req.body.Name,
+				req.body.Desc,
+				req.body.Price,
+				req.file,
+				req.body.Quantity,
+				req.body.Category,
+				req.body.SellerID,
+				req.body.ListingDate,
+				req.body.EndDate
+			)
+	);} catch (error) {
 			console.error(error);
 			return res.json({ success: false, data: "Server error" });
 		}
@@ -208,10 +199,7 @@ module.exports = (components) => {
 		console.log(req.body);
 		console.log("HELLO");
 		console.log(interface.getBoughtItems(req.body.UserID));
-		res.json({
-			success: true,
-			data: interface.getBoughtItems(req.body.UserID),
-		});
+		res.json({success: true, data: interface.getBoughtItems(req.body.UserID)});
 	});
 
 	router.post("/verifyEmail", (req, res) => {
@@ -219,7 +207,7 @@ module.exports = (components) => {
 	});
 
 	router.post("/getProfilePic", (req, res) => {
-		console.log("Profile Pic" + req.body.UserID);
+		console.log("Profile Pic"+req.body.UserID);
 		res.json(interface.getProfilePic(req.body.UserID));
 	});
 

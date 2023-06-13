@@ -7,23 +7,22 @@ const crypto = require("../utili/password.js");
 const { log } = require("console");
 const fs = require("fs");
 const emailSender = require("../utili/email.js");
-const { BlobServiceClient } = require("@azure/storage-blob");
-require("dotenv").config();
+const { BlobServiceClient } = require('@azure/storage-blob');
+require('dotenv').config();
 const auth = require("../Auth/Auth.js");
-const azureStorageConnectionString =
-	process.env.AZURE_STORAGE_CONNECTION_STRING;
-const containerName = "images";
-console.log(azureStorageConnectionString);
-const blobServiceClient = BlobServiceClient.fromConnectionString(
-	azureStorageConnectionString
-);
+
+const azureStorageConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const containerName = 'images';
+const blobServiceClient = BlobServiceClient.fromConnectionString(azureStorageConnectionString);
 const containerClient = blobServiceClient.getContainerClient(containerName);
+		
 
 module.exports = (dbName = "Database") => {
 	//Creates the Database class
 	const Database = new DataBaseSystem(dbName, DbPath);
 	try {
 		//Imports the DDL
+		// Database.database.prepare("DROP TABLE Review").run();
 		Database.importDDL(DDLPath);
 	} catch (error) {
 		console.log(error);
@@ -52,7 +51,7 @@ module.exports = (dbName = "Database") => {
 				"Email",
 				Email
 			); //Gets the UserID by using the email.
-
+		
 			const grabSalt = Database.getField(
 				"Password",
 				"Salt",
@@ -70,13 +69,14 @@ module.exports = (dbName = "Database") => {
 				hashedPassword[0].Password
 			) {
 				//Hashes the inputted password and comparess it to the stored password.
-				console.log("HERE" + getUserID);
-				try {
+				console.log("HERE"+getUserID);
+				try{
 					let data2 = getUserBusinessIDs(getUserID[0].UserID);
-					return { success: true, data: getUserID, data2: data2 };
-				} catch (error) {
-					return { success: true, data: getUserID, data2: null };
+					return { success: true, data: getUserID,  data2: data2 };
+				}catch(error){
+					return { success: true, data: getUserID, data2:null };
 				}
+				
 			} else {
 				return { success: false, data: "Email or Password incorrect" };
 			}
@@ -112,8 +112,9 @@ module.exports = (dbName = "Database") => {
 		Postcode,
 		ProfilePic
 	) {
+		
 		const user_id = Database.generateUUID("User", "UserID"); //Creates users UUID.
-
+		
 		const address_id = Database.generateUUID("Address", "AddressID"); //Creates address UUID.
 		if (Database.inTable("User", "Email", Email) === true) {
 			//Checks if the Email is already in the table and returns fales if its taken.
@@ -150,25 +151,18 @@ module.exports = (dbName = "Database") => {
 				Fname,
 				Lname,
 				DoB,
-				"https://synopticproject.blob.core.windows.net/images/" +
-					user_id +
-					".png",
+				"https://synopticproject.blob.core.windows.net/images/"+user_id+".png",
 				address_id
 			);
 			insert_Password.run(user_id, hashedPassword, salt);
-
-			try {
-				const blobClient = containerClient.getBlockBlobClient(
-					user_id + ".png"
-				);
-				const uploadResponse = await blobClient.upload(
-					ProfilePic.buffer,
-					ProfilePic.size
-				);
+			const blobClient = containerClient.getBlockBlobClient(user_id+".png");
+			
+			try{
+				const uploadResponse = await blobClient.upload(ProfilePic.buffer, ProfilePic.size);
 				console.log(`Upload succesful. ${uploadResponse.requestId}`);
 			} catch (error) {
-				console.error("No image uploaded");
-				//throw error;
+				console.error(error);
+				throw error;
 			}
 			sendWelcomeEmail(Email);
 			sendVerificationEmail(Email);
@@ -180,18 +174,14 @@ module.exports = (dbName = "Database") => {
 	function verifyEmail(UserID) {
 		let ID = auth.readToken(UserID);
 		Database.updateRecord("User", "Email_Confirmed", 1, "UserID", ID);
-		return { success: true, data: "Email Confirmed" };
+		return {success: true, data: "Email Confirmed"};
 	}
 
 	//makeUser Test
 	//  console.log(makeUser("omgitsblackbeard@gmail.com","13313232","tafin","nover","02/04/2000","Game","Party","Lane","London","LN169NG"));
 
 	function getProfilePic(userID) {
-		return (
-			"https://synopticproject.blob.core.windows.net/images/" +
-			userID +
-			".png"
-		);
+		return "https://synopticproject.blob.core.windows.net/images/"+userID+".png";
 	}
 
 	function removeUser(UserID) {
@@ -229,7 +219,7 @@ module.exports = (dbName = "Database") => {
 
 	/**
 	 *
-	 * @param {*} Name Business Name
+	 * @param {*} Bname Business Name
 	 * @param {*} Email Main email for business
 	 * @param {*} PhoneNumber Main Phonenumber for business
 	 * @param {*} Line1 Business address
@@ -240,7 +230,7 @@ module.exports = (dbName = "Database") => {
 	 * @returns Success true or false depending on errors. Data has business id if success or an error message.
 	 */
 	async function makeBusiness(
-		Name,
+		Bname,
 		Email,
 		PhoneNumber,
 		Line1,
@@ -267,7 +257,7 @@ module.exports = (dbName = "Database") => {
 			//SQL to insert data in to the User table.
 			const insert_business_sql = Database.database.prepare(`
             INSERT INTO Business
-            (BusinessID, Name, Email, PhoneNumber, img, AddressID, InvCode)
+            (BusinessID, Bname, Email, PhoneNumber, img, AddressID, InvCode)
             VALUES (?,?,?,?,?,?,?)`);
 
 			//SQL to insert data in to the User table.
@@ -280,28 +270,21 @@ module.exports = (dbName = "Database") => {
 			insert_address_sql.run(address_id, Line1, Line2, City, PostCode);
 			insert_business_sql.run(
 				business_id,
-				Name,
+				Bname,
 				Email,
 				PhoneNumber,
-				"https://synopticproject.blob.core.windows.net/images/" +
-					business_id +
-					"bpp.png",
+				"https://synopticproject.blob.core.windows.net/images/"+business_id+"bpp.png",
 				address_id,
 				InvCode
 			);
-
-			try {
-				const blobClient = containerClient.getBlockBlobClient(
-					business_id + "bpp.png"
-				);
-				const uploadResponse = await blobClient.upload(
-					ProfilePic.buffer,
-					ProfilePic.size
-				);
+			const blobClient = containerClient.getBlockBlobClient(business_id+"bpp.png");
+			
+			try{
+				const uploadResponse = await blobClient.upload(ProfilePic.buffer, ProfilePic.size);
 				console.log(`Upload succesful. ${uploadResponse.requestId}`);
 			} catch (error) {
-				console.log("No image uploaded");
-				//throw error;
+				console.error(error);
+				throw error;
 			}
 
 			const User_Business_sql = Database.database.prepare(`
@@ -394,7 +377,7 @@ module.exports = (dbName = "Database") => {
 		ListingDate,
 		EndDate
 	) {
-		const listing_id = Database.generateUUID("Listing", "ListingID");
+		const listing_id = Database.generateUUID("Listing", "ListingID"); //Creates users UUID.
 		if (Quantity < 0) {
 			return { success: false, data: "Invalid Quantity" };
 		}
@@ -413,29 +396,24 @@ module.exports = (dbName = "Database") => {
 			Name,
 			Desc,
 			Price,
-			"https://synopticproject.blob.core.windows.net/images/" +
-				listing_id +
-				"lispp.png",
+			"https://synopticproject.blob.core.windows.net/images/"+listing_id+"lispp.png",
 			Quantity,
 			SellerID,
 			ListingDate,
 			EndDate
 		);
-
-		try {
-			const blobClient = containerClient.getBlockBlobClient(
-				listing_id + "lispp.png"
-			);
-			const uploadResponse = await blobClient.upload(
-				img.buffer,
-				img.size
-			);
+		const blobClient = containerClient.getBlockBlobClient(listing_id+"lispp.png");
+		try{
+			const uploadResponse = await blobClient.upload(img.buffer, img.size);
 			console.log(`Upload succesful. ${uploadResponse.requestId}`);
 		} catch (error) {
-			console.log("No image uploaded");
+			console.error(error);
+			throw error;
 		}
 		Category = Category.split(",");
 		for (let i = 0; i < Category.length; i++) {
+
+		
 			let category = Database.getRecord("Category", "Name", Category[i]);
 			let category_id = category[0].CategoryID;
 			const insert_category_sql = Database.database.prepare(`
@@ -461,36 +439,53 @@ module.exports = (dbName = "Database") => {
 	//     )
 	// );
 
+	/**
+	 * Updates one column in the listing table
+	 * @param {*} ListingID Which listing is it
+	 * @param {*} Column What column are you changing
+	 * @param {*} NewValue What is the new value
+	 * @param {*} CheckedColumn What column are you checking against
+	 * @param {*} CheckedValue What is the value you are checking against
+	 *
+	 * @returns true if successful
+	 */
+	function updateListing(
+		ListingID,
+		Column,
+		NewValue,
+		CheckedColumn,
+		CheckedValue
+	) {
+		return Database.updateRecord(
+			"Listing",
+			Column,
+			NewValue,
+			"ListingID",
+			ListingID,
+			CheckedColumn,
+			CheckedValue
+		);
+	}
+
 	function updateListingQuantity(ListingID, Quantity) {
 		if (Quantity < 0) {
 			return "Invalid Quantity";
 		}
-		try {
-			Database.updateRecord(
-				"Listing",
-				"Quantity",
-				Quantity,
-				"ListingID",
-				ListingID
-			);
-			return "Quantity Updated";
-		} catch (error) {
-			return "Invalid ListingID";
-		}
+		return Database.updateRecord(
+			"Listing",
+			"Quantity",
+			Quantity,
+			"ListingID",
+			ListingID
+		);
 	}
 
 	function updateListingStatus() {
-		try {
-			Database.database
-				.prepare(
-					`UPDATE Listing SET Status = 1 WHERE EDate < date('now') OR Quantity <= 0`
-				)
-				.run();
-			return "Status Updated";
-		} catch (error) {
-			console.log(error);
-			return "Listing Status Update Failed";
-		}
+		Database.database
+			.prepare(
+				`UPDATE Listing SET Status = 1 WHERE EDate < date('now') OR Quantity <= 0`
+			)
+			.run();
 	}
 
 	/**
@@ -515,7 +510,7 @@ module.exports = (dbName = "Database") => {
 		} else {
 			let placeholders = array.map(() => "?").join(",");
 			let sql_listing_select = Database.database.prepare(
-				`SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name IN (${placeholders}) ))AND Status = 0`
+				`SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name IN (${placeholders}) ))WHERE Status = 0`
 			);
 
 			let data = sql_listing_select.all(...array);
@@ -535,11 +530,7 @@ module.exports = (dbName = "Database") => {
 	 * @returns True if found
 	 */
 	function getListing(ListingID) {
-		try {
-			return Database.getRecord("Listing", "ListingID", ListingID);
-		} catch (error) {
-			throw "Invalid ListingID";
-		}
+		return Database.getRecord("Listing", "ListingID", ListingID);
 	}
 
 	/**
@@ -548,14 +539,10 @@ module.exports = (dbName = "Database") => {
 	 * @returns All active listings from a specific business
 	 */
 	function getBusinessListings(BusinessID) {
-		try {
-			listing_sql = Database.database.prepare(
-				`SELECT * FROM Listing WHERE SellerID = ? AND Status = 0`
-			);
-			return listing_sql.all(BusinessID);
-		} catch (error) {
-			throw "Invalid BusinessID";
-		}
+		listing_sql = Database.database.prepare(
+			`SELECT * FROM Listing WHERE SellerID = ? AND Status = 0`
+		);
+		return listing_sql.all(BusinessID);
 	}
 
 	/**
@@ -564,11 +551,7 @@ module.exports = (dbName = "Database") => {
 	 * @returns All listings from a specific business
 	 */
 	function getAllBusinessListings(BusinessID) {
-		try {
-			return Database.getRecord("Listing", "SellerID", BusinessID);
-		} catch (error) {
-			throw "Invalid BusinessID";
-		}
+		return Database.getRecord("Listing", "SellerID", BusinessID);
 	}
 
 	/**
@@ -576,11 +559,7 @@ module.exports = (dbName = "Database") => {
 	 * @returns All listings from the database
 	 */
 	function getAllListingRecords() {
-		try {
-			return Database.getAllRecords("Listing");
-		} catch (error) {
-			throw "No listings found";
-		}
+		return Database.getAllRecords("Listing");
 	}
 
 	/**
@@ -592,20 +571,12 @@ module.exports = (dbName = "Database") => {
 	}
 
 	function createCategory(CategoryName) {
-		if (CategoryName == null || CategoryName == "") {
-			return "Category name cannot be empty";
-		}
-		if (Database.inTable("Category", "Name", CategoryName))
-			return "Category already exists";
 		const category_id = Database.generateUUID("Category", "CategoryID"); //Creates users UUID.
-		const insert_category_sql = Database.database.prepare(`
+		const insert_category_sql = Database.database.prepare(`\
 		INSERT INTO Category
 		(CategoryID, Name)
 		VALUES (?,?)`);
-		return {
-			success: true,
-			data: insert_category_sql.run(category_id, CategoryName),
-		};
+		return insert_category_sql.run(category_id, CategoryName);
 	}
 
 	function getCategories() {
@@ -613,27 +584,15 @@ module.exports = (dbName = "Database") => {
 	}
 
 	function getItemCategories(ListingID) {
-		try {
-			const category_sql = Database.database.prepare(
-				`SELECT * FROM Item_Category WHERE ListingID = ?`
-			);
-			return category_sql.all(ListingID);
-		} catch (error) {
-			throw "Invalid ListingID";
-		}
+		const category_sql = Database.database.prepare(
+			`SELECT * FROM Item_Category WHERE ListingID = ?`
+		);
+		return category_sql.all(ListingID);
 	}
 
 	function getCategoryName(CategoryID) {
-		try {
-			let category = Database.getRecord(
-				"Category",
-				"CategoryID",
-				CategoryID
-			);
-			return category[0].Name;
-		} catch (error) {
-			throw "Invalid CategoryID";
-		}
+		let category = Database.getRecord("Category", "CategoryID", CategoryID);
+		return category[0].Name;
 	}
 
 	// console.log(createCategory("Vegan"));
@@ -716,7 +675,7 @@ module.exports = (dbName = "Database") => {
 		return { success: false, data: "Listing does not exist" };
 	}
 
-	//  console.log(reserveItem("5a0112c7-2fad-435b-8a8c-9a48c350e06b","28179d4b-32ac-48d8-b1ef-d82987678c2c", 1));
+	    //  console.log(reserveItem("5a0112c7-2fad-435b-8a8c-9a48c350e06b","28179d4b-32ac-48d8-b1ef-d82987678c2c", 1));
 
 	/**
 	 *  Gets all purchases from a specific buyer
@@ -725,29 +684,21 @@ module.exports = (dbName = "Database") => {
 	 */
 	function getBoughtItems(BuyerID) {
 		let data = [];
-		try {
-			let purchases = Database.getRecord("Purchase", "BuyerID", BuyerID);
+		let purchases = Database.getRecord("Purchase", "BuyerID", BuyerID);
 
-			purchases.forEach((purchase) => {
-				data.push({ Purchase: [], Listing: [], Buyer: [] });
-				data[data.length - 1].Purchase = purchase;
-				let listing = Database.getRecord(
-					"Listing",
-					"ListingID",
-					purchase.ListingID
-				);
-				data[data.length - 1].Listing = listing[0];
-				let user = Database.getRecord(
-					"User",
-					"UserID",
-					purchase.BuyerID
-				);
-				data[data.length - 1].Buyer = user[0];
-			});
-			return data;
-		} catch (error) {
-			throw "Invalid BuyerID";
-		}
+		purchases.forEach((purchase) => {
+			data.push({ Purchase: [], Listing: [], Buyer: [] });
+			data[data.length - 1].Purchase = purchase;
+			let listing = Database.getRecord(
+				"Listing",
+				"ListingID",
+				purchase.ListingID
+			);
+			data[data.length - 1].Listing = listing[0];
+			let user = Database.getRecord("User", "UserID", purchase.BuyerID);
+			data[data.length - 1].Buyer = user[0];
+		});
+		return data;
 	}
 
 	/**
@@ -781,29 +732,24 @@ module.exports = (dbName = "Database") => {
 	 * @returns A specific purchase
 	 */
 	function getPurchase(PurchaseID) {
-		try {
-			console.log(PurchaseID);
-			let data = {
-				PurchaseID: null,
-				ListingID: null,
-				BusinessID: null,
-				BuyerID: null,
-				Quantity: null,
-				Date: null,
-				BusinessID: null,
-			};
-			data = Database.getRecord("Purchase", "PurchaseID", PurchaseID);
-			let listing = Database.getRecord(
-				"Listing",
-				"ListingID",
-				data[0].ListingID
-			);
-			data[0].BusinessID = listing[0].SellerID;
-
-			return data;
-		} catch (error) {
-			throw "Invalid PurchaseID";
-		}
+		let data = {
+			PurchaseID: null,
+			ListingID: null,
+			BusinessID: null,
+			BuyerID: null,
+			Quantity: null,
+			Date: null,
+			BusinessID: null,
+		};
+		data = Database.getRecord("Purchase", "PurchaseID", PurchaseID);
+		let listing = Database.getRecord(
+			"Listing",
+			"ListingID",
+			data[0].ListingID
+		);
+		data[0].BusinessID = listing[0].SellerID;
+		console.log("GetPurchase: "+data);
+		return data;
 	}
 
 	//********************************************************/
@@ -827,24 +773,23 @@ module.exports = (dbName = "Database") => {
 		Rating,
 		Review
 	) {
-		try {
-			let date = new Date();
-			const insert_review_sql = Database.database.prepare(
-				`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Title, Rating, Review, Date) VALUES (?,?,?,?,?,?,?)`
-			);
-			let success = insert_review_sql.run(
-				ReviewerID,
-				BusinessID,
-				PurchaseID,
-				Title,
-				Rating,
-				Review,
-				date.toISOString()
-			);
-			return { success: true, data: "Review Created" };
-		} catch (error) {
-			console.log(error);
-			throw "Failed to create review";
+		console.log(BusinessID);
+		let date = new Date();
+		const insert_review_sql = Database.database.prepare(
+			`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Title, Rating, Review, Date) VALUES (?,?,?,?,?,?,?)`
+		);
+		let success = insert_review_sql.run(
+			ReviewerID,
+			BusinessID,
+			PurchaseID,
+			Title,
+			Rating,
+			Review,
+			date.toISOString()
+		);
+
+		if (success.changes === 0) {
+			return "Review failed to be created";
 		}
 	}
 
@@ -865,32 +810,28 @@ module.exports = (dbName = "Database") => {
 	 * @returns All reviews from a specific business
 	 */
 	function getBusinessReviews(BusinessID) {
-		try {
-			let data = Database.database
-				.prepare(
-					"SELECT * FROM Review WHERE BusinessID = ? ORDER BY Date DESC"
-				)
-				.all(BusinessID);
-			data.forEach((review) => {
-				review.ReviewerName = Database.getRecord(
-					"User",
-					"UserID",
-					review.ReviewerID
-				)[0].Fname;
-				let date = new Date(review.Date);
-				review.Date =
-					date.getDate() +
-					"/" +
-					date.getMonth() +
-					"/" +
-					date.getFullYear();
-			});
-			return data;
-		} catch (error) {
-			throw "Invalid BusinessID";
-		}
+		let data = Database.database
+			.prepare(
+				"SELECT * FROM Review WHERE BusinessID = ? ORDER BY Date DESC"
+			)
+			.all(BusinessID);
+		data.forEach((review) => {
+			review.ReviewerName = Database.getRecord(
+				"User",
+				"UserID",
+				review.ReviewerID
+			)[0].Fname;
+			let date = new Date(review.Date);
+			review.Date =
+				date.getDate() +
+				"/" +
+				date.getMonth() +
+				"/" +
+				date.getFullYear();
+		});
+		console.log(data);
+		return data;
 	}
-
 	function getItemReviews(ListingID) {
 		let monthNames = [
 			"Janurary",
@@ -901,38 +842,35 @@ module.exports = (dbName = "Database") => {
 			"June",
 			"July",
 			"August",
-			"Septembreviewer",
+			"September",
 			"October",
 			"Novermber",
 			"December",
 		];
 		//Get the reviews of the purchases of the item
-		try {
-			let stmt = Database.database.prepare(
-				"SELECT * FROM Review join Purchase on Purchase.PurchaseID = Review.PurchaseID join Listing on Purchase.ListingID = Listing.ListingID WHERE Listing.ListingID = ?"
-			);
+		let stmt = Database.database.prepare(
+			"SELECT * FROM Review join Purchase on Purchase.PurchaseID = Review.PurchaseID join Listing on Purchase.ListingID = Listing.ListingID WHERE Listing.ListingID = ?"
+		);
 
-			let data = stmt.all(ListingID);
-			data.forEach((review) => {
-				let user = Database.getRecord(
-					"User",
-					"UserID",
-					review.ReviewerID
-				)[0];
-				review.ReviewerName = user.Fname;
-				review.img = user.img;
-				let date = new Date(review.Date);
-				review.Date =
-					date.getDate() +
-					" " +
-					monthNames[date.getMonth()] +
-					" " +
-					date.getFullYear();
-			});
-			return data;
-		} catch (error) {
-			throw "Invalid ListingID";
-		}
+		let data = stmt.all(ListingID);
+		console.log(data);
+		data.forEach((review) => {
+			let user = Database.getRecord(
+				"User",
+				"UserID",
+				review.ReviewerID)[0];
+			review.ReviewerName = user.Fname;
+			review.img = user.img;
+			let date = new Date(review.Date);
+			review.Date =
+				date.getDate() +
+				" " +
+				monthNames[date.getMonth()] +
+				" " +
+				date.getFullYear();
+		});
+		console.log(data);
+		return data;
 	}
 
 	/**
@@ -941,22 +879,19 @@ module.exports = (dbName = "Database") => {
 	 * @returns  Rating of business
 	 */
 	function getBusinessRating(BusinessID) {
+		console.log(BusinessID);
 		let total = 0;
 		const stmt = Database.database.prepare(
 			"SELECT * FROM Review WHERE BusinessID = ?"
 		);
-		try {
-			let sql_select_stmt = stmt.all(BusinessID);
-			sql_select_stmt.forEach((review) => {
-				total += review.Rating;
-			});
-			if (sql_select_stmt.length === 0) {
-				return "N/A";
-			}
-			return total / sql_select_stmt.length;
-		} catch (error) {
-			throw "Invalid BusinessID";
+		let sql_select_stmt = stmt.all(BusinessID);
+		sql_select_stmt.forEach((review) => {
+			total += review.Rating;
+		});
+		if (sql_select_stmt.length === 0) {
+			return "N/A";
 		}
+		return total / sql_select_stmt.length;
 	}
 
 	/**
@@ -985,11 +920,7 @@ module.exports = (dbName = "Database") => {
 		const stmt = Database.database.prepare(
 			"SELECT * FROM Review WHERE BusinessID = ?"
 		);
-		try {
-			return (sql_select_stmt = stmt.all(BusinessID).length);
-		} catch (error) {
-			throw "Invalid BusinessID";
-		}
+		return (sql_select_stmt = stmt.all(BusinessID).length);
 	}
 
 	/**
@@ -998,11 +929,7 @@ module.exports = (dbName = "Database") => {
 	 * @returns All reviews from a specific user
 	 */
 	function getUserReviews(UserID) {
-		try {
-			return Database.getRecord("Review", "ReviewerID", UserID);
-		} catch (error) {
-			return "Invalid UserID";
-		}
+		return Database.getRecord("Review", "ReviewerID", UserID);
 	}
 
 	/**
@@ -1012,11 +939,7 @@ module.exports = (dbName = "Database") => {
 	 */
 
 	function getReviewCount(UserID) {
-		try {
-			return Database.getRecord("Review", "ReviewerID", UserID).length;
-		} catch (error) {
-			return "Invalid UserID";
-		}
+		return Database.getRecord("Review", "ReviewerID", UserID).length;
 	}
 
 	//********************************************************/
@@ -1025,63 +948,55 @@ module.exports = (dbName = "Database") => {
 
 	function getBusinessPannel(PurchaseID) {
 		//ID, Name, IMG, Rating, Rating count
-		try {
-			const Purchase = Database.getRecord(
-				"Purchase",
-				"PurchaseID",
-				PurchaseID
-			);
-
-			const Listing = Database.getRecord(
-				"Listing",
-				"ListingID",
-				Purchase[0].ListingID
-			);
-
-			const BusinessID = Listing[0].SellerID;
-			const business = Database.getRecord(
-				"Business",
-				"BusinessID",
-				BusinessID
-			);
-
-			const rating = getBusinessRating(BusinessID);
-			const ratingCount = countBusinessReviews(BusinessID);
-			return {
-				ID: BusinessID,
-				Name: business[0].Name,
-				IMG: business[0].img,
-				Rating: rating,
-				RatingCount: ratingCount,
-			};
-		} catch (error) {
-			throw "Invalid PurchaseID";
-		}
+		const Purchase = Database.getRecord(
+			"Purchase",
+			"PurchaseID",
+			PurchaseID
+		);
+		console.log("Purchase="+PurchaseID);
+		const Listing = Database.getRecord(
+			"Listing",
+			"ListingID",
+			Purchase[0].ListingID
+		);
+		console.log(Listing);
+		const BusinessID = Listing[0].SellerID;
+		const business = Database.getRecord(
+			"Business",
+			"BusinessID",
+			BusinessID
+		);
+		console.log(business);
+		const rating = getBusinessRating(BusinessID);
+		const ratingCount = countBusinessReviews(BusinessID);
+		return {
+			ID: BusinessID,
+			Name: business[0].Bname,
+			IMG: business[0].img,
+			Rating: rating,
+			RatingCount: ratingCount,
+		};
 	}
 
 	function getItemPannel(PurchaseID) {
 		//Purchase ID, Listing name, Listing img, Listing price, Purchase quantity, Purchase date\
-		try {
-			let data = {
-				ID: null,
-				Name: null,
-				img: null,
-				Price: null,
-				Quantity: null,
-				Date: null,
-			};
-			const purchase = getPurchase(PurchaseID);
-			const listing = getListing(purchase[0].ListingID);
-			data.ID = purchase[0].PurchaseID;
-			data.Name = listing[0].Name;
-			data.img = listing[0].img;
-			data.Price = listing[0].Price * purchase[0].Quantity;
-			data.Quantity = purchase[0].Quantity;
-			data.Date = purchase[0].Date;
-			return data;
-		} catch (error) {
-			throw "Invalid PurchaseID";
-		}
+		let data = {
+			ID: null,
+			Name: null,
+			img: null,
+			Price: null,
+			Quantity: null,
+			Date: null,
+		};
+		const purchase = getPurchase(PurchaseID);
+		const listing = getListing(purchase[0].ListingID);
+		data.ID = purchase[0].PurchaseID;
+		data.Name = listing[0].Name;
+		data.img = listing[0].img;
+		data.Price = listing[0].Price * purchase[0].Quantity;
+		data.Quantity = purchase[0].Quantity;
+		data.Date = purchase[0].Date;
+		return data;
 	}
 
 	//********************************************************/
@@ -1098,14 +1013,14 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	//   console.log(sendWelcomeEmail("omgitsblackbeard@gmail.com"));
+	    //   console.log(sendWelcomeEmail("omgitsblackbeard@gmail.com"));
 
 	function sendVerificationEmail(email) {
 		//TODO
 		const userID = Database.getRecord("User", "Email", email)[0].UserID;
-
+		
 		const id = auth.makeToken(userID);
-
+		
 		url = "http://localhost:5173/verify?userID=" + id;
 
 		return emailSender.sendEmail(
@@ -1116,7 +1031,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	//  console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
+	    //  console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
 
 	function sendReservedEmail(purchaseID) {
 		//TODO
@@ -1150,12 +1065,12 @@ module.exports = (dbName = "Database") => {
 		let email = user[0].Email;
 		let temp = new Date(purchase[0].Date);
 		let date =
-			temp.getDate() +
+			temp.getDate()+
 			" " +
 			monthNames[temp.getMonth()] +
 			" " +
 			temp.getFullYear();
-
+			
 		let data = {
 			ID: purchase[0].PurchaseID,
 			Date: date,
@@ -1165,7 +1080,7 @@ module.exports = (dbName = "Database") => {
 			Quantity: purchase[0].Quantity,
 			Price: listing[0].Price,
 			code: purchase[0].Code,
-			Name: business[0].Name,
+			Name: business[0].BName,
 			Line1: address[0].Line1,
 			Line2: address[0].Line2,
 			Postcode: address[0].Postcode,
@@ -1178,7 +1093,7 @@ module.exports = (dbName = "Database") => {
 			data
 		);
 	}
-	//  console.log(sendReservedEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
+	    //  console.log(sendReservedEmail("6f03d9b1-1f26-4036-80d1-0f1a43160411"));
 
 	function sendReviewEmail(purchaseID) {
 		//TODO
@@ -1206,20 +1121,15 @@ module.exports = (dbName = "Database") => {
 		let user = Database.getRecord("User", "UserID", purchase[0].BuyerID);
 		let email = user[0].Email;
 		let temp = new Date(purchase[0].Date);
-		let date =
-			temp.getDate() +
-			" " +
-			monthNames[temp.getMonth()] +
-			" " +
-			temp.getFullYear();
+		let date = temp.getDate() + " " + monthNames[temp.getMonth()] + " " + temp.getFullYear();
 		let data = {
 			Name: listing[0].Name,
-			Seller: business[0].Name,
+			Seller: business[0].BName,
 			Date: date,
 			img: listing[0].img,
 			url: "http://localhost:5173/review?purchaseID=" + purchaseID,
 		};
-
+		
 		return emailSender.sendEmail(
 			"review.ejs",
 			email,
@@ -1238,6 +1148,7 @@ module.exports = (dbName = "Database") => {
 		getUserDetails,
 		getAllUserDetails,
 		createListing,
+		updateListing,
 		getListings,
 		getListing,
 		getBusinessListings,
@@ -1268,7 +1179,6 @@ module.exports = (dbName = "Database") => {
 		getBusinessDetails,
 		getUserBusinessIDs,
 		updateListingQuantity,
-		updateListingStatus,
 		updateBusinessDetails,
 		getBusinessDetails,
 		getCategories,
@@ -1279,6 +1189,5 @@ module.exports = (dbName = "Database") => {
 		jazz,
 		verifyEmail,
 		getProfilePic,
-		createCategory,
 	};
 };

@@ -6,7 +6,7 @@ const cors = require("cors");
 const interface = require("./DataBase/interface.js")();
 const app = express();
 const auth = require("./Auth/Auth.js");
-const testData = require("./DataBase/TestData/insertTestData.js");
+
 
 // CORS rubbish
 app.use(
@@ -31,11 +31,12 @@ app.use((req, res, next) => {
 	console.log("Request made to", req.path, "took", `${time}ms`);
 });
 
+
 // Server Config
 const port = process.env.PORT || 3000;
 
 // Routers
-const APIRoute = require("./routes/api")({ express, interface });
+const APIRoute = require("./routes/api")({ express,interface });
 
 // Routes
 app.use("/api", APIRoute);
@@ -45,6 +46,7 @@ app.get("*", (req, res) => {
 });
 
 // app.use("view engine", "ejs");
+
 
 // Open listener
 app.listen(port, () => {
