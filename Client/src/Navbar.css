@@ -13,7 +13,7 @@
 }
 
 header {
-    height: 90px;
+    height: 120px;
     display: flex;
     align-items: center;
     padding: 0 20px;
@@ -21,7 +21,10 @@ header {
     box-shadow: 0 0 10px #1b2b31;
     justify-content: space-between; 
     flex-direction: row;
+    position: fixed;
+    width: 100%;
 }
+
 header .header-left {
     display: flex;
     align-items: center;
@@ -37,10 +40,10 @@ header .header-left nav ul {
 .logo{
     width: 100px;
     height: 81px;  
-    margin-bottom: 20px; 
+    margin-bottom: 10px; 
     border-radius: 25px;  
-    margin-top: 5px;
-} 
+    margin-top: 10px;
+}
 
 
 #logout{
@@ -204,9 +207,10 @@ header .header-right {
     }
 
     .overlay{
-        display: inline;
+        display: inline;    
     }
-    .header{
+    
+.header{
         height: 90px;
         display: flex;
         align-items: center;
@@ -217,6 +221,7 @@ header .header-right {
         flex-direction: row;
         position: fixed;
         top: 0px;
+        
         width: 100%;
     }
 
