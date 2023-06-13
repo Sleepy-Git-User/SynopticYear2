@@ -47,7 +47,7 @@ export default function ReviewTemplate() {
 
 	const getPurchase = async (ID) => {
 		await axios.get("/api/getPurchase/" + ID).then((res) => {
-			console.log("DATA: " + res.data);
+			console.log("DATA: " + res.data.data[0]);
 			setPurchase(res.data.data[0]);
 		});
 		setForm({
@@ -98,9 +98,13 @@ export default function ReviewTemplate() {
 		e.preventDefault();
 		console.log(form);
 		axios.post("/api/submitReview", form).then((res) => {
-			console.log(res.status);
+			if (res.data.success) {
+				alert("Review Submitted");
+				window.location.href = "/";
+			} else {
+				alert("Review Failed to Submit");
+			}
 		});
-
 	};
 
 	useEffect(() => {

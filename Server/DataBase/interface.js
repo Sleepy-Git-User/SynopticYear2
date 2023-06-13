@@ -781,16 +781,16 @@ module.exports = (dbName = "Database") => {
 	 * @returns A specific purchase
 	 */
 	function getPurchase(PurchaseID) {
-		let data = {
-			PurchaseID: null,
-			ListingID: null,
-			BusinessID: null,
-			BuyerID: null,
-			Quantity: null,
-			Date: null,
-			BusinessID: null,
-		};
 		try {
+			let data = {
+				PurchaseID: null,
+				ListingID: null,
+				BusinessID: null,
+				BuyerID: null,
+				Quantity: null,
+				Date: null,
+				BusinessID: null,
+			};
 			data = Database.getRecord("Purchase", "PurchaseID", PurchaseID);
 			let listing = Database.getRecord(
 				"Listing",
@@ -826,11 +826,11 @@ module.exports = (dbName = "Database") => {
 		Rating,
 		Review
 	) {
-		let date = new Date();
-		const insert_review_sql = Database.database.prepare(
-			`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Title, Rating, Review, Date) VALUES (?,?,?,?,?,?,?)`
-		);
 		try {
+			let date = new Date();
+			const insert_review_sql = Database.database.prepare(
+				`INSERT INTO Review(ReviewerID, BusinessID, PurchaseID, Title, Rating, Review, Date) VALUES (?,?,?,?,?,?,?)`
+			);
 			let success = insert_review_sql.run(
 				ReviewerID,
 				BusinessID,
@@ -842,6 +842,7 @@ module.exports = (dbName = "Database") => {
 			);
 			return { success: true, data: "Review Created" };
 		} catch (error) {
+			console.log(error);
 			throw "Failed to create review";
 		}
 	}
@@ -1029,6 +1030,7 @@ module.exports = (dbName = "Database") => {
 				"PurchaseID",
 				PurchaseID
 			);
+
 			const Listing = Database.getRecord(
 				"Listing",
 				"ListingID",
