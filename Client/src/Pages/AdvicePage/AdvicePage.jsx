@@ -364,6 +364,8 @@ export default function AdvicePage() {
           </div>
         </div>
       </div>
+      <br/>
+      <button>Download as PDF</button>
     </div>
   ); 
 }

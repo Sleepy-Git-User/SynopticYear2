@@ -9,6 +9,7 @@ const fs = require("fs");
 const emailSender = require("../utili/email.js");
 const { BlobServiceClient } = require('@azure/storage-blob');
 require('dotenv').config();
+const auth = require("../Auth/Auth.js");
 
 const azureStorageConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const containerName = 'images';
@@ -50,6 +51,7 @@ module.exports = (dbName = "Database") => {
 				"Email",
 				Email
 			); //Gets the UserID by using the email.
+		
 			const grabSalt = Database.getField(
 				"Password",
 				"Salt",
@@ -67,7 +69,14 @@ module.exports = (dbName = "Database") => {
 				hashedPassword[0].Password
 			) {
 				//Hashes the inputted password and comparess it to the stored password.
-				return { success: true, data: getUserID };
+				console.log("HERE"+getUserID);
+				try{
+					let data2 = getUserBusinessIDs(getUserID[0].UserID);
+					return { success: true, data: getUserID,  data2: data2 };
+				}catch(error){
+					return { success: true, data: getUserID, data2:null };
+				}
+				
 			} else {
 				return { success: false, data: "Email or Password incorrect" };
 			}
@@ -161,16 +170,18 @@ module.exports = (dbName = "Database") => {
 			return { success: true, data: user_id };
 		}
 	}
+
+	function verifyEmail(UserID) {
+		let ID = auth.readToken(UserID);
+		Database.updateRecord("User", "Email_Confirmed", 1, "UserID", ID);
+		return {success: true, data: "Email Confirmed"};
+	}
+
 	//makeUser Test
 	//  console.log(makeUser("omgitsblackbeard@gmail.com","13313232","tafin","nover","02/04/2000","Game","Party","Lane","London","LN169NG"));
 
-	function generateProfPic(userID) {
-		identicon.generate({ id: userID, size: 150 }, (err, buffer) => {
-			if (err) throw err;
-
-			// buffer is identicon in PNG format.
-			fs.writeFileSync(__dirname + "/identicon.png", buffer);
-		});
+	function getProfilePic(userID) {
+		return "https://synopticproject.blob.core.windows.net/images/"+userID+".png";
 	}
 
 	function removeUser(UserID) {
@@ -494,12 +505,12 @@ module.exports = (dbName = "Database") => {
 		if (array.length === 0) {
 			return {
 				success: true,
-				data: Database.getAllRecords("Listing", "Status", 0),
+				data: Database.getRecord("Listing", "Status", 0),
 			};
 		} else {
 			let placeholders = array.map(() => "?").join(",");
 			let sql_listing_select = Database.database.prepare(
-				`SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name IN (${placeholders}) ))`
+				`SELECT * FROM Listing WHERE ListingID IN (SELECT ListingID FROM Item_Category WHERE CategoryID IN (SELECT CategoryID FROM Category WHERE Name IN (${placeholders}) ))WHERE Status = 0`
 			);
 
 			let data = sql_listing_select.all(...array);
@@ -607,6 +618,7 @@ module.exports = (dbName = "Database") => {
 	 */
 	function reserveItem(ListingID, BuyerID, Quantity) {
 		//Get listing
+		updateListingStatus();
 		if (Quantity <= 0) {
 			return { success: false, data: "Invalid Quantity" };
 		}
@@ -1005,9 +1017,11 @@ module.exports = (dbName = "Database") => {
 
 	function sendVerificationEmail(email) {
 		//TODO
-		const userID = Database.getRecord("User", "Email", email).UserID;
-
-		url = "http://localhost:5173/verify?userID=" + userID;
+		const userID = Database.getRecord("User", "Email", email)[0].UserID;
+		
+		const id = auth.makeToken(userID);
+		
+		url = "http://localhost:5173/verify?userID=" + id;
 
 		return emailSender.sendEmail(
 			"verifyEmail.ejs",
@@ -1017,7 +1031,7 @@ module.exports = (dbName = "Database") => {
 		);
 	}
 
-	//    console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
+	    //  console.log(sendVerificationEmail("omgitsblackbeard@gmail.com"));
 
 	function sendReservedEmail(purchaseID) {
 		//TODO
@@ -1173,5 +1187,7 @@ module.exports = (dbName = "Database") => {
 		getItemReviews,
 		getUserBusinessIDs,
 		jazz,
+		verifyEmail,
+		getProfilePic,
 	};
 };
