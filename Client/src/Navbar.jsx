@@ -68,6 +68,7 @@ export default function Navbar() {
                         <li>
                             <Link to="/Advice">Advice</Link>
                         </li>
+            
                         {/* <li>
                                 <Link id="logout" onClick={handleLogout}>
                                     Logout
@@ -77,11 +78,20 @@ export default function Navbar() {
                 </nav>
 
                 <div class="header-right">
-                    <div class="header-right">
+                    <div class="header-right"> 
+                    <div class="dropdown">
+                        <button class="dropbtn">Accessibility</button>
+                        <div class="dropdown-content">
+                            <a href="#">Languages</a>
+                            <a href="#">Colour Blind</a>
+                            <a href="#">Larger Font</a>
+                            <a href="#">Dyslexia</a>
+                        </div>
+                        </div>            
                         <li>
                             <Link id="logout" onClick={handleLogout}>
                                 Logout
-                            </Link>
+                            </Link> 
                         </li>
                         <Link to="/Account"> <img class="profile" src={profilePic} width="75" height="75" /> </Link>
                     </div>
