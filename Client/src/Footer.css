@@ -1,21 +1,19 @@
 .footer-container {
     background-color: #508196;
     width: 100%;
+    bottom: 0;
+    position: fixed;
 }
 .footer {
     padding: 40px 0; 
-    margin-top: 10%;
-}
+    margin-top: 10%;  
+} 
 
-.footer .social {
-    text-align: center;
-    padding-bottom: 25px;
-    color: #ccdde4;
-}
+
 
 .footer .social a {
     font-size: 24px;
-    color: inherit;
+    color: #ccdde4;
     display: inline-block;
     text-align: center;
     border: 1px solid #ccdde4;
@@ -29,6 +27,7 @@
 
 .footer .social a:hover {
     opacity: 0.9;
+    color: #ccdde4;
 }
 
 .footer ul {

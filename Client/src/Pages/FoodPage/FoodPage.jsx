@@ -16,6 +16,7 @@ export default function FoodPage() {
         <button className="userViewBtn" onClick={() => setTab(<FoodPageUserView />)}>User View</button>
         <button className="BusinessViewBtn" onClick={() => setTab(<FoodPageBusinessView />)}>Business View</button>
       </div>
+      <button className="reportBtn" >Report</button>
       {tab}
     </div>
   );
