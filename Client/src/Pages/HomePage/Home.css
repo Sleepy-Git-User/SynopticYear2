@@ -3,3 +3,44 @@
     padding:50px;
     text-align: center;
   }
+
+
+
+  .content h3 {
+    text-align: left;
+    padding-top: 20px;
+  }
+
+.people { 
+  margin-right: 10px;
+  margin-top: -300px;
+  height: 220px;
+  width: 258px;
+}
+
+.people2 {
+  margin-right: 10px;
+  margin-top: 200px;
+  margin-bottom: -1000px;
+  height: 220px;
+  width: 258px;
+}
+
+.homeInfo .image-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.homeInfo{
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 1200px){
+  .people, .people2{
+    display: none;
+  }
+  .content{
+    font-size: 28px;
+  }
+}

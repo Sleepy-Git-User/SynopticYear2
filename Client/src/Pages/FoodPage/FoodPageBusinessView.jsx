@@ -88,30 +88,11 @@ export default function FoodPageBusinessView() {
                 {/* Check to see if a business id is stored in session storage, otherwise show an error message */}
 
                 <div className="businessViewGrid">
-                
-                    {/* <h3>Add Listing</h3> */}
-                    <CreateListing />
-                
-                <div className="yourListingsBox">
-                    <h3>Your Listings</h3>
-                    {/*Function call to get a businesses listings and put each as an item in here*/}
-                    {listings.map((listing) => (
-                        <div>
-                            <div>{listing.Name}</div>
-                            <div>{listing.Description}</div>
-                            <div>Price: £{listing.Price}</div>
-                            <div>Total Quantity: {listing.Quantity}</div>
-                            
-                        </div>
-                    ))}
-                </div>
                 <div className="businessFiltersBox">
-                    <h3>Filters</h3>
+                    {/* <h3>Filters</h3> */}
                     {/*Will need Georges help with filters*/}
-
-
                     {categories.map((category) => (
-                    <div key={category.CategoryID}>
+                    <div className="filter2" key={category.CategoryID}>
                         <input
                         type="checkbox"
                         id={category.CategoryID}
@@ -124,6 +105,24 @@ export default function FoodPageBusinessView() {
                     </div>
                     ))}
                 </div>
+                
+                    {/* <h3>Add Listing</h3> */}
+                    <CreateListing />
+                
+                <div className="yourListingsBox">
+                    <h3>Your Listings</h3>
+                    {/*Function call to get a businesses listings and put each as an item in here*/}
+                    {listings.map((listing) => (
+                        <div className="listingsOnly">
+                            <div>{listing.Name}</div>
+                            <div>{listing.Description}</div>
+                            <div>Price: £{listing.Price}</div>
+                            <div>Total Quantity: {listing.Quantity}</div>
+                            
+                        </div>
+                    ))}
+                </div>
+                
                 </div></div>}
 
                 {!businessUser && <p> You are not registered as a business user. Please register as one on the account page to access this.</p>}

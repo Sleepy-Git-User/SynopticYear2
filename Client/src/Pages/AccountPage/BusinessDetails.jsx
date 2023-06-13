@@ -50,14 +50,14 @@ export default function AccountPage() {
   }, [])
 
   return (
-    <div >
-      <h3>Business Details</h3>
-      <img src={businessImg} alt="Business Logo" width="100" height="100" />
-      <p>{businessName}</p>
-      <p>{businessEmail}</p>
-      <p>{businessPhoneNumber}</p>
-
-
+    <div className="businessDetails"> 
+      <h2>Business Details</h2>
+      <div className="details"> 
+      <img className="businessImg" src={businessImg} alt="Business Logo" width="100" height="100" />
+      <p>Name: {businessName}</p>
+      <p>Email: {businessEmail}</p>
+      <p>Phone: {businessPhoneNumber}</p>
+      </div>
     </div>
   );
 }

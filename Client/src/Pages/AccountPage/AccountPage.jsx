@@ -36,7 +36,7 @@ export default function AccountPage() {
                 <div className="userInfo"> 
                 <h2>User Details</h2>
                 <div className="info">
-                <img src={info.data[0].img} alt="Profile Image" width="75" height="75" />
+                <img className="userImg" src={info.data[0].img} alt="Profile Image" width="100" height="100" />
                   <br />
                   Name: {info.data[0].Fname} {info.data[0].Lname} <br />
                   Email: {info.data[0].Email}<br />
@@ -123,9 +123,9 @@ export default function AccountPage() {
           {/*Map all items in a purchase history here! */}
           {boughtItems !== null ? (
             boughtItems.map((boughtItem) => (
-              <div key={boughtItem.Purchase.Code}>
+              <div className="purchases" key={boughtItem.Purchase.Code}>
                 <br />
-                <img src={boughtItem.Listing.img} alt="Listing Image" width="75" height="75" />
+                <img className="itemImg" src={boughtItem.Listing.img} alt="Listing Image" width="100" height="100" />
                 <p>Name: {boughtItem.Listing.Name}</p>
                 <p>Description: {boughtItem.Listing.Desc}</p>
                 <p>Price: £{boughtItem.Listing.Price}</p>
