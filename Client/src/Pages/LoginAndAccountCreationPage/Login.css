@@ -5,7 +5,7 @@
 } 
 
 #pageContainer {
-    min-height: calc(100vh - 600px);
+    min-height: calc(100vh - 350px);
     margin-bottom: 100px;
 }
 
