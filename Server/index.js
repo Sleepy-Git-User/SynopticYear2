@@ -6,6 +6,7 @@ const cors = require("cors");
 const interface = require("./DataBase/interface.js")();
 const app = express();
 const auth = require("./Auth/Auth.js");
+const testData = require("./DataBase/TestData/insertTestData.js");
 
 
 // CORS rubbish
