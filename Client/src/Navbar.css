@@ -1,7 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
+
+
 * {
     margin: 0;
+    padding:0;
     box-sizing: border-box; 
     text-decoration: none;
     list-style: none;
@@ -10,7 +13,7 @@
 }
 
 header {
-    height: 90px;
+    height: 120px;
     display: flex;
     align-items: center;
     padding: 0 20px;
@@ -18,7 +21,10 @@ header {
     box-shadow: 0 0 10px #1b2b31;
     justify-content: space-between; 
     flex-direction: row;
+    position: fixed;
+    width: 100%;
 }
+
 header .header-left {
     display: flex;
     align-items: center;
@@ -34,10 +40,10 @@ header .header-left nav ul {
 .logo{
     width: 100px;
     height: 81px;  
-    margin-bottom: 20px; 
+    margin-bottom: 10px; 
     border-radius: 25px;  
-    margin-top: 5px;
-} 
+    margin-top: 10px;
+}
 
 
 #logout{
@@ -46,7 +52,7 @@ header .header-left nav ul {
 
 nav ul li {
     display: inline-block;
-  }
+}
 
 nav ul li a {
     display: block;
@@ -63,21 +69,21 @@ nav ul li a.active {
     color: #9eaeb4;
 } 
 
-header .header-right {
+ header .header-right {
     display: flex;
     align-items: center;
 }
-header .header-right .hamburger {
+header .header-right {
     margin-left: 20px;
     cursor: pointer;
-    display: none;
-}
-header .header-right .hamburger div {
+    display: block;
+} 
+header .header-right {
     width: 30px;
     height: 2px;
     margin: 6px 0;
     background: #ccdde4;
-} 
+}  
 .profile{
     border-radius: 50px;
     margin-left: 30px;
@@ -88,12 +94,19 @@ header .header-right .hamburger div {
     margin-right: 20px; 
 }
 
-.dropbtn {
+.dropbtn { 
+    display: block;
     background-color: #508196;
     color: #ccdde4;
     padding: 10px;
     border: none;
     cursor: pointer;
+    font-size: 24px;
+    margin-left: 30px;
+} 
+
+.dropbtn:hover{
+    color: #9eaeb4;
 }
 
 .dropdown-content {
@@ -117,88 +130,100 @@ header .header-right .hamburger div {
     display: block;
 }
 
-/* New styles for responsive navigation */
-@media only screen and (max-width: 768px) {
-    header .header-left nav {
-        margin-left: 0;
-    }
-    nav ul {
-        flex-direction: row;
-    }
-    nav ul li a {
-        padding: 23px 0;
-        font-size: 20px;
-        padding: 5px 50px;
-    }
-
-    .logo {
-        display: block;
-    }
-
-    nav ul li {
-        display: inline-block;
-    }
-
-
-    .profile{
-        width: 50px; 
-        height: 50px; 
-        border-radius: 25px;
-    }
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px; 
+}
+.nav-menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap:60px; 
 }
 
-@media (max-width: 480px){
-    header .header-left nav {
-        margin-left: 0;
+.nav-link{
+    transition: 0.7s ease; 
+}
+
+.hamburger{
+    display: none;
+    cursor: pointer;
+}
+
+.bar{
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    -webkit-transition: all 0.4s ease-in-out; 
+    transition: all 0.3s ease-in-out;
+    background-color: white;
+}
+
+.overlay{
+    display: none;
+}
+
+
+@media only screen and (max-width: 1200px) {
+   .hamburger{
+    display: block;
+   }
+    .hamburger.active .bar:nth-child(2){
+        opacity: 0;
     }
-    nav ul {
-        flex-direction: row;
+    .hamburger.active .bar:nth-child(1){
+        translate: translateY(8px) rotate(45deg); 
+
     }
-    nav ul li a {
-        font-size: 10px;
-        /* padding: 5px 50px; */
+    .hamburger.active .bar:nth-child(3){
+        translate: translateY(-8px) rotate(-45deg); 
     }
 
-    .logo {
+    .nav-menu{
+        position: fixed;
+        left: -100%; 
+        top: 70px; 
+        gap:0; 
+        flex-direction: column;
+        background-color: #508196;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+    } 
+
+    .nav-item{
+        margin: 16px 0; 
+    }
+    .nav-menu.active{
+        left:0; 
+
+    } 
+
+    .profile{
         display: none;
     }
 
-    nav ul li {
-        display: inline-block;
+    .overlay{
+        display: inline;    
     }
-
-
-    .profile{
-        width: 50px; 
-        height: 50px; 
+    
+.header{
+        height: 90px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        background: #508196;
+        box-shadow: 0 0 10px #1b2b31;
+        justify-content: space-between;
+        flex-direction: row;
+        position: fixed;
+        top: 0px;
         
+        width: 100%;
     }
 
-}
 
-@media (max-width: 360px){
-    header .header-left nav {
-        margin-left: 0;
-    }
-    nav ul {
-        flex-direction: row;
-    }
-    nav ul li a {
-        font-size: 10px;
-        flex-direction: row;
-    }
-
-    .logo {
-        display: none;
-    }
-
-    nav ul li {
-        display: inline-block;
-    }
-
-    .profile{
-        width: 50px; 
-        height: 50px; 
-    }
-
-}
+} 

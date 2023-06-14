@@ -25,11 +25,11 @@ module.exports = (dbName = "Database") => {
 		//Imports the DDL
 		Database.importDDL(DDLPath);
 	} catch (error) {
-		console.log(error);
+		//console.log(error);
 	}
 
 	function jazz() {
-		console.log("jazz");
+		//console.log("jazz");
 	}
 	//********************************************************/
 
@@ -69,7 +69,6 @@ module.exports = (dbName = "Database") => {
 				hashedPassword[0].Password
 			) {
 				//Hashes the inputted password and comparess it to the stored password.
-
 				try {
 					let data2 = getUserBusinessIDs(getUserID[0].UserID);
 					return { success: true, data: getUserID, data2: data2 };
@@ -164,9 +163,9 @@ module.exports = (dbName = "Database") => {
 					ProfilePic.buffer,
 					ProfilePic.size
 				);
-				console.log(`Upload succesful. ${uploadResponse.requestId}`);
+				//console.log(`Upload succesful. ${uploadResponse.requestId}`);
 			} catch (error) {
-				console.error("No image uploaded");
+				//console.error("No image uploaded");
 				//throw error;
 			}
 			sendWelcomeEmail(Email);
@@ -203,6 +202,7 @@ module.exports = (dbName = "Database") => {
 	//console.log(getUserID("bike@gmail.com"));
 
 	function getUserDetails(userID) {
+		//console.log(Database.getRecord("User", "UserID", userID));
 		return {
 			success: true,
 			data: Database.getRecord("User", "UserID", userID),
@@ -296,9 +296,9 @@ module.exports = (dbName = "Database") => {
 					ProfilePic.buffer,
 					ProfilePic.size
 				);
-				console.log(`Upload succesful. ${uploadResponse.requestId}`);
+				//console.log(`Upload succesful. ${uploadResponse.requestId}`);
 			} catch (error) {
-				console.log("No image uploaded");
+				//console.log("No image uploaded");
 				//throw error;
 			}
 
@@ -308,7 +308,7 @@ module.exports = (dbName = "Database") => {
             VALUES (?,?)`);
 
 			User_Business_sql.run(UserID, business_id);
-			console.log("Business Created");
+			//console.log("Business Created");
 			return { success: true, data: business_id };
 		}
 	}
@@ -342,7 +342,8 @@ module.exports = (dbName = "Database") => {
 			UserID,
 			bdata[0].BusinessID
 		);
-
+		//console.log(linkeddata);
+		//console.log(linkeddata.length);
 		if (linkeddata.length != 0) {
 			return { success: false, data: "User already apart of Business" };
 		} else {
@@ -427,9 +428,9 @@ module.exports = (dbName = "Database") => {
 				img.buffer,
 				img.size
 			);
-			console.log(`Upload succesful. ${uploadResponse.requestId}`);
+			//console.log(`Upload succesful. ${uploadResponse.requestId}`);
 		} catch (error) {
-			console.log("No image uploaded");
+			//console.log("No image uploaded");
 		}
 		Category = Category.split(",");
 		for (let i = 0; i < Category.length; i++) {
@@ -485,7 +486,7 @@ module.exports = (dbName = "Database") => {
 				.run();
 			return "Status Updated";
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 			return "Listing Status Update Failed";
 		}
 	}
@@ -503,7 +504,7 @@ module.exports = (dbName = "Database") => {
 				array.push(key);
 			}
 		}
-
+		//console.log(array);
 		if (array.length === 0) {
 			return {
 				success: true,
@@ -779,6 +780,7 @@ module.exports = (dbName = "Database") => {
 	 */
 	function getPurchase(PurchaseID) {
 		try {
+			//console.log(PurchaseID);
 			let data = {
 				PurchaseID: null,
 				ListingID: null,
@@ -839,6 +841,7 @@ module.exports = (dbName = "Database") => {
 			);
 			return { success: true, data: "Review Created" };
 		} catch (error) {
+			//console.log(error);
 			throw "Failed to create review";
 		}
 	}
