@@ -9,6 +9,7 @@ export default function AdvicePage() {
 
   const [expandedSectionTitle, setExpandedSectionTitle] = useState();
   const [expandedSectionText, setExpandedSectionText] = useState();
+  const [navButtonClicked, setNavButtonClicked] = useState(false);
 
   const handleSectionClick = (title, text) => {
     setExpandedSectionTitle(title);
@@ -20,15 +21,23 @@ export default function AdvicePage() {
     setExpandedSection(null);
   };
 
+  const handleNavButtonClick = () => {
+    setNavButtonClicked(!navButtonClicked);
+  };
+
+
+
   return (
     <div id="pageContainer">
-              {expandedSection && (
-        <div id="popup" onClose={handleClosePopup}>
-          <h2>{expandedSectionTitle}</h2>
-          {expandedSectionText}
-          <button className="close-btn" onClick={handleClosePopup}><i class="fa-solid fa-xmark fa-xl"></i></button>
-        </div>
-      )}
+        {expandedSection && (<div id="popup" className={`${navButtonClicked ? "nav-button-clicked" : ""}`}
+    onClose={handleClosePopup}>
+    <h2>{expandedSectionTitle}</h2>
+    {expandedSectionText}
+    <button className="close-btn" onClick={handleClosePopup}>
+      <i className="fa-solid fa-xmark fa-xl"></i>
+    </button>
+  </div>
+)}
       <div className="bannerAdvice">
         <h1>Advice</h1>
       </div>

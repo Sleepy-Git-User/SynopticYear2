@@ -6,6 +6,11 @@
     margin-top: 90px;
   }
 
+  .nav-button-clicked {
+    background-color: #F8FD89;
+  }
+
+
   .gridContainerAdvice{
     display: grid;
     grid: auto / 1fr 1fr;;

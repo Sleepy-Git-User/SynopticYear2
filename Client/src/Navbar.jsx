@@ -59,6 +59,19 @@ export default function Navbar() {
 
     )}
 
+    function handleClick() {
+        changeBackgroundColor();
+        handleNavButtonClick();
+    }
+
+    function changeBackgroundColor() {
+        document.body.style.backgroundColor = "#F8FD89";
+        var popup = document.getElementById("popup");
+        if (popup) {
+            popup.style.backgroundColor = "#F8FD89 !important";
+        }
+}     
+
     return (
         <>
             <header>
@@ -82,7 +95,7 @@ export default function Navbar() {
                             <a href="#">Languages</a>
                             <a href="#">Colour Blind</a>
                             <a href="#">Larger Font</a>
-                            <a href="#">Dyslexia</a>
+                            <a id="dyslexia-btn" href="#" onClick={handleClick}>Dyslexia</a>
                         </div> 
                         </div>  
                         
