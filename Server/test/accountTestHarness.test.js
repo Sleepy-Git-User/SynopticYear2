@@ -12,8 +12,9 @@ const tables = [
 	"Business",
 	"User",
 ];
+
 tables.forEach((table) => {
-	console.log(`Deleting all records from ${table}`);
+	//console.log(`Deleting all records from ${table}`);
 	interface.Database.database.prepare(`DELETE FROM ${table}`).run();
 });
 

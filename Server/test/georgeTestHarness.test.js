@@ -11,7 +11,7 @@ const tables = [
 	"User",
 ];
 tables.forEach((table) => {
-	console.log(`Deleting all records from ${table}`);
+	//console.log(`Deleting all records from ${table}`);
 	interface.Database.database.prepare(`DELETE FROM ${table}`).run();
 });
 
@@ -87,15 +87,15 @@ const ReviewID = interface.Database.getRecord(
 	PurchaseID
 )[0].ReviewID;
 
-console.log("UserID: " + UserID);
+/*console.log("UserID: " + UserID);
 console.log("SellerID: " + SellerID);
 console.log("ListingID: " + ListingID);
 console.log("CategoryID: " + CategoryID);
 console.log("PurchaseID: " + PurchaseID);
-console.log("ReviewID: " + ReviewID);
+console.log("ReviewID: " + ReviewID);*/
 
 describe("createListing", function () {
-	console.log("CREATE" + SellerID);
+	//console.log("CREATE" + SellerID);
 	it("should create a listing with valid input", async function () {
 		const Name = "Sample Product";
 		const Desc = "This is a sample product for testing";
@@ -159,7 +159,7 @@ describe("updateListingQuantity", function () {
 			ListingID,
 			Quantity
 		);
-		console.log(result);
+		//console.log(result);
 		expect(result).to.be.an("string");
 		expect(result).to.equal("Quantity Updated");
 	});
@@ -206,7 +206,7 @@ describe("getListings", function () {
 describe("getListing", function () {
 	it("should return a listing with a given ID", async function () {
 		const result = await interface.getListing(ListingID);
-		console.log(result);
+		//console.log(result);
 		expect(result).to.be.an("array").that.is.not.empty;
 	});
 
