@@ -13,7 +13,6 @@ const auth = require("../Auth/Auth.js");
 const azureStorageConnectionString =
 	process.env.AZURE_STORAGE_CONNECTION_STRING;
 const containerName = "images";
-console.log(azureStorageConnectionString);
 const blobServiceClient = BlobServiceClient.fromConnectionString(
 	azureStorageConnectionString
 );
@@ -70,7 +69,7 @@ module.exports = (dbName = "Database") => {
 				hashedPassword[0].Password
 			) {
 				//Hashes the inputted password and comparess it to the stored password.
-				console.log("HERE" + getUserID);
+
 				try {
 					let data2 = getUserBusinessIDs(getUserID[0].UserID);
 					return { success: true, data: getUserID, data2: data2 };
@@ -204,7 +203,6 @@ module.exports = (dbName = "Database") => {
 	//console.log(getUserID("bike@gmail.com"));
 
 	function getUserDetails(userID) {
-		console.log(Database.getRecord("User", "UserID", userID));
 		return {
 			success: true,
 			data: Database.getRecord("User", "UserID", userID),
@@ -344,8 +342,7 @@ module.exports = (dbName = "Database") => {
 			UserID,
 			bdata[0].BusinessID
 		);
-		console.log(linkeddata);
-		console.log(linkeddata.length);
+
 		if (linkeddata.length != 0) {
 			return { success: false, data: "User already apart of Business" };
 		} else {
@@ -506,7 +503,7 @@ module.exports = (dbName = "Database") => {
 				array.push(key);
 			}
 		}
-		console.log(array);
+
 		if (array.length === 0) {
 			return {
 				success: true,
@@ -782,7 +779,6 @@ module.exports = (dbName = "Database") => {
 	 */
 	function getPurchase(PurchaseID) {
 		try {
-			console.log(PurchaseID);
 			let data = {
 				PurchaseID: null,
 				ListingID: null,
@@ -843,7 +839,6 @@ module.exports = (dbName = "Database") => {
 			);
 			return { success: true, data: "Review Created" };
 		} catch (error) {
-			console.log(error);
 			throw "Failed to create review";
 		}
 	}
