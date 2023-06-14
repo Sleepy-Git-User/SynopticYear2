@@ -70,7 +70,6 @@ module.exports = (dbName = "Database") => {
 				hashedPassword[0].Password
 			) {
 				//Hashes the inputted password and comparess it to the stored password.
-				console.log("HERE" + getUserID);
 				try {
 					let data2 = getUserBusinessIDs(getUserID[0].UserID);
 					return { success: true, data: getUserID, data2: data2 };
@@ -167,7 +166,7 @@ module.exports = (dbName = "Database") => {
 				);
 				console.log(`Upload succesful. ${uploadResponse.requestId}`);
 			} catch (error) {
-				console.error("No image uploaded");
+				//console.error("No image uploaded");
 				//throw error;
 			}
 			sendWelcomeEmail(Email);
@@ -300,7 +299,7 @@ module.exports = (dbName = "Database") => {
 				);
 				console.log(`Upload succesful. ${uploadResponse.requestId}`);
 			} catch (error) {
-				console.log("No image uploaded");
+				//console.log("No image uploaded");
 				//throw error;
 			}
 
