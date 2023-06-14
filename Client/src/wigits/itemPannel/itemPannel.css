@@ -12,6 +12,9 @@
 	margin: 0;
 	overflow: hidden;
 	margin: 0 auto;
+	background-color: #BA9FBD;
+	border: 3px solid #4e464e;
+	border-radius: 25px;
 }
 
 .itemHeader {
@@ -19,9 +22,9 @@
 	grid-template-columns: 60% 40%;
 	width: 99.9%;
 	overflow: hidden;
-	background-color: #f0f2f2;
+	background-color: #BA9FBD;
 	padding: 0 0 10px 0;
-	border: 1px #d5d9d9 solid;
+	border: 1px solid transparent;
 	border-radius: 8px 8px 0 0;
 }
 
@@ -92,7 +95,7 @@
 	height: 134px;
 	overflow: hidden;
 	padding: 0 0 10px 0;
-	border: 1px #d5d9d9 solid;
+	border: 1px solid transparent;
 	border-radius: 0 0 8px 8px;
 	margin-bottom: 30px;
 }

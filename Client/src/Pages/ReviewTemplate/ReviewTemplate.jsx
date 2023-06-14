@@ -126,7 +126,7 @@ export default function ReviewTemplate() {
 	}, [purchaseID]);
 
 	return (
-		<div>
+		<div id="pageContainer">
 			<h1 id="reviewHeader">Create Review</h1>
 			<h2>
 				{loading ? (

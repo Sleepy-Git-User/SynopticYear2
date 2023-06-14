@@ -1,7 +1,8 @@
 .bannerFood {
     background-color: #89A997;
     padding:50px;
-    text-align: center;
+    text-align: center; 
+    margin-top: 90px;
   }
 .mainInfo h2{
   font-size: 36px;
