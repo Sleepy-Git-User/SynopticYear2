@@ -14,111 +14,110 @@ import "./Account.css";
 
 export default function AccountPage() {
 
-    const [businessState, setBusinessState] = useState(<CreateBusiness />);
-    const [userDetails, setUserDetails] = useState();
-    const [name, setName] = useState("User");
-    const [boughtItems, setBoughtItems] = useState([]);
+  const [businessState, setBusinessState] = useState(<CreateBusiness />);
+  const [userDetails, setUserDetails] = useState();
+  const [name, setName] = useState("User");
+  const [boughtItems, setBoughtItems] = useState([]);
 
-    const getUserDetails = () => {
-        axios
-          .post("/api/getUserDetails", {
-            UserID: sessionStorage.getItem("userId"),
-          }, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-          .then((response) => response.data)
-          .then((info) => {
-            if (info.success) {
-              setName(info.data[0].Fname);
-              setUserDetails(
-                <div className="userInfo"> 
-                <h2>User Details</h2>
-                <div className="info">
+  const getUserDetails = () => {
+    axios
+      .post("/api/getUserDetails", {
+        UserID: sessionStorage.getItem("userId"),
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => response.data)
+      .then((info) => {
+        if (info.success) {
+          setName(info.data[0].Fname);
+          setUserDetails(
+            <div className="userInfo">
+              <h2>User Details</h2>
+              <div className="info">
                 <img className="userImg" src={info.data[0].img} alt="Profile Image" width="100" height="100" />
-                  <br />
-                  Name: {info.data[0].Fname} {info.data[0].Lname} <br />
-                  Email: {info.data[0].Email}<br />
-                  Phone: {info.data[0].PhoneNumber}
-                </div>
-                </div>
-              );
-            } else {
-              setUserDetails("Error getting user details.");
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      };
-
-    
-      const getBoughtItems = () => {
-        axios
-          .post("/api/getBoughtItems", {
-            UserID: sessionStorage.getItem("userId"),
-          }, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-          .then((response) => response.data)
-          .then((info) => {
-            if (info)
-             {
-                setBoughtItems(info.data)
-                console.log(boughtItems);
-            } else {
-              setBoughtItems([]);
-            }
-          })
-          .catch((error) => {
-            setBoughtItems([]);
-          });
-      };
-    
-
-    useEffect(() => {
-        // Try and get business ID for a user
-        const businessID = sessionStorage.getItem('businessId');
-        console.log("BUSINESSID");
-        console.log(businessID);
-
-        if (businessID === 'null' || businessID === null){
-            setBusinessState(<CreateBusiness />);
-        } else {
-            setBusinessState(<BusinessDetails />)
-        }
-
-        //Get User details
-        getUserDetails();
-
-        getBoughtItems();
-
-      }, [])
-
-    return (
-        <div id="pageContainer">
-
-            <div class="bannerAccount">
-                <h1>Hello, {name}</h1>
-                
-            </div> 
-            <div className="gridContainerAccountPage">
-            
-            
-                {/* <h2>User Details</h2> */}
-                {/*Get User Details and put in here */}
-                {userDetails}
-            
-
-            <div className="business">
-                {businessState}
+                <br />
+                Name: {info.data[0].Fname} {info.data[0].Lname} <br />
+                Email: {info.data[0].Email}<br />
+                Phone: {info.data[0].PhoneNumber}
+              </div>
             </div>
+          );
+        } else {
+          setUserDetails("Error getting user details.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
 
-          <div className="purchaseHistory">
+  const getBoughtItems = () => {
+    axios
+      .post("/api/getBoughtItems", {
+        UserID: sessionStorage.getItem("userId"),
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => response.data)
+      .then((info) => {
+        if (info) {
+          setBoughtItems(info.data)
+          console.log(boughtItems);
+        } else {
+          setBoughtItems([]);
+        }
+      })
+      .catch((error) => {
+        setBoughtItems([]);
+      });
+  };
+
+
+  useEffect(() => {
+    // Try and get business ID for a user
+    const businessID = sessionStorage.getItem('businessId');
+    console.log("BUSINESSID");
+    console.log(businessID);
+
+    if (businessID === 'null' || businessID === null) {
+      setBusinessState(<CreateBusiness />);
+    } else {
+      setBusinessState(<BusinessDetails />)
+    }
+
+    //Get User details
+    getUserDetails();
+
+    getBoughtItems();
+
+  }, [])
+
+  return (
+    <div id="pageContainer">
+
+      <div class="bannerAccount">
+        <h1>Hello, {name}</h1>
+
+      </div>
+      <div className="gridContainerAccountPage">
+
+
+        {/* <h2>User Details</h2> */}
+        {/*Get User Details and put in here */}
+        {userDetails}
+
+
+        <div className="business">
+          {businessState}
+        </div>
+
+
+        <div className="purchaseHistory">
           <h2>Purchase History</h2>
           {/*Map all items in a purchase history here! */}
           {boughtItems !== null ? (
@@ -140,14 +139,14 @@ export default function AccountPage() {
         </div>
 
 
-            <div className="reviews">
-                <h2>Your Reviews</h2>
-                {/* Should ONLY appear if a user has a business */}
-            </div> 
-
-            </div>
-
-
+        <div className="reviews">
+          <h2>Your Reviews</h2>
+          {/* Should ONLY appear if a user has a business */}
         </div>
-    );
+
+      </div>
+
+
+    </div>
+  );
 }
