@@ -181,8 +181,8 @@ module.exports = (dbName = "Database") => {
 				//console.error("No image uploaded");
 				//throw error;
 			}
-			// sendWelcomeEmail(Email);
-			// sendVerificationEmail(Email);
+			sendWelcomeEmail(Email);
+			sendVerificationEmail(Email);
 			//Returns true after creating the new user.
 			return { success: true, data: user_id };
 		}
