@@ -29,9 +29,9 @@ function sendEmail(filename, email, subject, data) {
 
                 transporter.sendMail(mailOptions, (err, info) => {
                     if (err) {
-                        console.error(err);
+                        //console.error(err);
                     } else {
-                        console.log("Email sent: " + info.response);
+                        //console.log("Email sent: " + info.response);
                     }
                 });
             }
