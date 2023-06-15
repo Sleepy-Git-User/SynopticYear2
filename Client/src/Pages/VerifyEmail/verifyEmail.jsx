@@ -17,6 +17,8 @@ export default function VerifyEmail() {
                 .then((data) => {
                     if (data) {
                         setSuccess(true);
+                        alert("Your email has been successfully verified");
+                        window.location.href = "/";
                     } else {
                         setSuccess(false);
 
