@@ -31,9 +31,6 @@ module.exports = (dbName = "Database") => {
 	function jazz() {
 		//console.log("jazz");
 	}
-	//********************************************************/
-
-	//******************** Users ***********************/
 	/**
 	 *
 	 * @param {*} Email that the user wants to use to login with.
