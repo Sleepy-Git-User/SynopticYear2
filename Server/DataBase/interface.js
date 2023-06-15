@@ -140,6 +140,21 @@ module.exports = (dbName = "Database") => {
             VALUES (?,?,?,?,?)`);
 
 			//Runs the SQL statments
+			var img;
+
+			if (
+				ProfilePic === null ||
+				ProfilePic === undefined ||
+				ProfilePic === ""
+			) {
+				img =
+					"https://synopticproject.blob.core.windows.net/images/user.png";
+			} else {
+				img =
+					"https://synopticproject.blob.core.windows.net/images/" +
+					user_id +
+					".png";
+			}
 			insert_address_sql.run(address_id, Line1, Line2, City, Postcode);
 			insert_user_sql.run(
 				user_id,
@@ -148,9 +163,7 @@ module.exports = (dbName = "Database") => {
 				Fname,
 				Lname,
 				DoB,
-				"https://synopticproject.blob.core.windows.net/images/" +
-					user_id +
-					".png",
+				img,
 				address_id
 			);
 			insert_Password.run(user_id, hashedPassword, salt);
@@ -168,8 +181,8 @@ module.exports = (dbName = "Database") => {
 				//console.error("No image uploaded");
 				//throw error;
 			}
-			sendWelcomeEmail(Email);
-			sendVerificationEmail(Email);
+			// sendWelcomeEmail(Email);
+			// sendVerificationEmail(Email);
 			//Returns true after creating the new user.
 			return { success: true, data: user_id };
 		}
@@ -185,11 +198,11 @@ module.exports = (dbName = "Database") => {
 	//  console.log(makeUser("omgitsblackbeard@gmail.com","13313232","tafin","nover","02/04/2000","Game","Party","Lane","London","LN169NG"));
 
 	function getProfilePic(userID) {
-		return (
-			"https://synopticproject.blob.core.windows.net/images/" +
-			userID +
-			".png"
-		);
+		try {
+			return Database.getField("User", "img", "UserID", userID)[0].img;
+		} catch (error) {
+			return false;
+		}
 	}
 
 	function removeUser(UserID) {
@@ -273,7 +286,21 @@ module.exports = (dbName = "Database") => {
             INSERT INTO Address
             (AddressID, Line1, Line2, City, Postcode)
             VALUES (?,?,?,?,?)`);
+			var img;
 
+			if (
+				ProfilePic === null ||
+				ProfilePic === undefined ||
+				ProfilePic === ""
+			) {
+				img =
+					"https://synopticproject.blob.core.windows.net/images/business.png";
+			} else {
+				img =
+					"https://synopticproject.blob.core.windows.net/images/" +
+					business_id +
+					"bpp.png";
+			}
 			//Runs the SQL statments
 			insert_address_sql.run(address_id, Line1, Line2, City, PostCode);
 			insert_business_sql.run(
@@ -281,9 +308,7 @@ module.exports = (dbName = "Database") => {
 				Name,
 				Email,
 				PhoneNumber,
-				"https://synopticproject.blob.core.windows.net/images/" +
-					business_id +
-					"bpp.png",
+				img,
 				address_id,
 				InvCode
 			);
@@ -402,6 +427,17 @@ module.exports = (dbName = "Database") => {
 		if (new Date(EndDate) < ListingDate) {
 			return { success: false, data: "Invalid End Date" };
 		}
+		var url;
+
+		if (img === null || img === undefined || img === "") {
+			url =
+				"https://synopticproject.blob.core.windows.net/images/listings.png";
+		} else {
+			url =
+				"https://synopticproject.blob.core.windows.net/images/" +
+				listing_id +
+				"lispp.png";
+		}
 		const insert_listing_sql = Database.database.prepare(`
     INSERT INTO Listing
     (ListingID, Name, Desc, Price, img, Quantity, SellerID, SDate, EDate)
@@ -411,9 +447,7 @@ module.exports = (dbName = "Database") => {
 			Name,
 			Desc,
 			Price,
-			"https://synopticproject.blob.core.windows.net/images/" +
-				listing_id +
-				"lispp.png",
+			url,
 			Quantity,
 			SellerID,
 			ListingDate,
